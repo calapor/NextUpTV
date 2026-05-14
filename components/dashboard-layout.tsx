@@ -9,8 +9,13 @@ import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Filter } from 'lucide-react'
 import { useIsMobile } from '@/hooks/use-mobile'
+import type { Recommendation } from '@/lib/types'
 
-export function DashboardLayout() {
+interface DashboardLayoutProps {
+  recommendations: Recommendation[]
+}
+
+export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   const isMobile = useIsMobile()
   const [year, setYear] = useState(2020)
   const [rating, setRating] = useState(7)
@@ -93,7 +98,7 @@ export function DashboardLayout() {
 
         {/* Recommendations Grid */}
         <div className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <RecommendationCardGrid />
+          <RecommendationCardGrid recommendations={recommendations} />
         </div>
       </div>
     </div>
