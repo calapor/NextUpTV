@@ -67,6 +67,10 @@ export async function POST(req: NextRequest) {
       try {
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
+        let fullText = ''
+        const foundTitles = new Set<string>()
+        const titleRegex = /"title":\s*"([^"]+)"/g
+
         const anthropicStream = anthropic.messages.stream({
           model: 'claude-sonnet-4-6',
           max_tokens: 8192,
@@ -76,27 +80,20 @@ export async function POST(req: NextRequest) {
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Generating recommendations...' }))
 
-        let fullText = ''
-        const foundTitles = new Set<string>()
-        const titleRegex = /"title":\s*"([^"]+)"/g
-
-        for await (const event of anthropicStream) {
-          if (
-            event.type === 'content_block_delta' &&
-            event.delta.type === 'text_delta'
-          ) {
-            fullText += event.delta.text
-            titleRegex.lastIndex = 0
-            let match
-            while ((match = titleRegex.exec(fullText)) !== null) {
-              const title = match[1]
-              if (!foundTitles.has(title)) {
-                foundTitles.add(title)
-                controller.enqueue(sseEvent({ type: 'status', message: `Found: ${title}` }))
-              }
+        anthropicStream.on('text', (textDelta) => {
+          fullText += textDelta
+          titleRegex.lastIndex = 0
+          let match
+          while ((match = titleRegex.exec(fullText)) !== null) {
+            const title = match[1]
+            if (!foundTitles.has(title)) {
+              foundTitles.add(title)
+              controller.enqueue(sseEvent({ type: 'status', message: `Suggesting: ${title}` }))
             }
           }
-        }
+        })
+
+        await anthropicStream.done()
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
 

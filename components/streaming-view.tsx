@@ -14,7 +14,8 @@ interface StreamingViewProps {
 }
 
 export function StreamingView({ pendingRequest, onRecommendationsReady, onNavigate }: StreamingViewProps) {
-  const [statusLines, setStatusLines] = useState<string[]>([])
+  const [phase, setPhase] = useState('Connecting...')
+  const [foundLines, setFoundLines] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -54,7 +55,11 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
           const payload = JSON.parse(line.slice(6))
 
           if (payload.type === 'status') {
-            setStatusLines((prev) => [...prev, payload.message])
+            if (payload.message.startsWith('Suggesting: ')) {
+              setFoundLines((prev) => [...prev, payload.message])
+            } else {
+              setPhase(payload.message)
+            }
           } else if (payload.type === 'recommendations') {
             onRecommendationsReady(payload.recommendations)
           } else if (payload.type === 'error') {
@@ -93,17 +98,23 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             </AlertDescription>
           </Alert>
         ) : (
-          <div className="relative h-[5rem] overflow-hidden mb-6">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-8 z-10 bg-gradient-to-b from-background to-transparent" />
-            <div className="h-full flex flex-col justify-end gap-1">
-              {statusLines.map((line, i) => (
-                <p
-                  key={i}
-                  className="shrink-0 text-sm leading-5 text-muted-foreground truncate animate-in fade-in slide-in-from-bottom-1 duration-300"
-                >
-                  {line}
-                </p>
-              ))}
+          <div className="mb-6">
+            {/* Pinned phase header */}
+            <p className="text-sm font-medium text-foreground mb-1">{phase}</p>
+
+            {/* Scrolling found-titles log */}
+            <div className="relative h-10 overflow-hidden">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-6 z-10 bg-gradient-to-b from-background to-transparent" />
+              <div className="h-full flex flex-col justify-end gap-0.5">
+                {foundLines.map((line, i) => (
+                  <p
+                    key={i}
+                    className="shrink-0 text-sm leading-5 text-muted-foreground truncate animate-in fade-in slide-in-from-bottom-1 duration-300"
+                  >
+                    {line}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         )}
