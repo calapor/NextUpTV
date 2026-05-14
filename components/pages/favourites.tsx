@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Upload, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import type { Recommendation } from '@/lib/types'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
@@ -22,9 +23,10 @@ interface UploadState {
 
 interface FavouritesPageProps {
   onNavigate?: (page: 'recommendations' | 'favourites') => void
+  onRecommendationsReady?: (recs: Recommendation[]) => void
 }
 
-export function FavouritesPage({ onNavigate }: FavouritesPageProps) {
+export function FavouritesPage({ onNavigate, onRecommendationsReady }: FavouritesPageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   // File upload state
@@ -116,28 +118,36 @@ export function FavouritesPage({ onNavigate }: FavouritesPageProps) {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
+
     if (!isFormValid) return
 
     setFormState('loading')
     setSubmitError(null)
 
     try {
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // In production, this would:
-      // 1. Read file content if file exists
-      // 2. Send to /api/recommendations with streaming
-      // 3. Store recommendations
-      // 4. Navigate to recommendations tab
-      
+      let fileContent = ''
+      if (uploadState.file) {
+        fileContent = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = (e) => resolve(e.target?.result as string)
+          reader.onerror = reject
+          reader.readAsText(uploadState.file!)
+        })
+      }
+
+      const res = await fetch('/api/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileContent, keywords, count: 10 }),
+      })
+
+      if (!res.ok) throw new Error(`API error ${res.status}`)
+
+      const data = await res.json()
+      onRecommendationsReady?.(data.recommendations)
       setFormState('success')
-      
-      // Navigate to recommendations after brief delay
-      setTimeout(() => {
-        onNavigate?.('recommendations')
-      }, 500)
+
+      setTimeout(() => onNavigate?.('recommendations'), 500)
     } catch (error) {
       setFormState('error')
       setSubmitError('Failed to generate recommendations. Please try again.')

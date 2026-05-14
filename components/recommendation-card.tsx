@@ -1,58 +1,67 @@
 'use client'
 
 import { Card } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import type { Recommendation } from '@/lib/types'
 
-export function RecommendationCard() {
+interface RecommendationCardProps {
+  recommendation: Recommendation
+}
+
+export function RecommendationCard({ recommendation }: RecommendationCardProps) {
+  const titleInitials = recommendation.title
+    .split(' ')
+    .slice(0, 2)
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+
   return (
     <Card className="group overflow-hidden bg-card hover:bg-card/80 transition-all duration-300 cursor-pointer hover:shadow-lg">
-      {/* Poster Image Skeleton */}
-      <div className="aspect-[2/3] bg-accent/10 overflow-hidden relative">
-        <Skeleton className="w-full h-full" />
+      {/* Poster Image Area */}
+      <div className="aspect-[2/3] bg-gradient-to-br from-blue-600 to-purple-600 overflow-hidden relative flex items-center justify-center">
+        <div className="text-4xl font-bold text-white/80">{titleInitials}</div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
-      
+
       {/* Card Content */}
       <div className="p-4 space-y-3">
         {/* Title */}
-        <div className="space-y-2">
-          <Skeleton className="h-5 w-3/4" />
-          <Skeleton className="h-4 w-1/2" />
+        <div className="space-y-1">
+          <h3 className="font-semibold text-foreground line-clamp-2">{recommendation.title}</h3>
+          <p className="text-sm text-muted-foreground">{recommendation.release_year}</p>
         </div>
-        
-        {/* Rating & Year */}
+
+        {/* Rating */}
         <div className="flex gap-2">
-          <Skeleton className="h-6 w-12 rounded-full" />
-          <Skeleton className="h-6 w-12 rounded-full" />
+          <Badge variant="secondary">★ {recommendation.imdb_rating.toFixed(1)}</Badge>
         </div>
-        
-        {/* Description */}
-        <div className="space-y-2 pt-2">
-          <Skeleton className="h-3 w-full" />
-          <Skeleton className="h-3 w-5/6" />
-          <Skeleton className="h-3 w-4/5" />
+
+        {/* Genres */}
+        <div className="flex flex-wrap gap-1">
+          {recommendation.genres.slice(0, 3).map((genre) => (
+            <Badge key={genre} variant="outline" className="text-xs">
+              {genre}
+            </Badge>
+          ))}
         </div>
-        
-        {/* Action Button */}
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          disabled
-        >
-          View Details
-        </Button>
+
+        {/* Reason */}
+        <p className="text-sm text-muted-foreground line-clamp-3">{recommendation.reason}</p>
       </div>
     </Card>
   )
 }
 
-export function RecommendationCardGrid() {
+interface RecommendationCardGridProps {
+  recommendations: Recommendation[]
+}
+
+export function RecommendationCardGrid({ recommendations }: RecommendationCardGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <RecommendationCard key={i} />
+      {recommendations.map((rec) => (
+        <RecommendationCard key={rec.title} recommendation={rec} />
       ))}
     </div>
   )
