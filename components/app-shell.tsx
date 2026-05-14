@@ -21,13 +21,13 @@ export function AppShell() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <TopNavigation currentPage={currentPage} onPageChange={handlePageChange} />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden pt-16">
         {currentPage === 'recommendations' ? (
-          <div key="recommendations">
+          <div key="recommendations" className="h-full">
             <RecommendationsPage onNavigate={handlePageChange} />
           </div>
         ) : (
-          <div key="favourites">
+          <div key="favourites" className="h-full">
             <FavouritesPage onNavigate={handlePageChange} />
           </div>
         )}
