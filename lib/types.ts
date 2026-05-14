@@ -24,3 +24,8 @@ export interface RecommendationsRequest {
   keywords: string
   count: number
 }
+
+export interface PendingRequest {
+  fileContent: string
+  keywords: string
+}

@@ -6,14 +6,12 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Upload, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-import type { Recommendation } from '@/lib/types'
+import { Upload, X, CheckCircle, AlertCircle } from 'lucide-react'
+import type { PendingRequest } from '@/lib/types'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
 const MAX_KEYWORDS_LENGTH = 1000
-
-type FormState = 'idle' | 'loading' | 'error' | 'success'
 
 interface UploadState {
   file: File | null
@@ -23,10 +21,10 @@ interface UploadState {
 
 interface FavouritesPageProps {
   onNavigate?: (page: 'recommendations' | 'favourites') => void
-  onRecommendationsReady?: (recs: Recommendation[]) => void
+  onSubmit?: (req: PendingRequest) => void
 }
 
-export function FavouritesPage({ onNavigate, onRecommendationsReady }: FavouritesPageProps) {
+export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   // File upload state
@@ -40,8 +38,6 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
   const [keywords, setKeywords] = useState('')
   const keywordsLength = keywords.length
 
-  // Form state
-  const [formState, setFormState] = useState<FormState>('idle')
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   // File validation
@@ -121,7 +117,6 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
 
     if (!isFormValid) return
 
-    setFormState('loading')
     setSubmitError(null)
 
     try {
@@ -135,34 +130,9 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
         })
       }
 
-      const res = await fetch('/api/recommendations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileContent, keywords, count: 10 }),
-      })
-
-      if (!res.ok) throw new Error(`API error ${res.status}`)
-
-      const data = await res.json()
-      onRecommendationsReady?.(data.recommendations)
-      setFormState('success')
-
-      setTimeout(() => onNavigate?.('recommendations'), 500)
-    } catch (error) {
-      setFormState('error')
-      setSubmitError('Failed to generate recommendations. Please try again.')
-      console.error('[v0] Submission error:', error)
-    }
-  }
-
-  // Reset form after success
-  const handleReset = () => {
-    setUploadState({ file: null, error: null, isUploading: false })
-    setKeywords('')
-    setFormState('idle')
-    setSubmitError(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      onSubmit?.({ fileContent, keywords })
+    } catch {
+      setSubmitError('Failed to read the uploaded file. Please try again.')
     }
   }
 
@@ -218,13 +188,7 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
                     aria-label="Upload favourites file"
                   />
 
-                  {uploadState.isUploading ? (
-                    // Uploading state
-                    <div className="flex flex-col items-center">
-                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-3" />
-                      <p className="text-foreground font-medium">Uploading...</p>
-                    </div>
-                  ) : uploadState.file ? (
+                  {uploadState.file ? (
                     // File selected state
                     <div className="flex flex-col items-center">
                       <CheckCircle className="w-8 h-8 text-green-600 mb-3" />
@@ -276,7 +240,6 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
                   id="keywords"
                   value={keywords}
                   onChange={handleKeywordsChange}
-                  disabled={formState === 'loading'}
                   placeholder="e.g. Breaking Bad, sci-fi, psychological thrillers"
                   className={`min-h-48 resize-none transition-colors ${
                     isOverCharLimit ? 'border-red-500' : ''
@@ -300,17 +263,10 @@ export function FavouritesPage({ onNavigate, onRecommendationsReady }: Favourite
             <Button
               type="submit"
               size="lg"
-              disabled={!isFormValid || formState === 'loading'}
+              disabled={!isFormValid}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {formState === 'loading' ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                'Update Preferences & Get Recommendations'
-              )}
+              Update Preferences & Get Recommendations
             </Button>
 
             {/* Form hints */}
