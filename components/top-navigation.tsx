@@ -18,8 +18,6 @@ export function TopNavigation({ currentPage, onPageChange }: TopNavigationProps)
     { name: 'Manage Favourites', id: 'favourites' as const },
   ]
   
-  console.log('[v0] TopNavigation rendering with currentPage:', currentPage)
-  
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="flex items-center justify-between h-16 px-6">
@@ -40,11 +38,7 @@ export function TopNavigation({ currentPage, onPageChange }: TopNavigationProps)
             <button
               key={tab.id}
               type="button"
-              onClick={() => {
-                alert(`Clicked: ${tab.id}`)
-                console.log('[v0] Tab clicked:', tab.id)
-                onPageChange(tab.id)
-              }}
+              onClick={() => onPageChange(tab.id)}
               className={cn(
                 'px-4 py-2 text-sm font-medium transition-colors rounded-md cursor-pointer',
                 currentPage === tab.id

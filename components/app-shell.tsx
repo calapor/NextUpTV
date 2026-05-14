@@ -13,12 +13,8 @@ export function AppShell() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
 
   const handlePageChange = (page: Page) => {
-    console.log('[v0] AppShell.handlePageChange called with:', page)
-    console.log('[v0] Current page was:', currentPage)
     setCurrentPage(page)
   }
-
-  console.log('[v0] AppShell rendering with currentPage:', currentPage)
 
   return (
     <div className="flex flex-col h-screen bg-background">
