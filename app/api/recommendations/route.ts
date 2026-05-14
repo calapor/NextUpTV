@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest, NextResponse } from 'next/server'
 import type { RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
+import { fetchTvdbData } from '@/lib/tvmaze'
 
 export const RECOMMENDATIONS_SYSTEM_PROMPT = `You are a personalised TV show recommendation engine.
 
@@ -57,5 +58,16 @@ export async function POST(req: NextRequest) {
   const text = message.content[0].type === 'text' ? message.content[0].text : ''
   const parsed: RecommendationsResponse = JSON.parse(text)
 
-  return NextResponse.json(parsed)
+  const tvdbResults = await Promise.all(
+    parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
+  )
+
+  const enriched = parsed.recommendations.map((rec, i) => ({
+    ...rec,
+    ...(tvdbResults[i]
+      ? { tvdb_thumbnail_url: tvdbResults[i]!.thumbnail_url, tvdb_show_url: tvdbResults[i]!.show_url }
+      : {}),
+  }))
+
+  return NextResponse.json({ recommendations: enriched })
 }

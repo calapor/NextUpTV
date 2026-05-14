@@ -11,6 +11,8 @@ export interface Recommendation {
   drama_score: number
   suspense_score: number
   romance_score: number
+  tvdb_thumbnail_url?: string
+  tvdb_show_url?: string
 }
 
 export interface RecommendationsResponse {

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import type { Recommendation } from '@/lib/types'
@@ -9,6 +10,8 @@ interface RecommendationCardProps {
 }
 
 export function RecommendationCard({ recommendation }: RecommendationCardProps) {
+  const [imgError, setImgError] = useState(false)
+
   const titleInitials = recommendation.title
     .split(' ')
     .slice(0, 2)
@@ -16,13 +19,47 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
     .join('')
     .toUpperCase()
 
+  const showThumbnail = !!recommendation.tvdb_thumbnail_url && !imgError
+
+  const posterContent = showThumbnail ? (
+    <img
+      src={recommendation.tvdb_thumbnail_url}
+      alt={`${recommendation.title} poster`}
+      className="w-full h-full object-cover"
+      onError={() => setImgError(true)}
+    />
+  ) : (
+    <>
+      <div className="text-4xl font-bold text-white/80">{titleInitials}</div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    </>
+  )
+
+  const posterArea = (
+    <div className={`aspect-[2/3] overflow-hidden relative flex items-center justify-center ${
+      showThumbnail ? '' : 'bg-gradient-to-br from-blue-600 to-purple-600'
+    }`}>
+      {posterContent}
+    </div>
+  )
+
   return (
     <Card className="group overflow-hidden bg-card hover:bg-card/80 transition-all duration-300 cursor-pointer hover:shadow-lg">
       {/* Poster Image Area */}
-      <div className="aspect-[2/3] bg-gradient-to-br from-blue-600 to-purple-600 overflow-hidden relative flex items-center justify-center">
-        <div className="text-4xl font-bold text-white/80">{titleInitials}</div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
+      {recommendation.tvdb_show_url ? (
+        <a
+          href={recommendation.tvdb_show_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+          tabIndex={-1}
+          aria-label={`View ${recommendation.title} on TheTVDB`}
+        >
+          {posterArea}
+        </a>
+      ) : (
+        posterArea
+      )}
 
       {/* Card Content */}
       <div className="p-4 space-y-3">
