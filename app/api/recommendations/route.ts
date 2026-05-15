@@ -12,8 +12,23 @@ function sseEvent(obj: object): Uint8Array {
 }
 
 function sanitizeSeriesTitle(title: string): string {
+  // Strip dash-based self-corrections e.g. "Night Agent — instead: Longmire"
+  title = title.replace(/\s*[—–-]\s*(?:instead|actually|wait|correction|oops)[^]*$/i, '').trim()
+  // Strip parenthetical self-corrections Claude sometimes emits
+  // e.g. "(wait — already listed)", "(already recommended)"
+  title = title.replace(/\s*\([^)]*\b(?:wait|already listed|already recommended|correction|oops|I mean)\b[^)]*\)/gi, '').trim()
   // Strip trailing season/series/part qualifiers e.g. "(Season 1)", ": Series 2", " - Part 3"
   return title.replace(/[\s:–\-]*\(?(?:Season|Series|Part)\s+\d+\)?$/i, '').trim()
+}
+
+function sanitizeReason(reason: string): string {
+  // Strip dash-based self-corrections e.g. "something — instead: something else"
+  reason = reason.replace(/\s*[—–-]\s*(?:instead|actually|wait|correction|oops)[^]*$/i, '').trim()
+  // Strip parenthetical self-corrections Claude sometimes emits mid-generation
+  // e.g. "(wait — already listed)", "(already recommended)", "(correction: ...)"
+  return reason
+    .replace(/\s*\([^)]*\b(?:wait|already listed|already recommended|correction|oops|I mean)\b[^)]*\)/gi, '')
+    .trim()
 }
 
 function extractJson(text: string): string {
@@ -81,6 +96,7 @@ export async function POST(req: NextRequest) {
 
         parsed.recommendations.forEach((rec) => {
           rec.title = sanitizeSeriesTitle(rec.title)
+          rec.reason = sanitizeReason(rec.reason)
         })
 
         const tvdbResults = await Promise.all(
