@@ -62,6 +62,7 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
     const results: Array<{
       tvdb_id: string
       name: string
+      thumbnail?: string
       image_url?: string
       overview?: string
       year?: string
@@ -101,7 +102,7 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
       .filter((c) => networkTypes.has(c.companyType?.companyTypeName ?? ''))
       .map((c) => c.name)
 
-    const posterUrl = best.image_url ?? series.image
+    const posterUrl = best.thumbnail ?? best.image_url ?? series.image
 
     const slug = best.slug ?? series.slug ?? best.tvdb_id
     const tvdb_show_url = `https://thetvdb.com/series/${slug}`

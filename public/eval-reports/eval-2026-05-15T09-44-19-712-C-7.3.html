@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval C 7.3 — 15/05/2026, 10:44:19</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#f59e0b;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 10:44:19</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">C</div>
+    <div class="score-block">
+      <div class="score">7.3</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">8.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#f59e0b"></div></div>
+        <p class="rationale">Almost all recommendations connect clearly to the taste profile. Yellowstone fits the power-family drama thread (Succession, Peaky Blinders). Mindhunter aligns with Black Bird and True Detective. Patriot suits the spy-drama cluster. Trapped fits the Fortitude/Dublin Murders Nordic-noir strand. The Recruit is a reasonable if somewhat thin match. The Leftovers is a slightly more lateral pick but defensible given Dark and The Expanse. The Severance entry is a disqualified placeholder that wastes one slot.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">7.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%;background:#f59e0b"></div></div>
+        <p class="rationale">Most reasons are genuinely specific: Patriot's reason cites bleak wit, morally compromised tradecraft, and absurdist tone linking three distinct input shows; Trapped correctly names Fortitude and Dublin Murders as tonal comparators. The Recruit reason is more generic ('fast-paced CIA thriller'), essentially restating the premise rather than identifying a shared narrative device. The Severance entry provides no meaningful reason at all, dragging the average down.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">6.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#f59e0b"></div></div>
+        <p class="rationale">The set is dominated by US productions (Yellowstone, The Recruit, Mindhunter, Patriot, Tulsa King, The Leftovers) with only Trapped offering a non-Anglophone perspective. Era clustering is also noticeable — six of the eight real recommendations are post-2014 and most are post-2017. Genres skew heavily toward crime/thriller/drama with little representation of sci-fi depth, comedy, or historical drama despite the viewer's clear appetite for those. The wasted Severance slot further reduces effective diversity.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">7/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#f59e0b"></div></div>
+        <p class="rationale">Most ratings and years are plausible. Patriot's release year of 2015 is slightly off — the show premiered in 2015 as a pilot but the full series launched on Amazon in 2017; minor but worth flagging. Tulsa King's IMDb rating of 8.2 is somewhat generous (actual rating hovers closer to 7.8–8.0). The zeroed-out Severance metadata is a structural anomaly that, while intentional, introduces noise into the dataset. All other figures are within acceptable range.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">7/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#f59e0b"></div></div>
+        <p class="rationale">Severance explicitly appears in the recommendations, which is a hard rule violation. The engine did flag it internally and zeroed out its metadata, showing awareness, but the title still occupies a recommendation slot. This is a partial violation — the intent to exclude is clear but execution failed, so a score of 10 is not warranted and a score of 0 would be too harsh given the self-identification.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">The recommendation set shows genuine curation effort, with several well-targeted picks (Mindhunter, Patriot, Trapped) that cite specific tonal and narrative links to input shows. However, the inclusion of Severance as a named entry — even with zeroed metadata — is an unacceptable execution failure that wastes a recommendation slot and violates the core no-overlap rule. Diversity is the weakest dimension: the set leans heavily on post-2015 US crime-drama and misses an opportunity to surface non-English-language titles, comedies, or sci-fi that the viewer clearly enjoys. Tightening the genre spread and replacing the Severance slot with a genuinely novel pick would significantly improve the set's overall utility.</p></div>
+
+  <h2>Recommendations Generated (8)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Yellowstone</strong> (2018)</td>
+        <td>Drama, Western, Thriller</td>
+        <td>8.7</td>
+        <td>Like Succession and Peaky Blinders, it centres on a powerful family empire fighting to maintain control through ruthless ambition, loyalty, and violence.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>The Recruit</strong> (2022)</td>
+        <td>Thriller, Action, Spy</td>
+        <td>7.4</td>
+        <td>Fans of The Night Agent and Tom Clancy's Jack Ryan will enjoy this fast-paced CIA thriller following a rookie lawyer drawn into dangerous intelligence operations.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Mindhunter</strong> (2017)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8.6</td>
+        <td>Like Black Bird and True Detective, it dives deep into the psychology of killers through intense character-driven FBI procedural storytelling.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Patriot</strong> (2015)</td>
+        <td>Drama, Spy, Dark Comedy</td>
+        <td>8.1</td>
+        <td>Shares the bleak wit and morally compromised spy tradecraft of Slow Horses and Le Bureau des légendes, wrapped in a darkly absurdist tone similar to Barry.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Tulsa King</strong> (2022)</td>
+        <td>Crime, Drama, Comedy</td>
+        <td>8.2</td>
+        <td>Fans of Reacher, The Sopranos, and Justified will enjoy this fish-out-of-water crime drama about a mafia capo exiled to Oklahoma building a new criminal empire.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Severance</strong> (0)</td>
+        <td>Sci-Fi, Thriller, Drama</td>
+        <td>0</td>
+        <td>Already a favourite — skipped as per rules.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>The Leftovers</strong> (2014)</td>
+        <td>Drama, Mystery, Sci-Fi</td>
+        <td>8.3</td>
+        <td>Like Dark and The Expanse, it blends existential dread with deeply human storytelling, following a community fractured after 2% of the world's population inexplicably vanishes.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>Trapped (Ófærð)</strong> (2015)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8</td>
+        <td>Fans of Fortitude and Dublin Murders will appreciate this Icelandic noir thriller where a small isolated town is locked down by a blizzard while a murder investigation unfolds.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Name</li><li>3 Body Problem</li><li>A Knight of the Seven Kingdoms</li><li>Atomic</li><li>Atypical</li><li>Baby Reindeer</li><li>Barry</li><li>Berlin Station</li><li>Better Call Saul</li><li>Billions</li><li>Black Bird</li><li>Black Books</li><li>Black Doves</li><li>Black Mirror</li><li>Bodkin</li><li>Bodyguard (2018)</li><li>Breaking Bad</li><li>Bridgerton</li><li>Brooklyn Nine-Nine</li><li>Chernobyl</li><li>Clarkson's Farm</li><li>Condor</li><li>Dark</li><li>Dark Matter (2024)</li><li>Derry Girls</li><li>Detectorists</li><li>Deutschland</li><li>Dexter</li><li>Dexter: New Blood</li><li>Dexter: Original Sin</li><li>Dexter: Resurrection</li><li>Die Kaiserin</li><li>Dix pour cent</li><li>DTF St. Louis</li><li>Dublin Murders</li><li>El Candidato</li><li>Fallout</li><li>Fargo</li><li>Father Ted</li><li>Fear the Walking Dead</li><li>For All Mankind</li><li>Fortitude</li><li>Game of Thrones</li><li>Generation Kill</li><li>Goliath</li><li>Hacks</li><li>Hanna</li><li>Hijack</li><li>Hit &amp; Run</li><li>Home (2019)</li><li>Homeland</li><li>Hostage (2025)</li><li>House of Cards (US)</li><li>House of the Dragon</li><li>Hunters (2020)</li><li>Into the Night</li><li>Invasion (2021)</li><li>It's Always Sunny in Philadelphia</li><li>James May: Our Man In...</li><li>Justified</li><li>Kalifat</li><li>Killing Eve</li><li>Le Bureau des légendes</li><li>Making a Murderer</li><li>McMafia</li><li>MobLand</li><li>Monster (2022)</li><li>Mr Inbetween</li><li>Munich Games</li><li>Murder at the Cottage: The Search for Justice for Sophie</li><li>Narcos</li><li>Narcos: Mexico</li><li>Obituary</li><li>Ozark</li><li>Paradise (2025)</li><li>Parks and Recreation</li><li>Peaky Blinders</li><li>PLUR1BUS</li><li>Prodigal Son</li><li>Reacher</li><li>Resident Alien</li><li>Rooster</li><li>Russian Doll</li><li>Schitt's Creek</li><li>SEAL Team</li><li>See</li><li>Severance</li><li>Slow Horses</li><li>Sneaky Pete</li><li>Sophie: A Murder in West Cork</li><li>Space Force</li><li>Star Trek: Discovery</li><li>Star Trek: Picard</li><li>Star Trek: Strange New Worlds</li><li>Star Trek: The Next Generation</li><li>Succession</li><li>Taboo (2017)</li><li>Tales of the Walking Dead</li><li>Ted Lasso</li><li>The Acolyte</li><li>The Agency (2024)</li><li>The Americans (2013)</li><li>The Bear</li><li>The Beast in Me</li><li>The Blacklist</li><li>The Day of the Jackal</li><li>The Diplomat</li><li>The Dropout</li><li>The Expanse</li><li>The Gentlemen</li><li>The Goldbergs (2013)</li><li>The Good Place</li><li>The Grand Tour (2016)</li><li>The Great Escapists</li><li>The Iris Affair</li><li>The Last Kingdom</li><li>The Last Narc</li><li>The Last of Us</li><li>The Last Ship</li><li>The Man in the High Castle</li><li>The Mandalorian</li><li>The Marvelous Mrs. Maisel</li><li>The Mentalist</li><li>The Mosquito Coast</li><li>The Night Agent</li><li>The Night Manager</li><li>The Office (US)</li><li>The Pitt</li><li>The Queen's Gambit</li><li>The Sopranos</li><li>The Spy</li><li>The Studio (2025)</li><li>The Sympathizer</li><li>The Terminal List</li><li>The Terminal List: Dark Wolf</li><li>The Terror</li><li>The Umbrella Academy</li><li>The Veil</li><li>The Walking Dead</li><li>The Walking Dead: Daryl Dixon</li><li>The Walking Dead: Dead City</li><li>The Walking Dead: The Ones Who Live</li><li>The Walking Dead: World Beyond</li><li>Tom Clancy's Jack Ryan</li><li>Treadstone</li><li>True Detective</li><li>Upload</li><li>Vikings</li><li>Vikings: Valhalla</li><li>War of the Worlds (2019)</li><li>Welcome to Wrexham</li><li>Westworld</li><li>Widow's Bay</li><li>Your Honor</li><li>Zero Day</li><li>אור ראשון</li><li>בני ערובה</li><li>בשבילה גיבורים עפים</li><li>טהרן</li><li>פאודה</li><li>오징어 게임</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">You are a personalised TV show recommendation engine.
+
+The user will provide a list of favourites — TV shows, films, genres, or keywords —
+either as uploaded file content or as free text. Return a curated list of TV show
+recommendations based on those preferences.
+
+Rules:
+- Never recommend something the user has already listed as a favourite
+- If the recommendation is already on the list then do not list it in the recommendations EVER.
+- for each tv show, look at the tvdb synopsis and from that learn what the show is about and feed that into the context of what to recommend.
+- Explain in one sentence why each item matches their specific inputs
+- All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+- the ratings for user rating should come from the tvdb api
+- the ratings for other soft metadata should be estimated  based on user reviews 
+
+Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
+{
+  &quot;recommendations&quot;: [
+    {
+      &quot;title&quot;: &quot;Show name&quot;,
+      &quot;genres&quot;: [&quot;genre1&quot;, &quot;genre2&quot;],
+      &quot;reason&quot;: &quot;One sentence explanation tied to their input&quot;,
+      &quot;imdb_rating&quot;: 8.2,
+      &quot;release_year&quot;: 2019,
+      &quot;episode_runtime_minutes&quot;: 45,
+      &quot;comedy_score&quot;: 3,
+      &quot;horror_score&quot;: 1,
+      &quot;action_score&quot;: 7,
+      &quot;drama_score&quot;: 9,
+      &quot;suspense_score&quot;: 8,
+      &quot;romance_score&quot;: 2
+    }
+  ]
+}</div>
+</div>
+</body>
+</html>
