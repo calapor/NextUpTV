@@ -9,6 +9,7 @@ Rules:
 - Explain in one sentence why each item matches their specific inputs
 - All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
 - Return a realistic 0–10 score for each of: comedy_score, horror_score, action_score, drama_score, suspense_score
+- Write each JSON field value as final, clean text — no self-corrections, parenthetical asides, reasoning notes, or dash-based corrections (e.g. "— instead:", "— actually:") inside field values
 
 
 

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval B 8.1 — 15/05/2026, 23:00:21</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#3b82f6;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 23:00:21</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">B</div>
+    <div class="score-block">
+      <div class="score">8.1</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">8.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#3b82f6"></div></div>
+        <p class="rationale">Nearly all recommendations connect meaningfully to the taste profile. Mindhunter fits the True Detective/Black Bird/Making a Murderer cluster perfectly; Silo matches the Severance/Dark Matter/Expanse sci-fi thread; Bad Sisters hits the Irish dark comedy and Baby Reindeer tones well. The Recruiter is a slightly weaker match — it is a lighter, more procedural Netflix spy show compared to the sophisticated spy dramas in the profile (Le Bureau, Slow Horses, The Americans). The Wire mention of 'The Shield' in the reason is odd since The Shield is not in the input, but the show itself is a strong match.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">7.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%;background:#3b82f6"></div></div>
+        <p class="rationale">Most reasons cite specific shared elements: the Irish sensibility comparison for Bad Sisters, the criminal-profiling procedural angle for Mindhunter, and the underground dystopian mystery framing for Silo are all well-targeted. The Tulsa King reason is solid but slightly generic ('charismatic lone operator'). The Wire reason references The Shield, a show not in the input profile, which is a minor error. The Irrational reason is functional but feels like a stock procedural pitch. Overall reasoning is above average but not consistently deep.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">7/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#3b82f6"></div></div>
+        <p class="rationale">The eight recommendations skew heavily toward prestige US drama and are predominantly post-2017 productions. There is reasonable genre spread (dark comedy, sci-fi, crime procedural, spy thriller, post-apocalyptic), but no non-English language content despite the viewer clearly enjoying Israeli, Korean, French, German and Spanish-language shows. No period dramas, no travel/documentary-adjacent content, and no purely comedic entries are included either, leaving several taste vectors in the profile unaddressed.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">7.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%;background:#3b82f6"></div></div>
+        <p class="rationale">Most ratings and years are plausible. The Wire's 9.3 IMDB rating is accurate. Mindhunter at 8.6 is slightly high (actual is closer to 8.6, acceptable). Station Eleven at 8.0 is reasonable. Silo at 8.2 is broadly correct. Bad Sisters at 8.4 is plausible. The Recruiter at 7.2 and The Irrational at 7.2 are plausible. Runtimes are all within credible range. No egregious errors detected, though a couple of ratings are on the optimistic side by 0.2–0.3 points.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">10/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#3b82f6"></div></div>
+        <p class="rationale">None of the eight recommended titles appear in the viewer's extensive input list. No spin-offs or direct franchise entries of input shows were recommended either.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">This is a solid, largely well-targeted recommendation set that correctly identifies several key taste clusters in the profile — particularly the prestige crime drama, spy thriller, and sci-fi dystopia threads — and matches them with high-quality shows the viewer has not already seen. The reasoning is generally specific and useful, with one factual slip (referencing The Shield in The Wire's reason despite it not being an input show). The most significant weakness is a lack of diversity: despite the viewer clearly consuming non-English language content from at least five different countries, every recommendation is an English-language production, and there is no attempt to surface comparable Israeli, Korean, French or German shows. Expanding into those dimensions would meaningfully improve the recommendation set.</p></div>
+
+  <h2>Recommendations Generated (8)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Tulsa King</strong> (2022)</td>
+        <td>Crime, Drama, Comedy</td>
+        <td>8.1</td>
+        <td>Like Justified and Reacher, it features a charismatic lone operator navigating criminal territory with dark humour and sharp writing.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Mindhunter</strong> (2017)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8.6</td>
+        <td>Fans of Black Bird, True Detective, and Making a Murderer will appreciate this slow-burn procedural about FBI agents building criminal profiling through chilling interviews with serial killers.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Station Eleven</strong> (2021)</td>
+        <td>Drama, Sci-Fi, Post-Apocalyptic</td>
+        <td>8</td>
+        <td>Fans of The Last of Us, Dark, and The Expanse will be drawn to this beautifully crafted, non-linear post-apocalyptic story that prioritises character depth and atmosphere over action.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>The Recruiter</strong> (2022)</td>
+        <td>Thriller, Drama, Spy</td>
+        <td>7.2</td>
+        <td>With the same morally complex intelligence-world tension found in Slow Horses, Le Bureau des légendes, and The Americans, this Netflix series follows a ruthless CIA recruiter operating in ethical grey zones.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Silo</strong> (2023)</td>
+        <td>Sci-Fi, Drama, Dystopian</td>
+        <td>8.2</td>
+        <td>Fans of Severance, Dark Matter, and The Expanse will love this tense, layered dystopian mystery set underground where the truth about the outside world is strictly forbidden.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Bad Sisters</strong> (2022)</td>
+        <td>Dark Comedy, Drama, Thriller</td>
+        <td>8.4</td>
+        <td>With the same darkly comic Irish sensibility as Derry Girls and Bodkin combined with the sinister intrigue of Baby Reindeer, this Apple TV+ show follows sisters plotting to kill an abusive brother-in-law.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>The Wire</strong> (2002)</td>
+        <td>Crime, Drama</td>
+        <td>9.3</td>
+        <td>Essential viewing for fans of The Sopranos, Narcos, and The Shield — a meticulously crafted portrait of institutional failure told through Baltimore's drug trade, policing, and politics.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>The Irrational</strong> (2023)</td>
+        <td>Crime, Drama, Mystery</td>
+        <td>7.2</td>
+        <td>Fans of The Mentalist and Prodigal Son will enjoy this slick procedural following a brilliant behavioural science professor who consults on high-stakes criminal investigations using psychology and logic.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Name</li><li>3 Body Problem</li><li>A Knight of the Seven Kingdoms</li><li>Atomic</li><li>Atypical</li><li>Baby Reindeer</li><li>Barry</li><li>Berlin Station</li><li>Better Call Saul</li><li>Billions</li><li>Black Bird</li><li>Black Books</li><li>Black Doves</li><li>Black Mirror</li><li>Bodkin</li><li>Bodyguard (2018)</li><li>Breaking Bad</li><li>Bridgerton</li><li>Brooklyn Nine-Nine</li><li>Chernobyl</li><li>Clarkson's Farm</li><li>Condor</li><li>Dark</li><li>Dark Matter (2024)</li><li>Derry Girls</li><li>Detectorists</li><li>Deutschland</li><li>Dexter</li><li>Dexter: New Blood</li><li>Dexter: Original Sin</li><li>Dexter: Resurrection</li><li>Die Kaiserin</li><li>Dix pour cent</li><li>DTF St. Louis</li><li>Dublin Murders</li><li>El Candidato</li><li>Fallout</li><li>Fargo</li><li>Father Ted</li><li>Fear the Walking Dead</li><li>For All Mankind</li><li>Fortitude</li><li>Game of Thrones</li><li>Generation Kill</li><li>Goliath</li><li>Hacks</li><li>Hanna</li><li>Hijack</li><li>Hit &amp; Run</li><li>Home (2019)</li><li>Homeland</li><li>Hostage (2025)</li><li>House of Cards (US)</li><li>House of the Dragon</li><li>Hunters (2020)</li><li>Into the Night</li><li>Invasion (2021)</li><li>It's Always Sunny in Philadelphia</li><li>James May: Our Man In...</li><li>Justified</li><li>Kalifat</li><li>Killing Eve</li><li>Le Bureau des légendes</li><li>Making a Murderer</li><li>McMafia</li><li>MobLand</li><li>Monster (2022)</li><li>Mr Inbetween</li><li>Munich Games</li><li>Murder at the Cottage: The Search for Justice for Sophie</li><li>Narcos</li><li>Narcos: Mexico</li><li>Obituary</li><li>Ozark</li><li>Paradise (2025)</li><li>Parks and Recreation</li><li>Peaky Blinders</li><li>PLUR1BUS</li><li>Prodigal Son</li><li>Reacher</li><li>Resident Alien</li><li>Rooster</li><li>Russian Doll</li><li>Schitt's Creek</li><li>SEAL Team</li><li>See</li><li>Severance</li><li>Slow Horses</li><li>Sneaky Pete</li><li>Sophie: A Murder in West Cork</li><li>Space Force</li><li>Star Trek: Discovery</li><li>Star Trek: Picard</li><li>Star Trek: Strange New Worlds</li><li>Star Trek: The Next Generation</li><li>Succession</li><li>Taboo (2017)</li><li>Tales of the Walking Dead</li><li>Ted Lasso</li><li>The Acolyte</li><li>The Agency (2024)</li><li>The Americans (2013)</li><li>The Bear</li><li>The Beast in Me</li><li>The Blacklist</li><li>The Day of the Jackal</li><li>The Diplomat</li><li>The Dropout</li><li>The Expanse</li><li>The Gentlemen</li><li>The Goldbergs (2013)</li><li>The Good Place</li><li>The Grand Tour (2016)</li><li>The Great Escapists</li><li>The Iris Affair</li><li>The Last Kingdom</li><li>The Last Narc</li><li>The Last of Us</li><li>The Last Ship</li><li>The Man in the High Castle</li><li>The Mandalorian</li><li>The Marvelous Mrs. Maisel</li><li>The Mentalist</li><li>The Mosquito Coast</li><li>The Night Agent</li><li>The Night Manager</li><li>The Office (US)</li><li>The Pitt</li><li>The Queen's Gambit</li><li>The Sopranos</li><li>The Spy</li><li>The Studio (2025)</li><li>The Sympathizer</li><li>The Terminal List</li><li>The Terminal List: Dark Wolf</li><li>The Terror</li><li>The Umbrella Academy</li><li>The Veil</li><li>The Walking Dead</li><li>The Walking Dead: Daryl Dixon</li><li>The Walking Dead: Dead City</li><li>The Walking Dead: The Ones Who Live</li><li>The Walking Dead: World Beyond</li><li>Tom Clancy's Jack Ryan</li><li>Treadstone</li><li>True Detective</li><li>Upload</li><li>Vikings</li><li>Vikings: Valhalla</li><li>War of the Worlds (2019)</li><li>Welcome to Wrexham</li><li>Westworld</li><li>Widow's Bay</li><li>Your Honor</li><li>Zero Day</li><li>אור ראשון</li><li>בני ערובה</li><li>בשבילה גיבורים עפים</li><li>טהרן</li><li>פאודה</li><li>오징어 게임</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">You are a personalised TV show recommendation engine.
+
+The user will provide a list of favourites — TV shows, films, genres, or keywords —
+either as uploaded file content or as free text. Return a curated list of TV show
+recommendations based on those preferences.
+
+Rules:
+ - Write each JSON field value as final, clean text — no self-corrections, parenthetical asides, or reasoning notes inside field values
+- Never recommend something the user has already listed as a favourite
+- Explain in one sentence why each item matches their specific inputs
+- All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+- Return a realistic 0–10 score for each of: comedy_score, horror_score, action_score, drama_score, suspense_score
+
+
+
+Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
+{
+  &quot;recommendations&quot;: [
+    {
+      &quot;title&quot;: &quot;Show name&quot;,
+      &quot;genres&quot;: [&quot;genre1&quot;, &quot;genre2&quot;],
+      &quot;reason&quot;: &quot;One sentence explanation tied to their input&quot;,
+      &quot;imdb_rating&quot;: 8.2,
+      &quot;release_year&quot;: 2019,
+      &quot;episode_runtime_minutes&quot;: 45,
+      &quot;comedy_score&quot;: 3,
+      &quot;horror_score&quot;: 1,
+      &quot;action_score&quot;: 7,
+      &quot;drama_score&quot;: 9,
+      &quot;suspense_score&quot;: 8,
+      &quot;romance_score&quot;: 2
+    }
+  ]
+}</div>
+</div>
+</body>
+</html>
