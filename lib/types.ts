@@ -36,3 +36,33 @@ export interface RecommendationsRequest {
   keywords: string
   count: number
 }
+
+export interface PendingRequest {
+  fileContent: string
+  keywords: string
+}
+
+// Eval types
+export interface CriterionScore {
+  score: number
+  rationale: string
+}
+
+export interface EvalCriteria {
+  relevance: CriterionScore
+  reasoningQuality: CriterionScore
+  diversity: CriterionScore
+  metadataAccuracy: CriterionScore
+  noOverlap: CriterionScore
+}
+
+export type EvalGrade = 'A' | 'B' | 'C' | 'D' | 'F'
+
+export interface EvalRunResult {
+  recommendations: Recommendation[]
+  criteria: EvalCriteria
+  overallScore: number
+  grade: EvalGrade
+  rawCritique: string
+  reportUrl: string
+}
