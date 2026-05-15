@@ -129,7 +129,7 @@ The application will be available at `http://localhost:3000`
 ## 🎯 Next Steps
 
 When implementing backend functionality:
-1. Connect to AI recommendation API
+1. ~~Connect to AI recommendation API~~
 2. Implement file upload handling
 3. Add real filtering logic
 4. Connect to database for persistence
