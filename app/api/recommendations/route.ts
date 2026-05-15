@@ -105,7 +105,8 @@ export async function POST(req: NextRequest) {
           err instanceof SyntaxError
             ? 'Claude returned invalid JSON. Please try again.'
             : 'An error occurred while generating recommendations.'
-        controller.enqueue(sseEvent({ type: 'error', message }))
+        const detail = err instanceof Error ? err.message : String(err)
+        controller.enqueue(sseEvent({ type: 'error', message, detail }))
       } finally {
         controller.close()
       }
