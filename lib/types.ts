@@ -25,6 +25,11 @@ export interface RecommendationsRequest {
   count: number
 }
 
+export interface PendingRequest {
+  fileContent: string
+  keywords: string
+}
+
 // Eval types
 export interface CriterionScore {
   score: number

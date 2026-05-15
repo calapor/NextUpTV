@@ -1,24 +1,37 @@
 'use client'
 
 import { DashboardLayout } from '@/components/dashboard-layout'
+import { StreamingView } from '@/components/streaming-view'
 import { Button } from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import type { Recommendation } from '@/lib/types'
+import type { Recommendation, PendingRequest } from '@/lib/types'
 
 interface RecommendationsPageProps {
   onNavigate?: (page: 'recommendations' | 'favourites') => void
   recommendations: Recommendation[]
+  pendingRequest: PendingRequest | null
+  onRecommendationsReady: (recs: Recommendation[]) => void
 }
 
-export function RecommendationsPage({ onNavigate, recommendations }: RecommendationsPageProps) {
-  const isEmpty = recommendations.length === 0
+export function RecommendationsPage({
+  onNavigate,
+  recommendations,
+  pendingRequest,
+  onRecommendationsReady,
+}: RecommendationsPageProps) {
+  if (pendingRequest) {
+    return (
+      <StreamingView
+        pendingRequest={pendingRequest}
+        onRecommendationsReady={onRecommendationsReady}
+        onNavigate={onNavigate}
+      />
+    )
+  }
 
-  if (isEmpty) {
+  if (recommendations.length === 0) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <div className="flex flex-col items-center justify-center text-center max-w-md px-4">
-          {/* Empty state */}
           <div className="mb-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-4">
               <svg
@@ -35,17 +48,14 @@ export function RecommendationsPage({ onNavigate, recommendations }: Recommendat
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-foreground mb-2">
-              No recommendations yet
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground mb-2">No recommendations yet</h1>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Go to Manage Favourites to upload your preferences and generate recommendations
             </p>
           </div>
 
-          {/* CTA */}
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="bg-blue-600 hover:bg-blue-700"
             onClick={() => onNavigate?.('favourites')}
           >
