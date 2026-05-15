@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 228 52" fill="none" role="img" aria-label="NextUpTV">
+  <defs>
+    <!-- Icon background: matches from-violet-600 via-purple-500 to-pink-500 diagonal -->
+    <linearGradient id="iconGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#7C3AED"/>
+      <stop offset="50%"  stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <!-- Text gradient: matches from-violet-500 to-pink-500 horizontal -->
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon container: 44×44 rounded square, vertically centred in 52px height -->
+  <rect x="0" y="4" width="44" height="44" rx="10" fill="url(#iconGrad)"/>
+
+  <!-- TV screen (Tv2-style flat panel) -->
+  <!-- Screen face -->
+  <rect x="7" y="11" width="30" height="21" rx="3" fill="white" fill-opacity="0.92"/>
+  <!-- Screen inner (subtle dark inset to give depth) -->
+  <rect x="9" y="13" width="26" height="17" rx="2" fill="#1e1040" fill-opacity="0.55"/>
+  <!-- Play triangle centred in screen -->
+  <path d="M19 17 L19 26 L27.5 21.5 Z" fill="white" fill-opacity="0.95"/>
+
+  <!-- TV stand -->
+  <rect x="19" y="32" width="6" height="4"  rx="1"   fill="white" fill-opacity="0.75"/>
+  <!-- TV base -->
+  <rect x="13" y="36" width="18" height="3" rx="1.5" fill="white" fill-opacity="0.75"/>
+
+  <!-- Wordmark: "NextUp" in gradient + "TV" in bold white -->
+  <!-- Using x-spacing tuned for Geist/system-ui at font-size 26 weight 700 -->
+  <text
+    x="54" y="35"
+    font-family="'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif"
+    font-weight="700"
+    font-size="26"
+    letter-spacing="-0.5"
+    fill="url(#textGrad)"
+  >NextUp</text>
+
+  <text
+    x="170" y="35"
+    font-family="'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif"
+    font-weight="800"
+    font-size="26"
+    letter-spacing="-0.5"
+    fill="white"
+  >TV</text>
+</svg>

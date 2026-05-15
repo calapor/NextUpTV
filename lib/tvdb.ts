@@ -39,8 +39,8 @@ function firstSentence(text: string): string {
 }
 
 export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | null> {
+  const cacheKey = title.trim().toLowerCase()
   try {
-    const cacheKey = title.trim().toLowerCase()
     const cached = showCache.get(cacheKey)
     if (cached && cached.expiresAt > Date.now()) {
       return cached.data
