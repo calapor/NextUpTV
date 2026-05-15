@@ -1,18 +1,30 @@
 export interface Recommendation {
+  // TV Show fields (TVDB-sourced when available, Claude fallback otherwise)
+  id?: number
   title: string
-  genres: string[]
-  reason: string
-  imdb_rating: number
+  one_sentence_synopsis?: string
   release_year: number
   episode_runtime_minutes: number
+  content_rating?: string
+  genres: string[]
+  tvdb_poster_thumbnail_url?: string
+  tvdb_show_url?: string
+  streaming_platforms?: string[]
+  average_user_rating?: number
+  imdb_rating: number
+
+  // AI Recommendation Attributes (Claude-generated, 0-10)
   comedy_score: number
   horror_score: number
   action_score: number
   drama_score: number
   suspense_score: number
   romance_score: number
-  tvdb_thumbnail_url?: string
-  tvdb_show_url?: string
+
+  // Recommendation Metadata (Claude-generated)
+  recommendation_score?: number
+  matched_keywords?: string[]
+  reason: string
 }
 
 export interface RecommendationsResponse {

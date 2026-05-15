@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
 import type { RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
-import { fetchTvdbData } from '@/lib/tvmaze'
+import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
 
 const anthropic = new Anthropic()
@@ -78,12 +78,26 @@ export async function POST(req: NextRequest) {
           parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
         )
 
-        const enriched = parsed.recommendations.map((rec, i) => ({
-          ...rec,
-          ...(tvdbResults[i]
-            ? { tvdb_thumbnail_url: tvdbResults[i]!.thumbnail_url, tvdb_show_url: tvdbResults[i]!.show_url }
-            : {}),
-        }))
+        const enriched = parsed.recommendations.map((rec, i) => {
+          const tvdb = tvdbResults[i]
+          return {
+            ...rec,
+            ...(tvdb
+              ? {
+                  id: tvdb.id,
+                  one_sentence_synopsis: tvdb.one_sentence_synopsis,
+                  release_year: tvdb.release_year,
+                  episode_runtime_minutes: tvdb.episode_runtime_minutes,
+                  content_rating: tvdb.content_rating,
+                  genres: tvdb.genres,
+                  tvdb_poster_thumbnail_url: tvdb.tvdb_poster_thumbnail_url,
+                  tvdb_show_url: tvdb.tvdb_show_url,
+                  streaming_platforms: tvdb.streaming_platforms,
+                  average_user_rating: tvdb.average_user_rating,
+                }
+              : {}),
+          }
+        })
 
         controller.enqueue(sseEvent({ type: 'recommendations', recommendations: enriched }))
       } catch (err) {
