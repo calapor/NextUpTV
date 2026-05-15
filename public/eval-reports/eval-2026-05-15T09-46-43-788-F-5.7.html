@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval F 5.7 — 15/05/2026, 10:46:43</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#ef4444;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 10:46:43</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">F</div>
+    <div class="score-block">
+      <div class="score">5.7</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">6.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ef4444"></div></div>
+        <p class="rationale">Most recommendations connect reasonably well to the taste profile — Silo, Tulsa King, The Recruit and Yellowjackets are solid fits. However, the Fauda entry is deeply confused, appearing to recommend 'Prisoners of War / Hatufim' but labelling it as a 'Fauda Season 5 / Continuation', which is misleading and arguably circles back to input-adjacent content. The Bureau of Magical Things entry is outright broken — it starts recommending one show then pivots mid-reason to recommend Yellowjackets, which appears as a separate entry anyway, creating a duplicate and a nonsensical placeholder.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">5.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:55%;background:#ef4444"></div></div>
+        <p class="rationale">Several reasons are specific and well-anchored to the input shows (Silo citing Severance/Dark Matter/The Expanse, The Offer citing Sopranos/Peaky Blinders/Succession). However, the Fauda entry is incoherent and self-contradictory, the Bureau of Magical Things entry abandons its own recommendation mid-text, and Yellowjackets appears twice with identical metadata and nearly identical reasoning. These structural errors significantly undermine the reasoning quality across the set.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">5.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:55%;background:#ef4444"></div></div>
+        <p class="rationale">The set is heavily clustered in the 2021–2023 period with predominantly US productions. Genres lean toward crime/drama/thriller with limited true variety. There is no comedy-first recommendation, no historical drama outside The Offer, no animation, no international show beyond the confused Fauda entry, and the duplicate Yellowjackets entry wastes a slot. The Squid Game: The Challenge pivot to reality TV adds one point of variety but is an unscripted format in an otherwise scripted list.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:50%;background:#ef4444"></div></div>
+        <p class="rationale">Silo's IMDB rating of 8.4 is plausible but slightly generous (sits closer to 8.0–8.2). Yellowjackets' 7.9 is reasonable. The Bureau of Magical Things entry carries Yellowjackets' metadata under a completely different show title, which is a clear fabrication error. The Fauda entry claims release year 2010 for 'Prisoners of War / Hatufim' which is approximately correct, but the metadata is filed under a misleading title mashup. The duplicate Yellowjackets entries share identical metadata, confirming a copy-paste error rather than genuine assessment.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">6/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#ef4444"></div></div>
+        <p class="rationale">Fauda (פאודה) is explicitly listed as an input favourite, and the seventh recommendation is titled 'Fauda (פאודה) — Season 5 / Continuation', which directly references and overlaps with an input show by name. Even though the body of the reason attempts to redirect to a different show (Hatufim), the title-level overlap is a hard rule violation. Additionally, Squid Game (오징어 게임) is in the input list and 'Squid Game: The Challenge' is a direct spin-off, which also warrants a penalty.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">This recommendation set has a solid conceptual foundation — Silo, Tulsa King, The Recruit and Yellowjackets are genuinely appropriate picks for this taste profile — but it is severely undermined by three structural failures: a duplicate Yellowjackets entry with a phantom placeholder show preceding it, a Fauda entry that names an input-show in its title in direct violation of the no-overlap rule, and a mid-reason pivot that abandons one show to recommend another. Metadata accuracy suffers from the copy-paste errors, and the overall diversity is weak given the heavy 2021–2023 US clustering. With cleanup and replacement of the broken entries, the underlying recommendations would score considerably higher.</p></div>
+
+  <h2>Recommendations Generated (8)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Tulsa King</strong> (2022)</td>
+        <td>Crime, Drama, Comedy</td>
+        <td>8.1</td>
+        <td>If you enjoy Justified, Reacher, and The Sopranos, this fish-out-of-water mob drama starring Sylvester Stallone as a New York mafia boss exiled to Oklahoma blends crime, dry humour, and strong character work in a similar vein.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Silo</strong> (2023)</td>
+        <td>Sci-Fi, Drama, Mystery</td>
+        <td>8.4</td>
+        <td>Fans of Severance, Dark Matter, and The Expanse will appreciate this dystopian mystery set in an underground silo where the truth about the outside world is a deadly secret, built on the same slow-burn tension and world-building you clearly love.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>The Offer</strong> (2022)</td>
+        <td>Drama, Crime, History</td>
+        <td>7.9</td>
+        <td>Given your love of The Sopranos, Peaky Blinders, and Succession, this behind-the-scenes dramatisation of the making of The Godfather delivers rich period crime drama with sharp political manoeuvring and compelling characters.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Squid Game: The Challenge</strong> (2023)</td>
+        <td>Reality, Thriller, Competition</td>
+        <td>6.8</td>
+        <td>Since you already love Squid Game (오징어 게임), this real-world competition series puts 456 contestants through the actual games for a $4.56 million prize, delivering the same tension and social dynamics in an unscripted format.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>The Bureau of Magical Things</strong> (2021)</td>
+        <td>Fantasy, Drama, Adventure</td>
+        <td>7.9</td>
+        <td>Given your appetite for genre-blending shows like The Umbrella Academy and Dark, this recommendation is instead replaced with — Yellowjackets — a survival thriller with deep mystery and dark character drama that mirrors your love of True Detective, Fargo, and Severance.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Yellowjackets</strong> (2021)</td>
+        <td>Drama, Thriller, Mystery, Survival</td>
+        <td>7.9</td>
+        <td>Your love of True Detective, Fargo, and Severance points directly to this survival mystery following a girls' soccer team stranded in the wilderness in 1996 and the dark secrets haunting the survivors decades later.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>Fauda (פאודה) — Season 5 / Continuation</strong> (2010)</td>
+        <td>Action, Thriller, Drama</td>
+        <td>8.3</td>
+        <td>Since פאודה is already a favourite, its Israeli counterpart עוד יום (Tehran / Fauda universe) — specifically Prisoners of War (חטופים), the original Israeli series that inspired Homeland — is a perfect match for your love of tense intelligence thrillers.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>The Recruit</strong> (2022)</td>
+        <td>Thriller, Action, Comedy, Drama</td>
+        <td>7.4</td>
+        <td>Fans of Tom Clancy's Jack Ryan, The Night Agent, and Condor will enjoy this fast-paced CIA thriller following a young agency lawyer pulled into dangerous international espionage, with sharper wit and a tone reminiscent of your lighter action picks.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Name</li><li>3 Body Problem</li><li>A Knight of the Seven Kingdoms</li><li>Atomic</li><li>Atypical</li><li>Baby Reindeer</li><li>Barry</li><li>Berlin Station</li><li>Better Call Saul</li><li>Billions</li><li>Black Bird</li><li>Black Books</li><li>Black Doves</li><li>Black Mirror</li><li>Bodkin</li><li>Bodyguard (2018)</li><li>Breaking Bad</li><li>Bridgerton</li><li>Brooklyn Nine-Nine</li><li>Chernobyl</li><li>Clarkson's Farm</li><li>Condor</li><li>Dark</li><li>Dark Matter (2024)</li><li>Derry Girls</li><li>Detectorists</li><li>Deutschland</li><li>Dexter</li><li>Dexter: New Blood</li><li>Dexter: Original Sin</li><li>Dexter: Resurrection</li><li>Die Kaiserin</li><li>Dix pour cent</li><li>DTF St. Louis</li><li>Dublin Murders</li><li>El Candidato</li><li>Fallout</li><li>Fargo</li><li>Father Ted</li><li>Fear the Walking Dead</li><li>For All Mankind</li><li>Fortitude</li><li>Game of Thrones</li><li>Generation Kill</li><li>Goliath</li><li>Hacks</li><li>Hanna</li><li>Hijack</li><li>Hit &amp; Run</li><li>Home (2019)</li><li>Homeland</li><li>Hostage (2025)</li><li>House of Cards (US)</li><li>House of the Dragon</li><li>Hunters (2020)</li><li>Into the Night</li><li>Invasion (2021)</li><li>It's Always Sunny in Philadelphia</li><li>James May: Our Man In...</li><li>Justified</li><li>Kalifat</li><li>Killing Eve</li><li>Le Bureau des légendes</li><li>Making a Murderer</li><li>McMafia</li><li>MobLand</li><li>Monster (2022)</li><li>Mr Inbetween</li><li>Munich Games</li><li>Murder at the Cottage: The Search for Justice for Sophie</li><li>Narcos</li><li>Narcos: Mexico</li><li>Obituary</li><li>Ozark</li><li>Paradise (2025)</li><li>Parks and Recreation</li><li>Peaky Blinders</li><li>PLUR1BUS</li><li>Prodigal Son</li><li>Reacher</li><li>Resident Alien</li><li>Rooster</li><li>Russian Doll</li><li>Schitt's Creek</li><li>SEAL Team</li><li>See</li><li>Severance</li><li>Slow Horses</li><li>Sneaky Pete</li><li>Sophie: A Murder in West Cork</li><li>Space Force</li><li>Star Trek: Discovery</li><li>Star Trek: Picard</li><li>Star Trek: Strange New Worlds</li><li>Star Trek: The Next Generation</li><li>Succession</li><li>Taboo (2017)</li><li>Tales of the Walking Dead</li><li>Ted Lasso</li><li>The Acolyte</li><li>The Agency (2024)</li><li>The Americans (2013)</li><li>The Bear</li><li>The Beast in Me</li><li>The Blacklist</li><li>The Day of the Jackal</li><li>The Diplomat</li><li>The Dropout</li><li>The Expanse</li><li>The Gentlemen</li><li>The Goldbergs (2013)</li><li>The Good Place</li><li>The Grand Tour (2016)</li><li>The Great Escapists</li><li>The Iris Affair</li><li>The Last Kingdom</li><li>The Last Narc</li><li>The Last of Us</li><li>The Last Ship</li><li>The Man in the High Castle</li><li>The Mandalorian</li><li>The Marvelous Mrs. Maisel</li><li>The Mentalist</li><li>The Mosquito Coast</li><li>The Night Agent</li><li>The Night Manager</li><li>The Office (US)</li><li>The Pitt</li><li>The Queen's Gambit</li><li>The Sopranos</li><li>The Spy</li><li>The Studio (2025)</li><li>The Sympathizer</li><li>The Terminal List</li><li>The Terminal List: Dark Wolf</li><li>The Terror</li><li>The Umbrella Academy</li><li>The Veil</li><li>The Walking Dead</li><li>The Walking Dead: Daryl Dixon</li><li>The Walking Dead: Dead City</li><li>The Walking Dead: The Ones Who Live</li><li>The Walking Dead: World Beyond</li><li>Tom Clancy's Jack Ryan</li><li>Treadstone</li><li>True Detective</li><li>Upload</li><li>Vikings</li><li>Vikings: Valhalla</li><li>War of the Worlds (2019)</li><li>Welcome to Wrexham</li><li>Westworld</li><li>Widow's Bay</li><li>Your Honor</li><li>Zero Day</li><li>אור ראשון</li><li>בני ערובה</li><li>בשבילה גיבורים עפים</li><li>טהרן</li><li>פאודה</li><li>오징어 게임</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">You are a personalised TV show recommendation engine.
+
+The user will provide a list of favourites — TV shows, films, genres, or keywords —
+either as uploaded file content or as free text. Return a curated list of TV show
+recommendations based on those preferences.
+
+Rules:
+- Never recommend something the user has already listed as a favourite
+- If the recommendation is already on the list then do not list it in the recommendations EVER.
+- for each tv show, look at the tvdb synopsis and from that learn what the show is about and feed that into the context of what to recommend.
+- Explain in one sentence why each item matches their specific inputs
+- All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+- the ratings for user rating should come from the tvdb api
+- the ratings for other soft metadata should be estimated  based on user reviews 
+- include non-english high ranking series in the recommendation list
+
+Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
+{
+  &quot;recommendations&quot;: [
+    {
+      &quot;title&quot;: &quot;Show name&quot;,
+      &quot;genres&quot;: [&quot;genre1&quot;, &quot;genre2&quot;],
+      &quot;reason&quot;: &quot;One sentence explanation tied to their input&quot;,
+      &quot;imdb_rating&quot;: 8.2,
+      &quot;release_year&quot;: 2019,
+      &quot;episode_runtime_minutes&quot;: 45,
+      &quot;comedy_score&quot;: 3,
+      &quot;horror_score&quot;: 1,
+      &quot;action_score&quot;: 7,
+      &quot;drama_score&quot;: 9,
+      &quot;suspense_score&quot;: 8,
+      &quot;romance_score&quot;: 2
+    }
+  ]
+}</div>
+</div>
+</body>
+</html>
