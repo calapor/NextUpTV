@@ -22,15 +22,11 @@ export function TopNavigation({ currentPage, onPageChange }: TopNavigationProps)
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="flex items-center justify-between h-16 px-6">
         {/* Logo */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-
-
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-violet-600 via-purple-500 to-pink-500">
-            <Tv2 className="w-5 h-5 text-white" />
-          </div>
-
-            <span className="font-semibold text-lg hidden sm:inline bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">NextUpTV</span>        
-          </div>
+        <img
+  src="nextuptv-logo-v3.png"
+  alt="NextUpTV logo"
+  className="h-30 w-auto"
+/>
         
         {/* Navigation Tabs */}
         <nav className="flex gap-1 ml-8">

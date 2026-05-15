@@ -11,6 +11,11 @@ function sseEvent(obj: object): Uint8Array {
   return encoder.encode(`data: ${JSON.stringify(obj)}\n\n`)
 }
 
+function sanitizeSeriesTitle(title: string): string {
+  // Strip trailing season/series/part qualifiers e.g. "(Season 1)", ": Series 2", " - Part 3"
+  return title.replace(/[\s:–\-]*\(?(?:Season|Series|Part)\s+\d+\)?$/i, '').trim()
+}
+
 function extractJson(text: string): string {
   const start = text.indexOf('{')
   const end = text.lastIndexOf('}')
@@ -73,6 +78,10 @@ export async function POST(req: NextRequest) {
           console.error('[recommendations] JSON parse failed. Raw text:\n', fullText)
           throw parseErr
         }
+
+        parsed.recommendations.forEach((rec) => {
+          rec.title = sanitizeSeriesTitle(rec.title)
+        })
 
         const tvdbResults = await Promise.all(
           parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
