@@ -17,6 +17,8 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
   const [phase, setPhase] = useState('Connecting...')
   const [foundLines, setFoundLines] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorDetail, setErrorDetail] = useState<string | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -64,6 +66,7 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             onRecommendationsReady(payload.recommendations)
           } else if (payload.type === 'error') {
             setErrorMessage(payload.message)
+            setErrorDetail(payload.detail ?? null)
           }
           // text events intentionally ignored
         }
@@ -87,14 +90,32 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Something went wrong</AlertTitle>
             <AlertDescription>
-              {errorMessage}
-              <Button
-                variant="link"
-                onClick={() => onNavigate?.('favourites')}
-                className="ml-1 p-0 h-auto"
-              >
-                Try again
-              </Button>
+              <div className="mb-2">
+                {errorMessage}
+                <Button
+                  variant="link"
+                  onClick={() => onNavigate?.('favourites')}
+                  className="ml-1 p-0 h-auto"
+                >
+                  Try again
+                </Button>
+              </div>
+              {errorDetail && (
+                <>
+                  <Button
+                    variant="link"
+                    onClick={() => setShowDetail(!showDetail)}
+                    className="p-0 h-auto text-xs"
+                  >
+                    {showDetail ? 'Hide' : 'Show'} details
+                  </Button>
+                  {showDetail && (
+                    <pre className="mt-2 p-2 bg-black bg-opacity-20 rounded text-xs overflow-auto max-h-32 whitespace-pre-wrap break-words">
+                      {errorDetail}
+                    </pre>
+                  )}
+                </>
+              )}
             </AlertDescription>
           </Alert>
         ) : (
