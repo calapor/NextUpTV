@@ -84,7 +84,7 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
         </div>
 
         {/* Reason */}
-        <p className="text-sm text-muted-foreground line-clamp-3">{recommendation.reason}</p>
+        <p className="text-sm text-muted-foreground">{recommendation.reason}</p>
       </div>
     </Card>
   )
