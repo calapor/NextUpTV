@@ -15,6 +15,9 @@ export interface TvdbEnrichment {
 
 let tokenCache: { token: string; expiresAt: number } | null = null
 
+const SHOW_CACHE_TTL = 60 * 60 * 1000
+const showCache = new Map<string, { data: TvdbEnrichment | null; expiresAt: number }>()
+
 async function getAuthToken(): Promise<string> {
   if (tokenCache && tokenCache.expiresAt > Date.now() + 86_400_000) {
     return tokenCache.token
@@ -37,6 +40,12 @@ function firstSentence(text: string): string {
 
 export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | null> {
   try {
+    const cacheKey = title.trim().toLowerCase()
+    const cached = showCache.get(cacheKey)
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.data
+    }
+
     const token = await getAuthToken()
     const headers = { Authorization: `Bearer ${token}` }
 
@@ -44,7 +53,10 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
       `${TVDB_BASE}/search?q=${encodeURIComponent(title)}&type=series`,
       { headers }
     )
-    if (!searchRes.ok) return null
+    if (!searchRes.ok) {
+      showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
+      return null
+    }
 
     const searchData = await searchRes.json()
     const results: Array<{
@@ -56,12 +68,18 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
       slug?: string
     }> = searchData.data ?? []
 
-    if (!results.length) return null
+    if (!results.length) {
+      showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
+      return null
+    }
     const best = results[0]
     const tvdbId = parseInt(best.tvdb_id, 10)
 
     const seriesRes = await fetch(`${TVDB_BASE}/series/${tvdbId}`, { headers })
-    if (!seriesRes.ok) return null
+    if (!seriesRes.ok) {
+      showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
+      return null
+    }
 
     const seriesData = await seriesRes.json()
     const series: {
@@ -90,7 +108,7 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
 
     const releaseYear = best.year ? parseInt(best.year, 10) : (series.year ?? 0)
 
-    return {
+    const result: TvdbEnrichment = {
       id: tvdbId,
       one_sentence_synopsis: firstSentence(best.overview ?? ''),
       release_year: releaseYear,
@@ -102,7 +120,10 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
       streaming_platforms: streaming,
       average_user_rating: series.score ?? 0,
     }
+    showCache.set(cacheKey, { data: result, expiresAt: Date.now() + SHOW_CACHE_TTL })
+    return result
   } catch {
+    showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
     return null
   }
 }
