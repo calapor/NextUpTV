@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval F 5.2 — 15/05/2026, 12:34:25</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#ef4444;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 12:34:25</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">F</div>
+    <div class="score-block">
+      <div class="score">5.2</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">6/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#ef4444"></div></div>
+        <p class="rationale">Most recommendations genuinely connect to the taste profile — Silo fits the sci-fi/dystopian thread, Mindhunter fits the crime-drama thread, Tokyo Vice fits the organized-crime thread. However, two entries are disqualifying: 'The Americans' and 'Succession' are both explicitly listed as viewer favourites, making them completely irrelevant as new recommendations. Night Agent appears as 'The Night Agent' in the input list, which is almost certainly the same show under a slightly different title, further undermining relevance.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">6.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ef4444"></div></div>
+        <p class="rationale">Several reasons are genuinely specific — the Mindhunter reason ties it to Black Bird and Making a Murderer with precise thematic overlap; the Silo reason correctly identifies Severance, Dark Matter and The Man in the High Castle as relevant anchors. However, the Succession reason is self-defeating (it acknowledges it's already a favourite), The Americans reason openly hedges with 'if you haven't seen it already' (they have), and the Station Eleven reason reads as generic 'fans of X will appreciate' phrasing without citing specific narrative or tonal elements.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">6/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#ef4444"></div></div>
+        <p class="rationale">The set is heavily weighted toward US prestige drama from 2017–2023. There is a reasonable genre spread (sci-fi, crime, spy, post-apocalyptic, survival) but almost no diversity in production origin — every show is American. There are no comedies, no non-English language titles, no older shows, and no lighter-toned content despite the viewer clearly enjoying comedy (Father Ted, Black Books, Derry Girls, Schitt's Creek). The era and geography are noticeably narrow.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">6.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ef4444"></div></div>
+        <p class="rationale">Most IMDB ratings and release years are broadly plausible. Mindhunter at 8.6 is slightly high (closer to 8.6 is actually accurate, so that's fine). Night Agent is listed with title 'Night Agent' rather than 'The Night Agent' and release year 2023 is correct for season 1. Station Eleven's rating of 8.0 is reasonable. The main concern is the Succession entry listing release year 2018 — Succession premiered in 2018 which is correct — but the show is a known input favourite, so the metadata is moot in context. No egregious fabrications detected, but minor inconsistencies exist.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">1/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:10%;background:#ef4444"></div></div>
+        <p class="rationale">This is a significant failure. 'Succession' is explicitly listed as a viewer favourite and is recommended anyway. 'The Americans (2013)' is also explicitly listed as a favourite and is recommended under the title 'The Americans'. 'The Night Agent' appears in the input list and 'Night Agent' in the recommendations — almost certainly the same show. Two confirmed hard violations and one very likely third violation result in a near-zero score.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">This recommendation set is critically undermined by at least two direct violations of the no-overlap rule — Succession and The Americans are both explicitly in the viewer's favourites list and should never have appeared as recommendations, and Night Agent is almost certainly a duplicate of The Night Agent already in the profile. The reasoning quality varies widely: Mindhunter and Silo are well-argued picks with specific anchoring to input shows, but the Succession entry is self-aware about the duplication yet still included, which is a structural failure. The remaining valid recommendations (Yellowjackets, Mindhunter, Station Eleven, Silo, Tokyo Vice) are all defensible choices, but the set as a whole ignores the viewer's strong comedy preferences and non-English language viewing habits, producing a narrow, US-centric slate that fails to reflect the full breadth of the taste profile.</p></div>
+
+  <h2>Recommendations Generated (8)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Yellowjackets</strong> (2021)</td>
+        <td>Drama, Mystery, Thriller, Survival</td>
+        <td>7.8</td>
+        <td>Blends the slow-burn suspense of Ozark and True Detective with the dark, layered storytelling of Lost, following a girls' soccer team stranded in the wilderness who descend into disturbing survival tactics across two timelines.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>The Americans</strong> (2013)</td>
+        <td>Drama, Spy, Thriller</td>
+        <td>8.4</td>
+        <td>If you haven't seen the 2013 original already, this Cold War spy drama shares the deep character complexity of Le Bureau des légendes and Slow Horses, with the moral ambiguity of Breaking Bad and The Americans' own successor, The Agency.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Mindhunter</strong> (2017)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8.6</td>
+        <td>Shares the meticulous, character-driven crime DNA of Black Bird and Making a Murderer, following FBI agents who pioneer criminal profiling by interviewing incarcerated serial killers in 1970s America.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Station Eleven</strong> (2021)</td>
+        <td>Drama, Sci-Fi, Post-Apocalyptic</td>
+        <td>8</td>
+        <td>Fans of The Last of Us and The Expanse will appreciate this beautifully crafted post-pandemic story told across multiple timelines, exploring art, memory and human connection after civilisation collapses.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Succession</strong> (2018)</td>
+        <td>Drama, Dark Comedy</td>
+        <td>8.9</td>
+        <td>Already a favourite — but if you haven't revisited it, its razor-sharp writing and morally bankrupt power dynamics make it the perfect companion to Billions, House of Cards and The Sopranos.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Night Agent</strong> (2023)</td>
+        <td>Action, Thriller, Spy</td>
+        <td>7.7</td>
+        <td>Complements your love of Bodyguard, Hijack and The Terminal List with a propulsive White House conspiracy thriller that escalates rapidly and keeps the tension relentless across its tight episode structure.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>Silo</strong> (2023)</td>
+        <td>Sci-Fi, Mystery, Drama, Dystopian</td>
+        <td>8.2</td>
+        <td>Appeals directly to your taste for Severance, Dark Matter and The Man in the High Castle — a tense, world-building mystery set inside a vast underground silo where the truth about the outside world is strictly forbidden.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>Tokyo Vice</strong> (2022)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>7.9</td>
+        <td>Shares the immersive underworld atmosphere of Narcos, McMafia and Peaky Blinders, following an American journalist embedded inside the Tokyo Metropolitan Police who gets drawn dangerously deep into the Yakuza's world.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Name</li><li>3 Body Problem</li><li>A Knight of the Seven Kingdoms</li><li>Atomic</li><li>Atypical</li><li>Baby Reindeer</li><li>Barry</li><li>Berlin Station</li><li>Better Call Saul</li><li>Billions</li><li>Black Bird</li><li>Black Books</li><li>Black Doves</li><li>Black Mirror</li><li>Bodkin</li><li>Bodyguard (2018)</li><li>Breaking Bad</li><li>Bridgerton</li><li>Brooklyn Nine-Nine</li><li>Chernobyl</li><li>Clarkson's Farm</li><li>Condor</li><li>Dark</li><li>Dark Matter (2024)</li><li>Derry Girls</li><li>Detectorists</li><li>Deutschland</li><li>Dexter</li><li>Dexter: New Blood</li><li>Dexter: Original Sin</li><li>Dexter: Resurrection</li><li>Die Kaiserin</li><li>Dix pour cent</li><li>DTF St. Louis</li><li>Dublin Murders</li><li>El Candidato</li><li>Fallout</li><li>Fargo</li><li>Father Ted</li><li>Fear the Walking Dead</li><li>For All Mankind</li><li>Fortitude</li><li>Game of Thrones</li><li>Generation Kill</li><li>Goliath</li><li>Hacks</li><li>Hanna</li><li>Hijack</li><li>Hit &amp; Run</li><li>Home (2019)</li><li>Homeland</li><li>Hostage (2025)</li><li>House of Cards (US)</li><li>House of the Dragon</li><li>Hunters (2020)</li><li>Into the Night</li><li>Invasion (2021)</li><li>It's Always Sunny in Philadelphia</li><li>James May: Our Man In...</li><li>Justified</li><li>Kalifat</li><li>Killing Eve</li><li>Le Bureau des légendes</li><li>Making a Murderer</li><li>McMafia</li><li>MobLand</li><li>Monster (2022)</li><li>Mr Inbetween</li><li>Munich Games</li><li>Murder at the Cottage: The Search for Justice for Sophie</li><li>Narcos</li><li>Narcos: Mexico</li><li>Obituary</li><li>Ozark</li><li>Paradise (2025)</li><li>Parks and Recreation</li><li>Peaky Blinders</li><li>PLUR1BUS</li><li>Prodigal Son</li><li>Reacher</li><li>Resident Alien</li><li>Rooster</li><li>Russian Doll</li><li>Schitt's Creek</li><li>SEAL Team</li><li>See</li><li>Severance</li><li>Slow Horses</li><li>Sneaky Pete</li><li>Sophie: A Murder in West Cork</li><li>Space Force</li><li>Star Trek: Discovery</li><li>Star Trek: Picard</li><li>Star Trek: Strange New Worlds</li><li>Star Trek: The Next Generation</li><li>Succession</li><li>Taboo (2017)</li><li>Tales of the Walking Dead</li><li>Ted Lasso</li><li>The Acolyte</li><li>The Agency (2024)</li><li>The Americans (2013)</li><li>The Bear</li><li>The Beast in Me</li><li>The Blacklist</li><li>The Day of the Jackal</li><li>The Diplomat</li><li>The Dropout</li><li>The Expanse</li><li>The Gentlemen</li><li>The Goldbergs (2013)</li><li>The Good Place</li><li>The Grand Tour (2016)</li><li>The Great Escapists</li><li>The Iris Affair</li><li>The Last Kingdom</li><li>The Last Narc</li><li>The Last of Us</li><li>The Last Ship</li><li>The Man in the High Castle</li><li>The Mandalorian</li><li>The Marvelous Mrs. Maisel</li><li>The Mentalist</li><li>The Mosquito Coast</li><li>The Night Agent</li><li>The Night Manager</li><li>The Office (US)</li><li>The Pitt</li><li>The Queen's Gambit</li><li>The Sopranos</li><li>The Spy</li><li>The Studio (2025)</li><li>The Sympathizer</li><li>The Terminal List</li><li>The Terminal List: Dark Wolf</li><li>The Terror</li><li>The Umbrella Academy</li><li>The Veil</li><li>The Walking Dead</li><li>The Walking Dead: Daryl Dixon</li><li>The Walking Dead: Dead City</li><li>The Walking Dead: The Ones Who Live</li><li>The Walking Dead: World Beyond</li><li>Tom Clancy's Jack Ryan</li><li>Treadstone</li><li>True Detective</li><li>Upload</li><li>Vikings</li><li>Vikings: Valhalla</li><li>War of the Worlds (2019)</li><li>Welcome to Wrexham</li><li>Westworld</li><li>Widow's Bay</li><li>Your Honor</li><li>Zero Day</li><li>אור ראשון</li><li>בני ערובה</li><li>בשבילה גיבורים עפים</li><li>טהרן</li><li>פאודה</li><li>오징어 게임</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">export const RECOMMENDATIONS_SYSTEM_PROMPT = `You are a personalised TV show recommendation engine.
+
+The user will provide a list of favourites — TV shows, films, genres, or keywords — either as uploaded file content or as free text. Return a curated list of TV show recommendations based on those preferences.
+
+Rules:
+- NEVER recommend something the user has already listed in their input list.
+- For each TV show in the list, look up the show synopsis from TheTVDB and also consider this as a flavour in deciding what  recommendations to make to the user.
+- Explain in one sentence why each item matches their specific inputs
+- All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+
+Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
+{
+  &quot;recommendations&quot;: [
+    {
+      &quot;title&quot;: &quot;Show name&quot;,
+      &quot;genres&quot;: [&quot;genre1&quot;, &quot;genre2&quot;],
+      &quot;reason&quot;: &quot;One sentence explanation tied to their input&quot;,
+      &quot;imdb_rating&quot;: 8.2,
+      &quot;release_year&quot;: 2019,
+      &quot;episode_runtime_minutes&quot;: 45,
+      &quot;comedy_score&quot;: 3,
+      &quot;horror_score&quot;: 1,
+      &quot;action_score&quot;: 7,
+      &quot;drama_score&quot;: 9,
+      &quot;suspense_score&quot;: 8,
+      &quot;romance_score&quot;: 2
+    }
+  ]
+}`
+</div>
+</div>
+</body>
+</html>
