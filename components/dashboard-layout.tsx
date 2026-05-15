@@ -255,9 +255,9 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   )
 
   return (
-    <div className="mt-16 h-[calc(100vh-64px)] flex overflow-hidden flex-col lg:flex-row">
+    <div className="h-full flex overflow-hidden flex-col md:flex-row">
       {/* Desktop Filter Panel - Hidden on mobile */}
-      <div className="hidden lg:flex lg:w-[30%] border-r border-border bg-card/50 p-6 overflow-y-auto flex-col">
+      <div className="hidden md:flex md:w-[280px] lg:w-[30%] border-r border-border bg-card/50 p-6 overflow-y-auto flex-col">
         <h2 className="text-lg font-semibold text-foreground mb-6">Filters</h2>
         {filterContent}
       </div>
@@ -272,14 +272,14 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
               {filteredRecommendations.length} of {recommendations.length} shown
             </p>
           </div>
-          <div className="lg:hidden">
+          <div className="md:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
                   <Filter className="w-4 h-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80">
+              <SheetContent side="left" className="w-[85vw] max-w-xs">
                 <div className="mt-6">
                   <h2 className="text-lg font-semibold text-foreground mb-6">Filters</h2>
                   {filterContent}
