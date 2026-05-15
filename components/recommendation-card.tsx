@@ -19,11 +19,11 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
     .join('')
     .toUpperCase()
 
-  const showThumbnail = !!recommendation.tvdb_thumbnail_url && !imgError
+  const showThumbnail = !!recommendation.tvdb_poster_thumbnail_url && !imgError
 
   const posterContent = showThumbnail ? (
     <img
-      src={recommendation.tvdb_thumbnail_url}
+      src={recommendation.tvdb_poster_thumbnail_url}
       alt={`${recommendation.title} poster`}
       className="w-full h-full object-cover"
       onError={() => setImgError(true)}

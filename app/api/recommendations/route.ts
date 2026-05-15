@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest, NextResponse } from 'next/server'
 import type { RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
-import { fetchTvdbData } from '@/lib/tvmaze'
+import { fetchTvdbData } from '@/lib/tvdb'
 
 export const RECOMMENDATIONS_SYSTEM_PROMPT = `You are a personalised TV show recommendation engine.
 
@@ -14,6 +14,8 @@ Rules:
 - Never recommend something the user has already listed as a favourite
 - Explain in one sentence why each item matches their specific inputs
 - All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+- recommendation_score reflects how well the show matches the user's specific inputs (0–10)
+- matched_keywords lists the specific words or phrases from the user's input that influenced this pick
 
 Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
 {
@@ -30,7 +32,9 @@ Respond ONLY with valid JSON — no markdown fences, no prose — in this exact 
       "action_score": 7,
       "drama_score": 9,
       "suspense_score": 8,
-      "romance_score": 2
+      "romance_score": 2,
+      "recommendation_score": 8.5,
+      "matched_keywords": ["crime", "psychological"]
     }
   ]
 }`
@@ -62,12 +66,26 @@ export async function POST(req: NextRequest) {
     parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
   )
 
-  const enriched = parsed.recommendations.map((rec, i) => ({
-    ...rec,
-    ...(tvdbResults[i]
-      ? { tvdb_thumbnail_url: tvdbResults[i]!.thumbnail_url, tvdb_show_url: tvdbResults[i]!.show_url }
-      : {}),
-  }))
+  const enriched = parsed.recommendations.map((rec, i) => {
+    const tvdb = tvdbResults[i]
+    return {
+      ...rec,
+      ...(tvdb
+        ? {
+            id: tvdb.id,
+            one_sentence_synopsis: tvdb.one_sentence_synopsis,
+            release_year: tvdb.release_year,
+            episode_runtime_minutes: tvdb.episode_runtime_minutes,
+            content_rating: tvdb.content_rating,
+            genres: tvdb.genres,
+            tvdb_poster_thumbnail_url: tvdb.tvdb_poster_thumbnail_url,
+            tvdb_show_url: tvdb.tvdb_show_url,
+            streaming_platforms: tvdb.streaming_platforms,
+            average_user_rating: tvdb.average_user_rating,
+          }
+        : {}),
+    }
+  })
 
   return NextResponse.json({ recommendations: enriched })
 }
