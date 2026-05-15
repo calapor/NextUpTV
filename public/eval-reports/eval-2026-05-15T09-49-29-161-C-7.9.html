@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval C 7.9 — 15/05/2026, 10:49:29</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#f59e0b;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 10:49:29</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">C</div>
+    <div class="score-block">
+      <div class="score">7.9</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">9/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:90%;background:#f59e0b"></div></div>
+        <p class="rationale">Both recommendations are prestige crime dramas with morally complex protagonists and institutional/systemic storytelling — core pillars of Breaking Bad and The Wire. The Sopranos is a canonical match; Ozark directly mirrors Breaking Bad's 'ordinary man corrupted' arc. No weak or tangential picks here.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">8.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#f59e0b"></div></div>
+        <p class="rationale">The reasons are specific and substantive. The Sopranos reason correctly identifies shared elements: moral corruption, institutional critique, slow-burn tension, and layered character work. The Ozark reason draws a precise parallel to Breaking Bad's premise and notes The Wire's systemic interest. Minor deduction because neither reason references specific narrative devices or character archetypes (e.g., the antihero's self-deception, the ensemble procedural structure) that would elevate them to truly exceptional.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">3.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:35%;background:#f59e0b"></div></div>
+        <p class="rationale">Both recommendations are American crime dramas with near-identical genre mixes (Crime/Drama/Thriller), similar suspense and drama scores, and both are streaming/premium cable productions. There is virtually no spread across genre, tone, era (both are prestige US cable/streaming), or production style. A viewer who wants something outside the crime-drama box gets no options here. With only two recommendations, the lack of variety is especially pronounced.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">8.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#f59e0b"></div></div>
+        <p class="rationale">The Sopranos' IMDB rating of 9.2 and 1999 release year are accurate; the runtime of 55 minutes is slightly low (episodes often run 50–75 minutes, averaging closer to 55–60, so acceptable). Ozark's 8.4 rating, 2017 release year, and 60-minute runtime are all plausible and accurate. Genre scores are internally consistent and believable for both shows.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">10/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#f59e0b"></div></div>
+        <p class="rationale">Neither The Sopranos nor Ozark appears in the input list of favourites (Breaking Bad, The Wire). No overlap whatsoever.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">The two recommendations are well-chosen and well-reasoned for fans of prestige crime drama, with accurate metadata and specific justifications that go beyond generic boilerplate. However, the set suffers significantly from a lack of diversity — both picks occupy virtually identical genre, tone, and cultural space, leaving no room for a viewer who might also respond to The Wire's journalistic realism or Breaking Bad's dark comedy elements through a different lens (e.g., a Nordic noir, a procedural, or a drama with a different structural approach). With only two recommendations both clustering in the same niche, the engine feels safe rather than insightful.</p></div>
+
+  <h2>Recommendations Generated (2)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>The Sopranos</strong> (1999)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>9.2</td>
+        <td>Like Breaking Bad and The Wire, The Sopranos is a prestige crime drama that explores the moral corruption of its protagonist in unflinching detail. It offers the same layered character development, institutional critique, and slow-burn tension that fans of both shows deeply appreciate.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Ozark</strong> (2017)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8.4</td>
+        <td>Ozark shares Breaking Bad's DNA almost directly — an ordinary man drawn into a criminal underworld, making increasingly desperate choices to protect his family. It carries the same suffocating tension and moral descent that made Breaking Bad iconic, while also featuring The Wire's interest in systemic criminal enterprise.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Breaking Bad</li><li>The Wire</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">You are a TV show recommendation engine. Return JSON with a recommendations array containing shows with title, genres, reason, imdb_rating, release_year, episode_runtime_minutes, comedy_score, horror_score, action_score, drama_score, suspense_score, romance_score fields.</div>
+</div>
+</body>
+</html>
