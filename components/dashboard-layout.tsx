@@ -279,8 +279,8 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
                   <Filter className="w-4 h-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[85vw] max-w-xs">
-                <div className="mt-6">
+              <SheetContent side="left" className="w-[85vw] max-w-xs p-0 flex flex-col">
+                <div className="flex-1 overflow-y-auto p-6">
                   <h2 className="text-lg font-semibold text-foreground mb-6">Filters</h2>
                   {filterContent}
                 </div>
