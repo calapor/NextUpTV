@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval F 5.7 — 15/05/2026, 00:38:16</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e5e5e5;line-height:1.6;padding:2rem}
+  .container{max-width:960px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.25rem;color:#fff}
+  h2{font-size:1rem;font-weight:600;margin:2rem 0 1rem;color:#a3a3a3;text-transform:uppercase;letter-spacing:.05em}
+  .meta{color:#737373;font-size:.875rem;margin-bottom:2rem}
+  .meta a{color:#7c3aed;text-decoration:none}
+  .grade-card{display:flex;align-items:center;gap:2rem;background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .grade-letter{font-size:5rem;font-weight:800;color:#ef4444;line-height:1}
+  .score-block .score{font-size:2.5rem;font-weight:700;color:#fff}
+  .score-block .label{color:#737373;font-size:.875rem}
+  .card{background:#171717;border:1px solid #262626;border-radius:.75rem;padding:1.5rem;margin-bottom:1.5rem}
+  .criterion{margin-bottom:1.25rem}
+  .criterion:last-child{margin-bottom:0}
+  .criterion-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+  .criterion-label{font-size:.875rem;font-weight:500}
+  .criterion-score{font-size:.875rem;font-weight:600;color:#fff}
+  .progress-bar{height:6px;background:#262626;border-radius:9999px;overflow:hidden;margin-bottom:.5rem}
+  .progress-fill{height:100%;border-radius:9999px;transition:width .3s}
+  .rationale{font-size:.8rem;color:#737373;font-style:italic}
+  .critique{font-size:.9rem;color:#a3a3a3;line-height:1.7}
+  .prompt-block{font-family:'Menlo','Monaco',monospace;font-size:.75rem;background:#0d0d0d;border:1px solid #262626;border-radius:.5rem;padding:1rem;white-space:pre-wrap;color:#a3a3a3;max-height:300px;overflow-y:auto}
+  .shows-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
+  .shows-list li{background:#262626;border-radius:9999px;padding:.25rem .75rem;font-size:.8rem;color:#d4d4d4}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #262626;color:#737373;font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  td{padding:.625rem .75rem;border-bottom:1px solid #1a1a1a;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="meta"><a href="index.html">← All Reports</a></div>
+  <h1>Prompt Evaluation Report</h1>
+  <p class="meta">Run at 15/05/2026, 00:38:16</p>
+
+  <div class="grade-card">
+    <div class="grade-letter">F</div>
+    <div class="score-block">
+      <div class="score">5.7</div>
+      <div class="label">Overall Score / 10</div>
+    </div>
+  </div>
+
+  <h2>Criteria Breakdown</h2>
+  <div class="card">
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Relevance</span>
+          <span class="criterion-score">6/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#ef4444"></div></div>
+        <p class="rationale">Most recommendations genuinely connect to the taste profile — Mindhunter, Silo, Industry, Yellowjackets, and Trapped are well-matched. However, 'Slow Horses Season 4' is a direct continuation of an input show (not a new recommendation), and the 'Night Agent' entry is confusingly titled and partially recommends 'Designated Survivor' rather than constituting a clean, standalone recommendation. These two entries significantly undermine the set's utility.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Reasoning Quality</span>
+          <span class="criterion-score">7/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#ef4444"></div></div>
+        <p class="rationale">Most reasons are genuinely specific, citing concrete narrative elements (non-linear storytelling, criminal profiling origins, bleak Nordic atmosphere) and linking them to named input shows. The Mindhunter, Silo, Trapped, and Yellowjackets reasons are particularly strong. The 'Night Agent' entry is confused and self-referential, mentioning an input show (The Night Agent) by approximate name and pivoting mid-reason to recommend a different show (Designated Survivor) entirely. The Slow Horses entry is redundant — the reason essentially says 'you already love this show.'</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Diversity</span>
+          <span class="criterion-score">6/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#ef4444"></div></div>
+        <p class="rationale">There is noticeable clustering: most recommendations are US or English-language productions from 2015–2024, and the dominant tone is dark thriller/drama. Trapped is a welcome Nordic outlier, and Yellowjackets adds a horror edge, but comedy is barely represented, there are no period pieces, no non-English-language drama outside Trapped, and no light or feel-good entries to balance the viewer's demonstrated taste for comedy (Brooklyn Nine-Nine, Schitt's Creek, Black Books, Father Ted, etc.).</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">Metadata Accuracy</span>
+          <span class="criterion-score">6.5/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ef4444"></div></div>
+        <p class="rationale">Several entries are plausible but some are off. Silo's IMDB rating of 8.0 is slightly high (closer to 7.6–7.7 on most trackers). The 'Night Agent' entry appears to be metadata for Condor (2016, 44 min) but is titled 'Night Agent,' creating a factual mismatch. Slow Horses Season 4's 2024 release year is accurate and rating plausible. Mindhunter and Industry metadata are broadly accurate. Trapped's 8.0 rating and 2015 year are correct. No catastrophically wrong values, but the Condor/Night Agent confusion is a meaningful error.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-header">
+          <span class="criterion-label">No Overlap</span>
+          <span class="criterion-score">3/10</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:30%;background:#ef4444"></div></div>
+        <p class="rationale">This is a significant violation. 'Slow Horses' is explicitly listed as an input favourite, and recommending 'Slow Horses Season 4' is effectively recommending an input show under a slightly different label — a clear hard-rule breach. Additionally, the 'Night Agent' entry's reasoning references 'The Night Agent' (an input show) as if recommending it, and the title itself nearly duplicates the input show name. These overlaps materially damage the score.</p>
+      </div></div>
+
+  <h2>Overall Critique</h2>
+  <div class="card"><p class="critique">This recommendation set has genuine strengths — Mindhunter, Silo, Industry, Yellowjackets, and Trapped are all well-reasoned, relevant picks with specific and insightful justifications. However, the set is undermined by a critical flaw: recommending 'Slow Horses Season 4' when Slow Horses already appears in the viewer's favourites list is a hard-rule violation that should have been caught. The 'Night Agent' entry is also problematic, essentially mislabelling a Condor/Designated Survivor hybrid recommendation with metadata that doesn't match the title. The set also skews heavily toward dark drama-thrillers and neglects the viewer's evident appetite for comedy, leaving a meaningful gap in coverage of their demonstrated taste.</p></div>
+
+  <h2>Recommendations Generated (8)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Genres</th><th>IMDb</th><th>Reason</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Slow Horses Season 4</strong> (2024)</td>
+        <td>Thriller, Drama, Spy</td>
+        <td>8.4</td>
+        <td>Since you already love Slow Horses, this continues the gripping MI5 espionage drama that fans of Le Bureau des légendes, The Americans, and Bodyguard consistently enjoy.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Yellowjackets</strong> (2021)</td>
+        <td>Drama, Thriller, Mystery, Horror</td>
+        <td>7.8</td>
+        <td>Fans of Dark, Fargo, and True Detective will appreciate this layered mystery that blends survival horror with non-linear storytelling and deeply complex characters.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Industry</strong> (2020)</td>
+        <td>Drama, Thriller</td>
+        <td>7.7</td>
+        <td>If you enjoy the high-stakes world of Billions and Succession, Industry delivers the same razor-sharp power dynamics, moral ambiguity, and intense character drama set in the cutthroat world of London finance.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Night Agent</strong> (2016)</td>
+        <td>Action, Thriller, Drama</td>
+        <td>7.4</td>
+        <td>Given your enjoyment of The Night Agent, Tom Clancy's Jack Ryan, and Hijack, Condor's fast-paced conspiracy thriller format should appeal — and if you want something adjacent, Designated Survivor fills the same White House political-action niche.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Mindhunter</strong> (2017)</td>
+        <td>Crime, Drama, Thriller</td>
+        <td>8.6</td>
+        <td>Fans of Black Bird, Dexter, Making a Murderer, and True Detective will love this meticulously crafted FBI procedural exploring the origins of criminal profiling through real serial killer interviews.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Silo</strong> (2023)</td>
+        <td>Sci-Fi, Drama, Mystery, Thriller</td>
+        <td>8</td>
+        <td>Your love of Severance, Dark Matter, The Expanse, and Fallout points directly to this dystopian sci-fi mystery set in a vast underground community hiding dark secrets about the outside world.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>The Recruit</strong> (2022)</td>
+        <td>Action, Thriller, Comedy, Drama</td>
+        <td>7.2</td>
+        <td>Given your taste for spy thrillers like Berlin Station, Killing Eve, and Treadstone with a lighter edge similar to Mr Inbetween and Barry, this fast-moving CIA thriller balances dark humour with genuine international intrigue.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>Trapped (Ófærð)</strong> (2015)</td>
+        <td>Crime, Drama, Thriller, Mystery</td>
+        <td>8</td>
+        <td>If you enjoy the bleak Nordic atmosphere of Fortitude, Dublin Murders, and Fargo combined with the grounded crime drama of Slow Horses and Justified, this Icelandic thriller set in an isolated snowbound town is a perfect match.</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <h2>Test Shows</h2>
+  <div class="card"><ul class="shows-list"><li>Name</li><li>3 Body Problem</li><li>A Knight of the Seven Kingdoms</li><li>Atomic</li><li>Atypical</li><li>Baby Reindeer</li><li>Barry</li><li>Berlin Station</li><li>Better Call Saul</li><li>Billions</li><li>Black Bird</li><li>Black Books</li><li>Black Doves</li><li>Black Mirror</li><li>Bodkin</li><li>Bodyguard (2018)</li><li>Breaking Bad</li><li>Bridgerton</li><li>Brooklyn Nine-Nine</li><li>Chernobyl</li><li>Clarkson's Farm</li><li>Condor</li><li>Dark</li><li>Dark Matter (2024)</li><li>Derry Girls</li><li>Detectorists</li><li>Deutschland</li><li>Dexter</li><li>Dexter: New Blood</li><li>Dexter: Original Sin</li><li>Dexter: Resurrection</li><li>Die Kaiserin</li><li>Dix pour cent</li><li>DTF St. Louis</li><li>Dublin Murders</li><li>El Candidato</li><li>Fallout</li><li>Fargo</li><li>Father Ted</li><li>Fear the Walking Dead</li><li>For All Mankind</li><li>Fortitude</li><li>Game of Thrones</li><li>Generation Kill</li><li>Goliath</li><li>Hacks</li><li>Hanna</li><li>Hijack</li><li>Hit &amp; Run</li><li>Home (2019)</li><li>Homeland</li><li>Hostage (2025)</li><li>House of Cards (US)</li><li>House of the Dragon</li><li>Hunters (2020)</li><li>Into the Night</li><li>Invasion (2021)</li><li>It's Always Sunny in Philadelphia</li><li>James May: Our Man In...</li><li>Justified</li><li>Kalifat</li><li>Killing Eve</li><li>Le Bureau des légendes</li><li>Making a Murderer</li><li>McMafia</li><li>MobLand</li><li>Monster (2022)</li><li>Mr Inbetween</li><li>Munich Games</li><li>Murder at the Cottage: The Search for Justice for Sophie</li><li>Narcos</li><li>Narcos: Mexico</li><li>Obituary</li><li>Ozark</li><li>Paradise (2025)</li><li>Parks and Recreation</li><li>Peaky Blinders</li><li>PLUR1BUS</li><li>Prodigal Son</li><li>Reacher</li><li>Resident Alien</li><li>Rooster</li><li>Russian Doll</li><li>Schitt's Creek</li><li>SEAL Team</li><li>See</li><li>Severance</li><li>Slow Horses</li><li>Sneaky Pete</li><li>Sophie: A Murder in West Cork</li><li>Space Force</li><li>Star Trek: Discovery</li><li>Star Trek: Picard</li><li>Star Trek: Strange New Worlds</li><li>Star Trek: The Next Generation</li><li>Succession</li><li>Taboo (2017)</li><li>Tales of the Walking Dead</li><li>Ted Lasso</li><li>The Acolyte</li><li>The Agency (2024)</li><li>The Americans (2013)</li><li>The Bear</li><li>The Beast in Me</li><li>The Blacklist</li><li>The Day of the Jackal</li><li>The Diplomat</li><li>The Dropout</li><li>The Expanse</li><li>The Gentlemen</li><li>The Goldbergs (2013)</li><li>The Good Place</li><li>The Grand Tour (2016)</li><li>The Great Escapists</li><li>The Iris Affair</li><li>The Last Kingdom</li><li>The Last Narc</li><li>The Last of Us</li><li>The Last Ship</li><li>The Man in the High Castle</li><li>The Mandalorian</li><li>The Marvelous Mrs. Maisel</li><li>The Mentalist</li><li>The Mosquito Coast</li><li>The Night Agent</li><li>The Night Manager</li><li>The Office (US)</li><li>The Pitt</li><li>The Queen's Gambit</li><li>The Sopranos</li><li>The Spy</li><li>The Studio (2025)</li><li>The Sympathizer</li><li>The Terminal List</li><li>The Terminal List: Dark Wolf</li><li>The Terror</li><li>The Umbrella Academy</li><li>The Veil</li><li>The Walking Dead</li><li>The Walking Dead: Daryl Dixon</li><li>The Walking Dead: Dead City</li><li>The Walking Dead: The Ones Who Live</li><li>The Walking Dead: World Beyond</li><li>Tom Clancy's Jack Ryan</li><li>Treadstone</li><li>True Detective</li><li>Upload</li><li>Vikings</li><li>Vikings: Valhalla</li><li>War of the Worlds (2019)</li><li>Welcome to Wrexham</li><li>Westworld</li><li>Widow's Bay</li><li>Your Honor</li><li>Zero Day</li><li>אור ראשון</li><li>בני ערובה</li><li>בשבילה גיבורים עפים</li><li>טהרן</li><li>פאודה</li><li>오징어 게임</li></ul></div>
+
+  <h2>System Prompt Used</h2>
+  <div class="prompt-block">You are a personalised TV show recommendation engine.
+
+The user will provide a list of favourites — TV shows, films, genres, or keywords —
+either as uploaded file content or as free text. Return a curated list of TV show
+recommendations based on those preferences.
+
+Rules:
+- Return exactly the number of recommendations requested
+- Never recommend something the user has already listed as a favourite
+- Explain in one sentence why each item matches their specific inputs
+- All numeric scores (0–10) and ratings must be realistic estimates based on your knowledge
+
+Respond ONLY with valid JSON — no markdown fences, no prose — in this exact shape:
+{
+  &quot;recommendations&quot;: [
+    {
+      &quot;title&quot;: &quot;Show name&quot;,
+      &quot;genres&quot;: [&quot;genre1&quot;, &quot;genre2&quot;],
+      &quot;reason&quot;: &quot;One sentence explanation tied to their input&quot;,
+      &quot;imdb_rating&quot;: 8.2,
+      &quot;release_year&quot;: 2019,
+      &quot;episode_runtime_minutes&quot;: 45,
+      &quot;comedy_score&quot;: 3,
+      &quot;horror_score&quot;: 1,
+      &quot;action_score&quot;: 7,
+      &quot;drama_score&quot;: 9,
+      &quot;suspense_score&quot;: 8,
+      &quot;romance_score&quot;: 2
+    }
+  ]
+}</div>
+</div>
+</body>
+</html>
