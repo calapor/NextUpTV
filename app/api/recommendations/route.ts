@@ -99,13 +99,10 @@ export async function POST(req: NextRequest) {
           rec.reason = sanitizeReason(rec.reason)
         })
 
-        const tvdbResults = await Promise.all(
-          parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
-        )
-
-        const enriched = parsed.recommendations.map((rec, i) => {
-          const tvdb = tvdbResults[i]
-          return {
+        const enriched = []
+        for (const rec of parsed.recommendations) {
+          const tvdb = await fetchTvdbData(rec.title)
+          const enrichedRec = {
             ...rec,
             ...(tvdb
               ? {
@@ -122,9 +119,11 @@ export async function POST(req: NextRequest) {
                 }
               : {}),
           }
-        })
+          enriched.push(enrichedRec)
+          controller.enqueue(sseEvent({ type: 'recommendation', recommendation: enrichedRec }))
+        }
 
-        controller.enqueue(sseEvent({ type: 'recommendations', recommendations: enriched }))
+        controller.enqueue(sseEvent({ type: 'complete', recommendations: enriched }))
       } catch (err) {
         const message =
           err instanceof SyntaxError

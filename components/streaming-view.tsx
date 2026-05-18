@@ -1,11 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { LoadingSkeletonGrid } from '@/components/loading-skeleton'
+import { LoadingSkeletonCard } from '@/components/loading-skeleton'
+import { RecommendationCard } from '@/components/recommendation-card'
 import type { PendingRequest, Recommendation } from '@/lib/types'
+
+function formatElapsed(ms: number): string {
+  const total = ms / 1000
+  if (total < 60) return `${total.toFixed(2)}s`
+  const m = Math.floor(total / 60)
+  const s = (total % 60).toFixed(2)
+  return `${m}m ${s}s`
+}
 
 interface StreamingViewProps {
   pendingRequest: PendingRequest
@@ -15,10 +24,31 @@ interface StreamingViewProps {
 
 export function StreamingView({ pendingRequest, onRecommendationsReady, onNavigate }: StreamingViewProps) {
   const [phase, setPhase] = useState('Connecting...')
-  const [foundLines, setFoundLines] = useState<string[]>([])
+  const [liveRecs, setLiveRecs] = useState<Recommendation[]>([])
+  const [streaming, setStreaming] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [errorDetail, setErrorDetail] = useState<string | null>(null)
   const [showDetail, setShowDetail] = useState(false)
+  const [elapsed, setElapsed] = useState(0)
+  const timerStartRef = useRef<number | null>(null)
+
+  const isProcessing = phase === 'Generating recommendations...' || phase === 'Fetching show details...'
+
+  // Latch start time once when generating begins; keep it across the fetching phase
+  useEffect(() => {
+    if (phase === 'Generating recommendations...' && timerStartRef.current === null) {
+      timerStartRef.current = Date.now()
+      setElapsed(0)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (!isProcessing || timerStartRef.current === null) return
+    const interval = setInterval(() => {
+      setElapsed(Date.now() - timerStartRef.current!)
+    }, 10)
+    return () => clearInterval(interval)
+  }, [isProcessing])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -30,7 +60,7 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
         body: JSON.stringify({
           fileContent: pendingRequest.fileContent,
           keywords: pendingRequest.keywords,
-          count: 10,
+          count: 30,
         }),
         signal: controller.signal,
       })
@@ -57,18 +87,22 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
           const payload = JSON.parse(line.slice(6))
 
           if (payload.type === 'status') {
-            if (payload.message.startsWith('Suggesting: ')) {
-              setFoundLines((prev) => [...prev, payload.message])
-            } else {
+            if (!payload.message.startsWith('Suggesting: ')) {
               setPhase(payload.message)
             }
-          } else if (payload.type === 'recommendations') {
+          } else if (payload.type === 'recommendation') {
+            const newRec: Recommendation = payload.recommendation
+            setLiveRecs(prev => {
+              const merged = [...prev, newRec].sort((a, b) => b.imdb_rating - a.imdb_rating)
+              return merged.slice(0, 10)
+            })
+          } else if (payload.type === 'complete') {
+            setStreaming(false)
             onRecommendationsReady(payload.recommendations)
           } else if (payload.type === 'error') {
             setErrorMessage(payload.message)
             setErrorDetail(payload.detail ?? null)
           }
-          // text events intentionally ignored
         }
       }
     }
@@ -81,6 +115,8 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
 
     return () => controller.abort()
   }, [pendingRequest, onRecommendationsReady])
+
+  const skeletonCount = streaming ? Math.max(0, 10 - liveRecs.length) : 0
 
   return (
     <div className="mt-16 h-[calc(100vh-64px)] flex flex-col overflow-hidden">
@@ -120,27 +156,26 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
           </Alert>
         ) : (
           <div className="mb-6">
-            {/* Pinned phase header */}
-            <p className="text-sm font-medium text-foreground mb-1">{phase}</p>
-
-            {/* Scrolling found-titles log */}
-            <div className="relative h-10 overflow-hidden">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-6 z-10 bg-gradient-to-b from-background to-transparent" />
-              <div className="h-full flex flex-col justify-end gap-0.5">
-                {foundLines.map((line, i) => (
-                  <p
-                    key={i}
-                    className="shrink-0 text-sm leading-5 text-muted-foreground truncate animate-in fade-in slide-in-from-bottom-1 duration-300"
-                  >
-                    {line}
-                  </p>
-                ))}
+            <p className="text-sm font-medium text-foreground mb-2">{phase}</p>
+            {isProcessing && (
+              <div className="flex items-center gap-2">
+                <div className="w-3.5 h-3.5 rounded-full border-2 border-muted-foreground/25 border-t-foreground animate-spin" />
+                <span className="text-xs text-muted-foreground tabular-nums">
+                  {formatElapsed(elapsed)}
+                </span>
               </div>
-            </div>
+            )}
           </div>
         )}
 
-        <LoadingSkeletonGrid />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {liveRecs.map((rec) => (
+            <RecommendationCard key={rec.title} recommendation={rec} />
+          ))}
+          {Array.from({ length: skeletonCount }).map((_, i) => (
+            <LoadingSkeletonCard key={`skeleton-${i}`} />
+          ))}
+        </div>
       </div>
     </div>
   )
