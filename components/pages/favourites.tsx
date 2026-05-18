@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Upload, X, CheckCircle, AlertCircle } from 'lucide-react'
-import type { PendingRequest } from '@/lib/types'
+import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
@@ -22,9 +22,10 @@ interface UploadState {
 interface FavouritesPageProps {
   onNavigate?: (page: 'recommendations' | 'favourites') => void
   onSubmit?: (req: PendingRequest) => void
+  cachedInput?: CachedFavouritesInput | null
 }
 
-export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
+export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: FavouritesPageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   // File upload state
@@ -34,8 +35,12 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
     isUploading: false,
   })
 
+  const [cachedFile, setCachedFile] = useState<{ fileName: string; fileContent: string } | null>(
+    cachedInput?.fileContent ? { fileName: cachedInput.fileName, fileContent: cachedInput.fileContent } : null
+  )
+
   // Keywords state
-  const [keywords, setKeywords] = useState('')
+  const [keywords, setKeywords] = useState(cachedInput?.keywords ?? '')
   const keywordsLength = keywords.length
 
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -58,14 +63,17 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
   // Handle file selection
   const handleFileSelect = (selectedFile: File) => {
     const error = validateFile(selectedFile)
-    
+
     if (error) {
       setUploadState({ file: null, error, isUploading: false })
     } else {
       setUploadState({ file: selectedFile, error: null, isUploading: false })
+      setCachedFile(null)
       setSubmitError(null)
     }
   }
+
+  const handleRemoveCachedFile = () => setCachedFile(null)
 
   // Handle file input change
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +116,7 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
   }
 
   // Check if form is valid
-  const isFormValid = uploadState.file !== null || keywords.trim().length > 0
+  const isFormValid = uploadState.file !== null || cachedFile !== null || keywords.trim().length > 0
   const isOverCharLimit = keywordsLength === MAX_KEYWORDS_LENGTH
 
   // Handle form submission
@@ -121,16 +129,21 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
 
     try {
       let fileContent = ''
+      let fileName = ''
       if (uploadState.file) {
+        fileName = uploadState.file.name
         fileContent = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader()
           reader.onload = (e) => resolve(e.target?.result as string)
           reader.onerror = reject
           reader.readAsText(uploadState.file!)
         })
+      } else if (cachedFile) {
+        fileName = cachedFile.fileName
+        fileContent = cachedFile.fileContent
       }
 
-      onSubmit?.({ fileContent, keywords })
+      onSubmit?.({ fileContent, keywords, fileName })
     } catch {
       setSubmitError('Failed to read the uploaded file. Please try again.')
     }
@@ -169,9 +182,9 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
                 <div
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
-                  onClick={() => !uploadState.file && !uploadState.isUploading && fileInputRef.current?.click()}
+                  onClick={() => !uploadState.file && !cachedFile && !uploadState.isUploading && fileInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
-                    uploadState.file
+                    uploadState.file || cachedFile
                       ? 'border-green-500/50 bg-green-500/5'
                       : uploadState.error
                       ? 'border-red-500/50 bg-red-500/5'
@@ -210,6 +223,28 @@ export function FavouritesPage({ onNavigate, onSubmit }: FavouritesPageProps) {
                       >
                         <X className="w-4 h-4 mr-2" />
                         Remove
+                      </Button>
+                    </div>
+                  ) : cachedFile ? (
+                    // Previously uploaded file from cache
+                    <div className="flex flex-col items-center">
+                      <CheckCircle className="w-8 h-8 text-green-600 mb-3" />
+                      <p className="text-xs text-muted-foreground mb-1">Previously uploaded</p>
+                      <p className="text-foreground font-medium truncate max-w-xs mb-3">
+                        {cachedFile.fileName || 'favourites file'}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleRemoveCachedFile()
+                        }}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Clear
                       </Button>
                     </div>
                   ) : uploadState.error ? (

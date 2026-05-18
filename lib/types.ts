@@ -1,3 +1,17 @@
+export interface PartialRecommendation {
+  title: string
+  id?: number
+  one_sentence_synopsis?: string
+  release_year?: number
+  episode_runtime_minutes?: number
+  content_rating?: string
+  genres?: string[]
+  tvdb_poster_thumbnail_url?: string
+  tvdb_show_url?: string
+  streaming_platforms?: string[]
+  average_user_rating?: number
+}
+
 export interface Recommendation {
   // TV Show fields (TVDB-sourced when available, Claude fallback otherwise)
   id?: number
@@ -39,6 +53,13 @@ export interface RecommendationsRequest {
 
 export interface PendingRequest {
   fileContent: string
+  keywords: string
+  fileName?: string
+}
+
+export interface CachedFavouritesInput {
+  fileContent: string
+  fileName: string
   keywords: string
 }
 

@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import type { Recommendation } from '@/lib/types'
+import type { PartialRecommendation, Recommendation } from '@/lib/types'
 
 interface RecommendationCardProps {
-  recommendation: Recommendation
+  recommendation: PartialRecommendation | Recommendation
 }
 
 export function RecommendationCard({ recommendation }: RecommendationCardProps) {
@@ -70,21 +70,27 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
         </div>
 
         {/* Rating */}
-        <div className="flex gap-2">
-          <Badge variant="secondary">★ {recommendation.imdb_rating.toFixed(1)}</Badge>
-        </div>
+        {'imdb_rating' in recommendation && (
+          <div className="flex gap-2">
+            <Badge variant="secondary">★ {recommendation.imdb_rating.toFixed(1)}</Badge>
+          </div>
+        )}
 
         {/* Genres */}
-        <div className="flex flex-wrap gap-1">
-          {recommendation.genres.slice(0, 3).map((genre) => (
-            <Badge key={genre} variant="outline" className="text-xs">
-              {genre}
-            </Badge>
-          ))}
-        </div>
+        {recommendation.genres && recommendation.genres.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {recommendation.genres.slice(0, 3).map((genre) => (
+              <Badge key={genre} variant="outline" className="text-xs">
+                {genre}
+              </Badge>
+            ))}
+          </div>
+        )}
 
         {/* Reason */}
-        <p className="text-sm text-muted-foreground">{recommendation.reason}</p>
+        {'reason' in recommendation && (
+          <p className="text-sm text-muted-foreground">{recommendation.reason}</p>
+        )}
       </div>
     </Card>
   )

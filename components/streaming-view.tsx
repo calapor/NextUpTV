@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { LoadingSkeletonCard } from '@/components/loading-skeleton'
 import { RecommendationCard } from '@/components/recommendation-card'
-import type { PendingRequest, Recommendation } from '@/lib/types'
+import type { PartialRecommendation, PendingRequest, Recommendation } from '@/lib/types'
 
 function formatElapsed(ms: number): string {
   const total = ms / 1000
@@ -24,7 +24,7 @@ interface StreamingViewProps {
 
 export function StreamingView({ pendingRequest, onRecommendationsReady, onNavigate }: StreamingViewProps) {
   const [phase, setPhase] = useState('Connecting...')
-  const [liveRecs, setLiveRecs] = useState<Recommendation[]>([])
+  const [liveRecs, setLiveRecs] = useState<Array<PartialRecommendation | Recommendation>>([])
   const [streaming, setStreaming] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [errorDetail, setErrorDetail] = useState<string | null>(null)
@@ -60,7 +60,7 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
         body: JSON.stringify({
           fileContent: pendingRequest.fileContent,
           keywords: pendingRequest.keywords,
-          count: 30,
+          count: 20,
         }),
         signal: controller.signal,
       })
@@ -90,10 +90,21 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             if (!payload.message.startsWith('Suggesting: ')) {
               setPhase(payload.message)
             }
+          } else if (payload.type === 'partial_recommendation') {
+            const partial: PartialRecommendation = payload.recommendation
+            setLiveRecs(prev => {
+              if (prev.some(r => r.title === partial.title)) return prev
+              return [...prev, partial].slice(0, 10)
+            })
           } else if (payload.type === 'recommendation') {
             const newRec: Recommendation = payload.recommendation
             setLiveRecs(prev => {
-              const merged = [...prev, newRec].sort((a, b) => b.imdb_rating - a.imdb_rating)
+              const deduped = prev.filter(r => r.title !== newRec.title)
+              const merged = [...deduped, newRec].sort((a, b) => {
+                const ra = 'imdb_rating' in a ? a.imdb_rating : -1
+                const rb = 'imdb_rating' in b ? b.imdb_rating : -1
+                return rb - ra
+              })
               return merged.slice(0, 10)
             })
           } else if (payload.type === 'complete') {
