@@ -25,7 +25,7 @@ export function TopNavigation({ currentPage, onPageChange }: TopNavigationProps)
         <img
   src="nextuptv-logo-v3.png"
   alt="NextUpTV logo"
-  className="h-30 w-auto"
+  className="h-10 w-auto"
 />
         
         {/* Navigation Tabs */}
