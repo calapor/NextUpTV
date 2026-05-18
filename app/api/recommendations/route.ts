@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
-import type { RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
+import type { PartialRecommendation, RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
 
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
         let fullText = ''
-        const foundTitles = new Set<string>()
+        const tvdbPromises = new Map<string, ReturnType<typeof fetchTvdbData>>()
         const titleRegex = /"title":\s*"([^"]+)"/g
 
         const anthropicStream = anthropic.messages.stream({
@@ -74,10 +74,29 @@ export async function POST(req: NextRequest) {
           titleRegex.lastIndex = 0
           let match
           while ((match = titleRegex.exec(fullText)) !== null) {
-            const title = match[1]
-            if (!foundTitles.has(title)) {
-              foundTitles.add(title)
-              controller.enqueue(sseEvent({ type: 'status', message: `Suggesting: ${title}` }))
+            const sanitized = sanitizeSeriesTitle(match[1])
+            if (!tvdbPromises.has(sanitized)) {
+              const promise = fetchTvdbData(sanitized)
+              tvdbPromises.set(sanitized, promise)
+              promise.then((tvdb) => {
+                if (tvdb) {
+                  const partial: PartialRecommendation = {
+                    title: sanitized,
+                    id: tvdb.id,
+                    one_sentence_synopsis: tvdb.one_sentence_synopsis,
+                    release_year: tvdb.release_year,
+                    episode_runtime_minutes: tvdb.episode_runtime_minutes,
+                    content_rating: tvdb.content_rating,
+                    genres: tvdb.genres,
+                    tvdb_poster_thumbnail_url: tvdb.tvdb_poster_thumbnail_url,
+                    tvdb_show_url: tvdb.tvdb_show_url,
+                    streaming_platforms: tvdb.streaming_platforms,
+                    average_user_rating: tvdb.average_user_rating,
+                  }
+                  controller.enqueue(sseEvent({ type: 'partial_recommendation', recommendation: partial }))
+                }
+              })
+              controller.enqueue(sseEvent({ type: 'status', message: `Suggesting: ${sanitized}` }))
             }
           }
         })
@@ -99,9 +118,12 @@ export async function POST(req: NextRequest) {
           rec.reason = sanitizeReason(rec.reason)
         })
 
+        const seenTitles = new Set<string>()
         const enriched = []
         for (const rec of parsed.recommendations) {
-          const tvdb = await fetchTvdbData(rec.title)
+          if (seenTitles.has(rec.title)) continue
+          seenTitles.add(rec.title)
+          const tvdb = await (tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
           const enrichedRec = {
             ...rec,
             ...(tvdb
@@ -123,6 +145,7 @@ export async function POST(req: NextRequest) {
           controller.enqueue(sseEvent({ type: 'recommendation', recommendation: enrichedRec }))
         }
 
+        enriched.sort((a, b) => (b.imdb_rating ?? 0) - (a.imdb_rating ?? 0))
         controller.enqueue(sseEvent({ type: 'complete', recommendations: enriched }))
       } catch (err) {
         const message =
