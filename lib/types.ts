@@ -40,6 +40,13 @@ export interface RecommendationsRequest {
 export interface PendingRequest {
   fileContent: string
   keywords: string
+  fileName?: string
+}
+
+export interface CachedFavouritesInput {
+  fileContent: string
+  fileName: string
+  keywords: string
 }
 
 // Eval types

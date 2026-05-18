@@ -93,7 +93,8 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
           } else if (payload.type === 'recommendation') {
             const newRec: Recommendation = payload.recommendation
             setLiveRecs(prev => {
-              const merged = [...prev, newRec].sort((a, b) => b.imdb_rating - a.imdb_rating)
+              const deduped = prev.filter(r => r.title !== newRec.title)
+              const merged = [...deduped, newRec].sort((a, b) => b.imdb_rating - a.imdb_rating)
               return merged.slice(0, 10)
             })
           } else if (payload.type === 'complete') {
