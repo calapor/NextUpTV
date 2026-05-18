@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 96" role="img" aria-label="NextUpTV">
+  <defs>
+    <linearGradient id="bg" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#112244"/>
+      <stop offset="100%" stop-color="#081320"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#04D9FF"/>
+      <stop offset="50%" stop-color="#0079D9"/>
+      <stop offset="100%" stop-color="#0051AB"/>
+    </linearGradient>
+    <filter id="borderGlow" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="96" rx="13" fill="url(#bg)"/>
+
+  <!-- Glowing border -->
+  <rect width="400" height="96" rx="13" fill="none"
+        stroke="#0079D9" stroke-width="2" filter="url(#borderGlow)" opacity="0.9"/>
+
+  <!-- Text block -->
+  <g font-family="'Arial Black', 'Impact', ui-sans-serif" font-weight="900" font-size="62">
+    <text x="18" y="70" fill="url(#blue)" textLength="168" lengthAdjust="spacingAndGlyphs">NEXT</text>
+    <text x="196" y="70" fill="url(#blue)" textLength="80" lengthAdjust="spacingAndGlyphs">UP</text>
+    <text x="318" y="70" fill="white" textLength="72" lengthAdjust="spacingAndGlyphs">TV</text>
+  </g>
+
+  <!-- Play / skip-forward icon between UP and TV -->
+  <g transform="translate(284, 48)">
+    <polygon points="0,-18 18,0 0,18" fill="#04D9FF"/>
+    <polygon points="16,-18 34,0 16,18" fill="#0051AB"/>
+  </g>
+</svg>
