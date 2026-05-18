@@ -9,19 +9,41 @@ interface RecommendationsPageProps {
   onNavigate?: (page: 'recommendations' | 'favourites') => void
   recommendations: Recommendation[]
   pendingRequest: PendingRequest | null
-  onRecommendationsReady: (recs: Recommendation[]) => void
+  onRecommendationReceived: (rec: Recommendation) => void
+  onRecommendationsReady: () => void
 }
 
 export function RecommendationsPage({
   onNavigate,
   recommendations,
   pendingRequest,
+  onRecommendationReceived,
   onRecommendationsReady,
 }: RecommendationsPageProps) {
+  // Streaming + cards available: show compact banner above the live dashboard
+  if (pendingRequest && recommendations.length > 0) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
+        <StreamingView
+          pendingRequest={pendingRequest}
+          onRecommendationReceived={onRecommendationReceived}
+          onRecommendationsReady={onRecommendationsReady}
+          onNavigate={onNavigate}
+          compact
+        />
+        <div className="flex-1 overflow-hidden">
+          <DashboardLayout recommendations={recommendations} isStreaming />
+        </div>
+      </div>
+    )
+  }
+
+  // Streaming + no cards yet: full loading view
   if (pendingRequest) {
     return (
       <StreamingView
         pendingRequest={pendingRequest}
+        onRecommendationReceived={onRecommendationReceived}
         onRecommendationsReady={onRecommendationsReady}
         onNavigate={onNavigate}
       />

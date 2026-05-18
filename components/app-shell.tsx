@@ -26,8 +26,11 @@ export function AppShell() {
     setCurrentPage('recommendations')
   }
 
-  const handleRecommendationsReady = (recs: Recommendation[]) => {
-    setRecommendations(recs)
+  const handleRecommendationReceived = (rec: Recommendation) => {
+    setRecommendations((prev) => [...prev, rec])
+  }
+
+  const handleRecommendationsReady = () => {
     setPendingRequest(null)
   }
 
@@ -41,6 +44,7 @@ export function AppShell() {
               onNavigate={handlePageChange}
               recommendations={recommendations}
               pendingRequest={pendingRequest}
+              onRecommendationReceived={handleRecommendationReceived}
               onRecommendationsReady={handleRecommendationsReady}
             />
           </div>

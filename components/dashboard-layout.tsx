@@ -14,9 +14,10 @@ const STORAGE_KEY = 'nextuptv_filter_state'
 
 interface DashboardLayoutProps {
   recommendations: Recommendation[]
+  isStreaming?: boolean
 }
 
-export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
+export function DashboardLayout({ recommendations, isStreaming = false }: DashboardLayoutProps) {
   const [sheetOpen, setSheetOpen] = useState(false)
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   const [comedyMin, setComedyMin]   = useState(0)
   const [horrorMin, setHorrorMin]   = useState(0)
   const [yearMin, setYearMin]       = useState(0)
-  const [listCount, setListCount]   = useState(10)
+  const [listCount, setListCount]   = useState(30)
 
   const initialized = useRef(false)
 
@@ -54,26 +55,26 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
 
   useEffect(() => {
     if (!dataRanges) return
+    if (initialized.current) return  // never reset sliders after first init
 
-    if (!initialized.current) {
-      initialized.current = true
-      const saved = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '') } catch { return null } })()
-      if (saved) {
-        setRuntimeMax(Math.max(dataRanges.runtime.min, Math.min(saved.runtimeMax ?? dataRanges.runtime.max, dataRanges.runtime.max)))
-        setRatingMin (Math.max(dataRanges.rating.min,  Math.min(saved.ratingMin  ?? dataRanges.rating.min,  dataRanges.rating.max)))
-        setComedyMin (Math.max(dataRanges.comedy.min,  Math.min(saved.comedyMin  ?? dataRanges.comedy.min,  dataRanges.comedy.max)))
-        setHorrorMin (Math.max(dataRanges.horror.min,  Math.min(saved.horrorMin  ?? dataRanges.horror.min,  dataRanges.horror.max)))
-        setYearMin   (Math.max(dataRanges.year.min,    Math.min(saved.yearMin    ?? dataRanges.year.min,    dataRanges.year.max)))
-        setListCount (saved.listCount ?? 10)
-        return
-      }
+    initialized.current = true
+    const saved = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '') } catch { return null } })()
+    if (saved) {
+      setRuntimeMax(saved.runtimeMax ?? 9999)
+      setRatingMin (Math.max(dataRanges.rating.min,  Math.min(saved.ratingMin  ?? dataRanges.rating.min,  dataRanges.rating.max)))
+      setComedyMin (Math.max(dataRanges.comedy.min,  Math.min(saved.comedyMin  ?? dataRanges.comedy.min,  dataRanges.comedy.max)))
+      setHorrorMin (Math.max(dataRanges.horror.min,  Math.min(saved.horrorMin  ?? dataRanges.horror.min,  dataRanges.horror.max)))
+      setYearMin   (Math.max(dataRanges.year.min,    Math.min(saved.yearMin    ?? dataRanges.year.min,    dataRanges.year.max)))
+      setListCount (saved.listCount ?? 30)
+    } else {
+      // Default: show everything
+      setRuntimeMax(9999)
+      setRatingMin (dataRanges.rating.min)
+      setComedyMin (dataRanges.comedy.min)
+      setHorrorMin (dataRanges.horror.min)
+      setYearMin   (dataRanges.year.min)
+      setListCount (30)
     }
-    setRuntimeMax(dataRanges.runtime.max)
-    setRatingMin (dataRanges.rating.min)
-    setComedyMin (dataRanges.comedy.min)
-    setHorrorMin (dataRanges.horror.min)
-    setYearMin   (dataRanges.year.min)
-    setListCount (Math.min(10, recommendations.length))
   }, [dataRanges])
 
   useEffect(() => {
@@ -91,17 +92,17 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
       r.horror_score >= horrorMin &&
       r.release_year >= yearMin
     )
-    return result.slice(0, listCount)
+    return result.sort((a, b) => b.imdb_rating - a.imdb_rating).slice(0, listCount)
   }, [recommendations, runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount])
 
   const resetFilters = () => {
     if (!dataRanges) return
-    setRuntimeMax(dataRanges.runtime.max)
+    setRuntimeMax(9999)
     setRatingMin (dataRanges.rating.min)
     setComedyMin (dataRanges.comedy.min)
     setHorrorMin (dataRanges.horror.min)
     setYearMin   (dataRanges.year.min)
-    setListCount (Math.min(10, recommendations.length))
+    setListCount (30)
   }
 
   const filterContent = (
@@ -111,11 +112,13 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
         <div>
           <div className="flex items-center justify-between mb-3">
             <Label className="text-base font-semibold">Runtime</Label>
-            <span className="text-sm text-muted-foreground">≤ {runtimeMax} min</span>
+            <span className="text-sm text-muted-foreground">
+              {runtimeMax >= dataRanges.runtime.max ? 'All' : `≤ ${runtimeMax} min`}
+            </span>
           </div>
           <Slider
-            value={[runtimeMax]}
-            onValueChange={(val) => setRuntimeMax(val[0])}
+            value={[Math.min(runtimeMax, dataRanges.runtime.max)]}
+            onValueChange={(val) => setRuntimeMax(val[0] >= dataRanges.runtime.max ? 9999 : val[0])}
             min={dataRanges.runtime.min}
             max={dataRanges.runtime.max}
             step={1}
@@ -232,13 +235,13 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
             value={[listCount]}
             onValueChange={(val) => setListCount(val[0])}
             min={1}
-            max={10}
+            max={30}
             step={1}
             className="w-full"
           />
           <div className="flex justify-between mt-1">
             <span className="text-xs text-muted-foreground">1</span>
-            <span className="text-xs text-muted-foreground">10</span>
+            <span className="text-xs text-muted-foreground">30</span>
           </div>
         </div>
       )}
@@ -270,6 +273,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
             <h1 className="text-xl lg:text-2xl font-bold text-foreground">Your Recommendations</h1>
             <p className="text-xs lg:text-sm text-muted-foreground mt-1">
               {filteredRecommendations.length} of {recommendations.length} shown
+              {isStreaming && <span className="ml-2 text-blue-500 animate-pulse">· finding more…</span>}
             </p>
           </div>
           <div className="md:hidden">

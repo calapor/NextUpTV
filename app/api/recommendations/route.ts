@@ -99,13 +99,23 @@ export async function POST(req: NextRequest) {
           rec.reason = sanitizeReason(rec.reason)
         })
 
-        const tvdbResults = await Promise.all(
-          parsed.recommendations.map((rec) => fetchTvdbData(rec.title))
-        )
+        controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
 
-        const enriched = parsed.recommendations.map((rec, i) => {
-          const tvdb = tvdbResults[i]
-          return {
+        // Serialize enqueue calls with a small gap so the HTTP layer flushes each event
+        // individually rather than batching the burst of concurrent TVDB responses.
+        let enqueueChain = Promise.resolve()
+        const queuedEnqueue = (data: Uint8Array) => {
+          enqueueChain = enqueueChain.then(
+            () => new Promise<void>(resolve => {
+              controller.enqueue(data)
+              setTimeout(resolve, 20)
+            })
+          )
+        }
+
+        const enrichmentPromises = parsed.recommendations.map(async (rec, i) => {
+          const tvdb = await fetchTvdbData(rec.title)
+          const enriched = {
             ...rec,
             ...(tvdb
               ? {
@@ -122,9 +132,13 @@ export async function POST(req: NextRequest) {
                 }
               : {}),
           }
+          queuedEnqueue(sseEvent({ type: 'recommendation', recommendation: enriched }))
         })
 
-        controller.enqueue(sseEvent({ type: 'recommendations', recommendations: enriched }))
+        await Promise.all(enrichmentPromises)
+        await enqueueChain  // wait for all queued sends to complete
+
+        controller.enqueue(sseEvent({ type: 'recommendations_complete' }))
       } catch (err) {
         const message =
           err instanceof SyntaxError

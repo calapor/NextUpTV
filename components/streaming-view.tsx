@@ -9,11 +9,19 @@ import type { PendingRequest, Recommendation } from '@/lib/types'
 
 interface StreamingViewProps {
   pendingRequest: PendingRequest
-  onRecommendationsReady: (recs: Recommendation[]) => void
+  onRecommendationReceived: (rec: Recommendation) => void
+  onRecommendationsReady: () => void
   onNavigate?: (page: 'recommendations' | 'favourites') => void
+  compact?: boolean
 }
 
-export function StreamingView({ pendingRequest, onRecommendationsReady, onNavigate }: StreamingViewProps) {
+export function StreamingView({
+  pendingRequest,
+  onRecommendationReceived,
+  onRecommendationsReady,
+  onNavigate,
+  compact = false,
+}: StreamingViewProps) {
   const [phase, setPhase] = useState('Connecting...')
   const [foundLines, setFoundLines] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -30,7 +38,7 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
         body: JSON.stringify({
           fileContent: pendingRequest.fileContent,
           keywords: pendingRequest.keywords,
-          count: 10,
+          count: 30,
         }),
         signal: controller.signal,
       })
@@ -62,13 +70,14 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             } else {
               setPhase(payload.message)
             }
-          } else if (payload.type === 'recommendations') {
-            onRecommendationsReady(payload.recommendations)
+          } else if (payload.type === 'recommendation') {
+            onRecommendationReceived(payload.recommendation)
+          } else if (payload.type === 'recommendations_complete') {
+            onRecommendationsReady()
           } else if (payload.type === 'error') {
             setErrorMessage(payload.message)
             setErrorDetail(payload.detail ?? null)
           }
-          // text events intentionally ignored
         }
       }
     }
@@ -80,66 +89,90 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
     })
 
     return () => controller.abort()
-  }, [pendingRequest, onRecommendationsReady])
+  }, [pendingRequest, onRecommendationReceived, onRecommendationsReady])
 
+  if (errorMessage) {
+    const errorContent = (
+      <Alert variant="destructive" className="mb-6 max-w-lg">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Something went wrong</AlertTitle>
+        <AlertDescription>
+          <div className="mb-2">
+            {errorMessage}
+            <Button
+              variant="link"
+              onClick={() => onNavigate?.('favourites')}
+              className="ml-1 p-0 h-auto"
+            >
+              Try again
+            </Button>
+          </div>
+          {errorDetail && (
+            <>
+              <Button
+                variant="link"
+                onClick={() => setShowDetail(!showDetail)}
+                className="p-0 h-auto text-xs"
+              >
+                {showDetail ? 'Hide' : 'Show'} details
+              </Button>
+              {showDetail && (
+                <pre className="mt-2 p-2 bg-black bg-opacity-20 rounded text-xs overflow-auto max-h-32 whitespace-pre-wrap break-words">
+                  {errorDetail}
+                </pre>
+              )}
+            </>
+          )}
+        </AlertDescription>
+      </Alert>
+    )
+
+    if (compact) return <div className="px-4 py-3 border-b border-border">{errorContent}</div>
+    return (
+      <div className="mt-16 h-[calc(100vh-64px)] flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-4 lg:p-6">{errorContent}</div>
+      </div>
+    )
+  }
+
+  // Compact mode: slim banner shown above DashboardLayout while streaming
+  if (compact) {
+    return (
+      <div className="px-4 lg:px-6 py-2 border-b border-border bg-card/30 flex items-center gap-4">
+        <p className="text-sm font-medium text-foreground shrink-0">{phase}</p>
+        <div className="relative flex-1 h-5 overflow-hidden">
+          <div className="h-full flex flex-col justify-end">
+            {foundLines.slice(-1).map((line, i) => (
+              <p key={i} className="text-xs text-muted-foreground truncate">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Full mode: shown while waiting for the first card
   return (
     <div className="mt-16 h-[calc(100vh-64px)] flex flex-col overflow-hidden">
       <div className="flex-1 overflow-y-auto p-4 lg:p-6">
-        {errorMessage ? (
-          <Alert variant="destructive" className="mb-6 max-w-lg">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Something went wrong</AlertTitle>
-            <AlertDescription>
-              <div className="mb-2">
-                {errorMessage}
-                <Button
-                  variant="link"
-                  onClick={() => onNavigate?.('favourites')}
-                  className="ml-1 p-0 h-auto"
+        <div className="mb-6">
+          <p className="text-sm font-medium text-foreground mb-1">{phase}</p>
+          <div className="relative h-10 overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-6 z-10 bg-gradient-to-b from-background to-transparent" />
+            <div className="h-full flex flex-col justify-end gap-0.5">
+              {foundLines.map((line, i) => (
+                <p
+                  key={i}
+                  className="shrink-0 text-sm leading-5 text-muted-foreground truncate animate-in fade-in slide-in-from-bottom-1 duration-300"
                 >
-                  Try again
-                </Button>
-              </div>
-              {errorDetail && (
-                <>
-                  <Button
-                    variant="link"
-                    onClick={() => setShowDetail(!showDetail)}
-                    className="p-0 h-auto text-xs"
-                  >
-                    {showDetail ? 'Hide' : 'Show'} details
-                  </Button>
-                  {showDetail && (
-                    <pre className="mt-2 p-2 bg-black bg-opacity-20 rounded text-xs overflow-auto max-h-32 whitespace-pre-wrap break-words">
-                      {errorDetail}
-                    </pre>
-                  )}
-                </>
-              )}
-            </AlertDescription>
-          </Alert>
-        ) : (
-          <div className="mb-6">
-            {/* Pinned phase header */}
-            <p className="text-sm font-medium text-foreground mb-1">{phase}</p>
-
-            {/* Scrolling found-titles log */}
-            <div className="relative h-10 overflow-hidden">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-6 z-10 bg-gradient-to-b from-background to-transparent" />
-              <div className="h-full flex flex-col justify-end gap-0.5">
-                {foundLines.map((line, i) => (
-                  <p
-                    key={i}
-                    className="shrink-0 text-sm leading-5 text-muted-foreground truncate animate-in fade-in slide-in-from-bottom-1 duration-300"
-                  >
-                    {line}
-                  </p>
-                ))}
-              </div>
+                  {line}
+                </p>
+              ))}
             </div>
           </div>
-        )}
-
+        </div>
         <LoadingSkeletonGrid />
       </div>
     </div>
