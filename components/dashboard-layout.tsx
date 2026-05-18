@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Filter } from 'lucide-react'
 import type { Recommendation } from '@/lib/types'
 
@@ -232,13 +232,13 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
             value={[listCount]}
             onValueChange={(val) => setListCount(val[0])}
             min={1}
-            max={10}
+            max={recommendations.length}
             step={1}
             className="w-full"
           />
           <div className="flex justify-between mt-1">
             <span className="text-xs text-muted-foreground">1</span>
-            <span className="text-xs text-muted-foreground">10</span>
+            <span className="text-xs text-muted-foreground">{recommendations.length}</span>
           </div>
         </div>
       )}
@@ -281,7 +281,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
               </SheetTrigger>
               <SheetContent side="left" className="w-[85vw] max-w-xs p-0 flex flex-col">
                 <div className="flex-1 overflow-y-auto p-6">
-                  <h2 className="text-lg font-semibold text-foreground mb-6">Filters</h2>
+                  <SheetTitle className="text-lg font-semibold text-foreground mb-6">Filters</SheetTitle>
                   {filterContent}
                 </div>
               </SheetContent>
