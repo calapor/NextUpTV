@@ -1,4 +1,7 @@
+import Anthropic from '@anthropic-ai/sdk'
+
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
+const anthropic = new Anthropic()
 
 export interface TvdbEnrichment {
   id: number
@@ -36,6 +39,36 @@ async function getAuthToken(): Promise<string> {
 function firstSentence(text: string): string {
   const match = text.match(/^.+?[.!?]/)
   return match ? match[0] : text
+}
+
+async function inferStreamingServices(title: string, overview: string): Promise<string[]> {
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 200,
+      messages: [
+        {
+          role: 'user',
+          content: `What streaming services currently offer the TV show "${title}"? Respond with ONLY a JSON array of service names (e.g., ["Netflix", "Hulu", "Apple TV+"]). If you're unsure, return an empty array [].
+
+Show synopsis: ${overview}`,
+        },
+      ],
+    })
+
+    const content = response.content[0]
+    if (content.type === 'text') {
+      try {
+        const platforms = JSON.parse(content.text)
+        return Array.isArray(platforms) ? platforms : []
+      } catch {
+        return []
+      }
+    }
+    return []
+  } catch {
+    return []
+  }
 }
 
 export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | null> {
@@ -98,9 +131,14 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
     const usRating = contentRatings.find((r) => r.country === 'usa') ?? contentRatings[0]
 
     const networkTypes = new Set(['Network', 'Streaming Service'])
-    const streaming = (series.companies ?? [])
+    let streaming = (series.companies ?? [])
       .filter((c) => networkTypes.has(c.companyType?.companyTypeName ?? ''))
       .map((c) => c.name)
+
+    // If TVDB doesn't provide streaming services, use Claude to infer them
+    if (streaming.length === 0) {
+      streaming = await inferStreamingServices(best.name, best.overview ?? '')
+    }
 
     const posterUrl = best.thumbnail ?? best.image_url ?? series.image
 
