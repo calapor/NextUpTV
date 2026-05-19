@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { StreamingPlatformIcons } from '@/components/streaming-platform-icons'
 import type { PartialRecommendation, Recommendation } from '@/lib/types'
 
 interface RecommendationCardProps {
@@ -86,6 +87,12 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
             ))}
           </div>
         )}
+
+        {/* Streaming Platforms */}
+        <StreamingPlatformIcons
+          platforms={recommendation.streaming_platforms}
+          showTitle={recommendation.title}
+        />
 
         {/* Reason */}
         {'reason' in recommendation && (
