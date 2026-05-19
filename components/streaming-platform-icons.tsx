@@ -18,7 +18,7 @@ export function StreamingPlatformIcons({
   }
 
   return (
-    <div className="flex gap-2 mt-3">
+    <div className="flex flex-col gap-2">
       {availablePlatforms.map((platform) => {
         const searchUrl = getPlatformSearchUrl(platform.name, showTitle)
         if (!searchUrl) return null

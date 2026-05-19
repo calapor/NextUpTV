@@ -63,11 +63,19 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
       )}
 
       {/* Card Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-4 grid grid-cols-[1fr_auto] gap-3 auto-rows-min">
         {/* Title */}
         <div className="space-y-1">
           <h3 className="font-semibold text-foreground line-clamp-2">{recommendation.title}</h3>
           <p className="text-sm text-muted-foreground">{recommendation.release_year}</p>
+        </div>
+
+        {/* Streaming Platforms - spans multiple rows on the right */}
+        <div className="row-span-3">
+          <StreamingPlatformIcons
+            platforms={recommendation.streaming_platforms}
+            showTitle={recommendation.title}
+          />
         </div>
 
         {/* Rating */}
@@ -88,15 +96,9 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
           </div>
         )}
 
-        {/* Streaming Platforms */}
-        <StreamingPlatformIcons
-          platforms={recommendation.streaming_platforms}
-          showTitle={recommendation.title}
-        />
-
-        {/* Reason */}
+        {/* Reason - spans full width below */}
         {'reason' in recommendation && (
-          <p className="text-sm text-muted-foreground">{recommendation.reason}</p>
+          <p className="text-sm text-muted-foreground col-span-2">{recommendation.reason}</p>
         )}
       </div>
     </Card>
