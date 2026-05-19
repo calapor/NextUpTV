@@ -75,6 +75,22 @@ function computeOverallScore(scores: number[]): number {
   return Math.round((sum / scores.length) * 10) / 10
 }
 
+function normalizeTitle(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+function buildInputTitleSet(lines: string): Set<string> {
+  return new Set(lines.split(/[\n,;]+/).map(l => normalizeTitle(l.trim())).filter(Boolean))
+}
+
+function isInputShow(title: string, inputTitles: Set<string>): boolean {
+  const n = normalizeTitle(title)
+  for (const t of inputTitles) {
+    if (t === n || t.includes(n) || n.includes(t)) return true
+  }
+  return false
+}
+
 function stripMarkdownFences(text: string): string {
   let cleaned = text.replace(/^```json\n?/, '').replace(/\n?```$/, '')
   const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
@@ -358,6 +374,9 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       )
     }
+
+    const inputTitles = buildInputTitleSet(showsList)
+    parsed.recommendations = parsed.recommendations.filter(r => !isInputShow(r.title, inputTitles))
 
     // Step 2: Judge the recommendations
     const judgeUserContent =

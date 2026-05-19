@@ -31,6 +31,22 @@ function sanitizeReason(reason: string): string {
     .trim()
 }
 
+function normalizeTitle(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+function buildInputTitleSet(lines: string): Set<string> {
+  return new Set(lines.split(/[\n,;]+/).map(l => normalizeTitle(l.trim())).filter(Boolean))
+}
+
+function isInputShow(title: string, inputTitles: Set<string>): boolean {
+  const n = normalizeTitle(title)
+  for (const t of inputTitles) {
+    if (t === n || t.includes(n) || n.includes(t)) return true
+  }
+  return false
+}
+
 function extractJson(text: string): string {
   const start = text.indexOf('{')
   const end = text.lastIndexOf('}')
@@ -56,6 +72,7 @@ export async function POST(req: NextRequest) {
       try {
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
+        const inputTitles = buildInputTitleSet([fileContent, keywords].filter(Boolean).join('\n'))
         let fullText = ''
         const tvdbPromises = new Map<string, ReturnType<typeof fetchTvdbData>>()
         const titleRegex = /"title":\s*"([^"]+)"/g
@@ -75,7 +92,7 @@ export async function POST(req: NextRequest) {
           let match
           while ((match = titleRegex.exec(fullText)) !== null) {
             const sanitized = sanitizeSeriesTitle(match[1])
-            if (!tvdbPromises.has(sanitized)) {
+            if (!tvdbPromises.has(sanitized) && !isInputShow(sanitized, inputTitles)) {
               const promise = fetchTvdbData(sanitized)
               tvdbPromises.set(sanitized, promise)
               promise.then((tvdb) => {
@@ -122,6 +139,7 @@ export async function POST(req: NextRequest) {
         const enriched = []
         for (const rec of parsed.recommendations) {
           if (seenTitles.has(rec.title)) continue
+          if (isInputShow(rec.title, inputTitles)) continue
           seenTitles.add(rec.title)
           const tvdb = await (tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
           const enrichedRec = {

@@ -1,5 +1,41 @@
 [
   {
+    "filename": "eval-2026-05-19T20-45-46-502-B-8.4.html",
+    "runAt": "19/05/2026, 21:45:46",
+    "grade": "B",
+    "overallScore": 8.4
+  },
+  {
+    "filename": "eval-2026-05-19T17-59-03-942-F-4.7.html",
+    "runAt": "19/05/2026, 18:59:03",
+    "grade": "F",
+    "overallScore": 4.7
+  },
+  {
+    "filename": "eval-2026-05-19T17-57-52-171-F-5.6.html",
+    "runAt": "19/05/2026, 18:57:52",
+    "grade": "F",
+    "overallScore": 5.6
+  },
+  {
+    "filename": "eval-2026-05-19T17-53-56-907-F-4.9.html",
+    "runAt": "19/05/2026, 18:53:56",
+    "grade": "F",
+    "overallScore": 4.9
+  },
+  {
+    "filename": "eval-2026-05-19T17-52-54-853-F-5.2.html",
+    "runAt": "19/05/2026, 18:52:54",
+    "grade": "F",
+    "overallScore": 5.2
+  },
+  {
+    "filename": "eval-2026-05-19T17-50-59-957-F-5.2.html",
+    "runAt": "19/05/2026, 18:50:59",
+    "grade": "F",
+    "overallScore": 5.2
+  },
+  {
     "filename": "eval-2026-05-15T22-00-21-471-B-8.1.html",
     "runAt": "15/05/2026, 23:00:21",
     "grade": "B",
