@@ -1,7 +1,6 @@
 'use client'
 
 import { getAvailablePlatforms, getPlatformSearchUrl } from '@/lib/streaming-platforms'
-import Image from 'next/image'
 
 interface StreamingPlatformIconsProps {
   platforms: string[] | undefined
@@ -34,14 +33,11 @@ export function StreamingPlatformIcons({
             aria-label={`Watch on ${platform.name}`}
             className="inline-block hover:opacity-80 transition-opacity"
           >
-            <div className="relative w-8 h-8">
-              <Image
-                src={`/icons/streaming/${platform.iconName}.svg`}
-                alt={platform.name}
-                fill
-                className="object-contain"
-              />
-            </div>
+            <img
+              src={`/icons/streaming/${platform.iconName}.svg`}
+              alt={platform.name}
+              className="w-8 h-8 object-contain"
+            />
           </a>
         )
       })}
