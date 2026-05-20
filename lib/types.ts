@@ -63,6 +63,19 @@ export interface CachedFavouritesInput {
   keywords: string
 }
 
+export interface CastMember {
+  actor: string
+  character: string
+  image?: string
+}
+
+export interface ShowDetails {
+  status: string
+  season_count: number
+  cast: CastMember[]
+  full_overview: string
+}
+
 // Eval types
 export interface CriterionScore {
   score: number

@@ -21,7 +21,7 @@ let tokenCache: { token: string; expiresAt: number } | null = null
 const SHOW_CACHE_TTL = 60 * 60 * 1000
 const showCache = new Map<string, { data: TvdbEnrichment | null; expiresAt: number }>()
 
-async function getAuthToken(): Promise<string> {
+export async function getAuthToken(): Promise<string> {
   if (tokenCache && tokenCache.expiresAt > Date.now() + 86_400_000) {
     return tokenCache.token
   }

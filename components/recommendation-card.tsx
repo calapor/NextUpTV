@@ -4,13 +4,15 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StreamingPlatformIcons } from '@/components/streaming-platform-icons'
+import { ShowDetailSheet } from '@/components/show-detail-sheet'
 import type { PartialRecommendation, Recommendation } from '@/lib/types'
 
 interface RecommendationCardProps {
   recommendation: PartialRecommendation | Recommendation
+  onSelect?: (rec: PartialRecommendation | Recommendation) => void
 }
 
-export function RecommendationCard({ recommendation }: RecommendationCardProps) {
+export function RecommendationCard({ recommendation, onSelect }: RecommendationCardProps) {
   const [imgError, setImgError] = useState(false)
 
   const titleInitials = recommendation.title
@@ -45,22 +47,12 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
   )
 
   return (
-    <Card className="group overflow-hidden bg-card hover:bg-card/80 transition-all duration-300 cursor-pointer hover:shadow-lg">
+    <Card
+      className="group overflow-hidden bg-card hover:bg-card/80 transition-all duration-300 cursor-pointer hover:shadow-lg"
+      onClick={() => onSelect?.(recommendation)}
+    >
       {/* Poster Image Area */}
-      {recommendation.tvdb_show_url ? (
-        <a
-          href={recommendation.tvdb_show_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-          tabIndex={-1}
-          aria-label={`View ${recommendation.title} on TheTVDB`}
-        >
-          {posterArea}
-        </a>
-      ) : (
-        posterArea
-      )}
+      {posterArea}
 
       {/* Card Content */}
       <div className="p-4 grid grid-cols-[1fr_auto] gap-3 auto-rows-min">
@@ -110,11 +102,26 @@ interface RecommendationCardGridProps {
 }
 
 export function RecommendationCardGrid({ recommendations }: RecommendationCardGridProps) {
+  const [selectedRec, setSelectedRec] = useState<Recommendation | null>(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
+
+  const handleSelect = (rec: PartialRecommendation | Recommendation) => {
+    setSelectedRec(rec as Recommendation)
+    setSheetOpen(true)
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {recommendations.map((rec) => (
-        <RecommendationCard key={rec.title} recommendation={rec} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {recommendations.map((rec) => (
+          <RecommendationCard key={rec.title} recommendation={rec} onSelect={handleSelect} />
+        ))}
+      </div>
+      <ShowDetailSheet
+        recommendation={selectedRec}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
+    </>
   )
 }
