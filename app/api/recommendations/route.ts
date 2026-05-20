@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server'
 import type { PartialRecommendation, RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
+import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
 
 const anthropic = new Anthropic()
 const encoder = new TextEncoder()
@@ -31,30 +32,6 @@ function sanitizeReason(reason: string): string {
     .trim()
 }
 
-function normalizeTitle(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]/g, '')
-}
-
-function buildInputTitleSet(lines: string): Set<string> {
-  return new Set(lines.split(/[\n,;]+/).map(l => normalizeTitle(l.trim())).filter(Boolean))
-}
-
-function isInputShow(title: string, inputTitles: Set<string>): boolean {
-  const n = normalizeTitle(title)
-  for (const t of inputTitles) {
-    if (t === n || t.includes(n) || n.includes(t)) return true
-  }
-  return false
-}
-
-function extractJson(text: string): string {
-  const start = text.indexOf('{')
-  const end = text.lastIndexOf('}')
-  if (start === -1 || end === -1 || end < start) {
-    throw new SyntaxError('No JSON object found in Claude response')
-  }
-  return text.slice(start, end + 1)
-}
 
 export async function POST(req: NextRequest) {
   const { fileContent, keywords, count } = (await req.json()) as RecommendationsRequest
