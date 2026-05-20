@@ -120,18 +120,17 @@ The application will be available at `http://localhost:3000`
 
 ## 📝 Notes
 
-- No backend logic implemented yet (placeholder only)
-- No mock APIs (prepare for real backend integration)
-- File upload and form submission are non-functional placeholders
-- Filter sliders are interactive but don't filter recommendations yet
+- ~~No backend logic implemented yet (placeholder only)~~
+- ~~File upload and form submission are non-functional placeholders~~
+- ~~Filter sliders are interactive but don't filter recommendations yet~~
 - Recommendation states can be manually triggered via state changes
 
 ## 🎯 Next Steps
 
 When implementing backend functionality:
 1. ~~Connect to AI recommendation API~~
-2. Implement file upload handling
-3. Add real filtering logic
+2. ~~Implement file upload handling~~
+3. ~~Add real filtering logic~~
 4. Connect to database for persistence
 5. Add user authentication (optional)
-6. Implement localStorage persistence for filter state
+6. ~~Implement localStorage persistence for filter state~~
