@@ -59,9 +59,16 @@ function extractJson(text: string): string {
 export async function POST(req: NextRequest) {
   const { fileContent, keywords, count } = (await req.json()) as RecommendationsRequest
 
+  if ((fileContent?.length ?? 0) > 100_000) {
+    return new Response('File content too large', { status: 400 })
+  }
+  if ((keywords?.length ?? 0) > 5_000) {
+    return new Response('Keywords too long', { status: 400 })
+  }
+
   const userContent = [
-    fileContent && `My favourite shows (from uploaded file):\n${fileContent}`,
-    keywords && `Keywords, shows and genres I enjoy:\n${keywords}`,
+    fileContent && `My favourite shows (from uploaded file):\n<user_input>\n${fileContent}\n</user_input>`,
+    keywords && `Keywords, shows and genres I enjoy:\n<user_input>\n${keywords}\n</user_input>`,
     `Please return ${count} recommendations.`,
   ]
     .filter(Boolean)
@@ -79,7 +86,7 @@ export async function POST(req: NextRequest) {
 
         const anthropicStream = anthropic.messages.stream({
           model: 'claude-sonnet-4-6',
-          max_tokens: 8192,
+          max_tokens: 6144,
           system: RECOMMENDATIONS_SYSTEM_PROMPT,
           messages: [{ role: 'user', content: userContent }],
         })
