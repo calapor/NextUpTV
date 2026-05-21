@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Upload, X, CheckCircle, AlertCircle } from 'lucide-react'
+import { Upload, X, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -20,12 +20,13 @@ interface UploadState {
 }
 
 interface FavouritesPageProps {
-  onNavigate?: (page: 'recommendations' | 'favourites') => void
+  onNavigate?: (page: 'recommendations' | 'favourites' | 'library') => void
   onSubmit?: (req: PendingRequest) => void
   cachedInput?: CachedFavouritesInput | null
+  onClearAll?: () => void
 }
 
-export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: FavouritesPageProps) {
+export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }: FavouritesPageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   // File upload state
@@ -147,6 +148,15 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: Favourites
     } catch {
       setSubmitError('Failed to read the uploaded file. Please try again.')
     }
+  }
+
+  const handleClearAll = () => {
+    setUploadState({ file: null, error: null, isUploading: false })
+    setCachedFile(null)
+    setKeywords('')
+    setSubmitError(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+    onClearAll?.()
   }
 
   return (
@@ -321,6 +331,19 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: Favourites
                 Please upload a file or add keywords to continue
               </p>
             )}
+
+            <div className="border-t border-border pt-4">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleClearAll}
+                className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Clear all data &amp; reset
+              </Button>
+            </div>
           </form>
         </Card>
       </div>
