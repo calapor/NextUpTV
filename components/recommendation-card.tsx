@@ -28,7 +28,7 @@ export function RecommendationCard({ recommendation, onSelect }: RecommendationC
     <img
       src={recommendation.tvdb_poster_thumbnail_url}
       alt={`${recommendation.title} poster`}
-      className="w-full h-full object-cover"
+      className="w-full h-full object-cover object-top"
       onError={() => setImgError(true)}
     />
   ) : (
