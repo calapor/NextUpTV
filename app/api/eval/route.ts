@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
 import type { EvalCriteria, EvalGrade, EvalRunResult, RecommendationsResponse } from '@/lib/types'
+import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
 
 export const maxDuration = 60
 
@@ -75,28 +76,6 @@ function computeOverallScore(scores: number[]): number {
   return Math.round((sum / scores.length) * 10) / 10
 }
 
-function normalizeTitle(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]/g, '')
-}
-
-function buildInputTitleSet(lines: string): Set<string> {
-  return new Set(lines.split(/[\n,;]+/).map(l => normalizeTitle(l.trim())).filter(Boolean))
-}
-
-function isInputShow(title: string, inputTitles: Set<string>): boolean {
-  const n = normalizeTitle(title)
-  for (const t of inputTitles) {
-    if (t === n || t.includes(n) || n.includes(t)) return true
-  }
-  return false
-}
-
-function stripMarkdownFences(text: string): string {
-  let cleaned = text.replace(/^```json\n?/, '').replace(/\n?```$/, '')
-  const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
-  if (jsonMatch) cleaned = jsonMatch[0]
-  return cleaned
-}
 
 function escapeHtml(str: string): string {
   return str
@@ -353,13 +332,19 @@ export async function POST(req: NextRequest) {
     if (count < 1 || count > 20) {
       return NextResponse.json({ error: 'Count must be between 1 and 20' }, { status: 400 })
     }
+    if (systemPrompt.length > 10_000) {
+      return NextResponse.json({ error: 'System prompt exceeds maximum length' }, { status: 400 })
+    }
+    if (showsList.length > 20_000) {
+      return NextResponse.json({ error: 'Shows list exceeds maximum length' }, { status: 400 })
+    }
 
-    const userContent = `My favourite shows:\n${showsList}\n\nPlease return ${count} recommendations.`
+    const userContent = `My favourite shows:\n<user_input>\n${showsList}\n</user_input>\n\nPlease return ${count} recommendations.`
 
     // Step 1: Generate recommendations
     const recMessage = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
+      max_tokens: 3072,
       system: systemPrompt,
       messages: [{ role: 'user', content: userContent }],
     })
@@ -367,7 +352,7 @@ export async function POST(req: NextRequest) {
     const recText = recMessage.content[0].type === 'text' ? recMessage.content[0].text : ''
     let parsed: RecommendationsResponse
     try {
-      parsed = JSON.parse(stripMarkdownFences(recText))
+      parsed = JSON.parse(extractJson(recText))
     } catch {
       return NextResponse.json(
         { error: 'Failed to parse recommendations response', details: recText.slice(0, 200) },
@@ -380,7 +365,7 @@ export async function POST(req: NextRequest) {
 
     // Step 2: Judge the recommendations
     const judgeUserContent =
-      `Input shows (the viewer's favourites):\n${showsList}\n\n` +
+      `Input shows (the viewer's favourites):\n<user_input>\n${showsList}\n</user_input>\n\n` +
       `Recommendations to evaluate:\n${JSON.stringify(parsed.recommendations)}`
 
     const judgeMessage = await anthropic.messages.create({
@@ -393,7 +378,7 @@ export async function POST(req: NextRequest) {
     const judgeText = judgeMessage.content[0].type === 'text' ? judgeMessage.content[0].text : ''
     let judgeResponse
     try {
-      judgeResponse = JSON.parse(stripMarkdownFences(judgeText))
+      judgeResponse = JSON.parse(extractJson(judgeText))
     } catch {
       return NextResponse.json(
         { error: 'Failed to parse judge response', details: judgeText.slice(0, 200) },

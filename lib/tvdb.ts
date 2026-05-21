@@ -21,7 +21,7 @@ let tokenCache: { token: string; expiresAt: number } | null = null
 const SHOW_CACHE_TTL = 60 * 60 * 1000
 const showCache = new Map<string, { data: TvdbEnrichment | null; expiresAt: number }>()
 
-async function getAuthToken(): Promise<string> {
+export async function getAuthToken(): Promise<string> {
   if (tokenCache && tokenCache.expiresAt > Date.now() + 86_400_000) {
     return tokenCache.token
   }
@@ -109,7 +109,7 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
     const best = results[0]
     const tvdbId = parseInt(best.tvdb_id, 10)
 
-    const seriesRes = await fetch(`${TVDB_BASE}/series/${tvdbId}`, { headers })
+    const seriesRes = await fetch(`${TVDB_BASE}/series/${tvdbId}/extended`, { headers })
     if (!seriesRes.ok) {
       showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
       return null

@@ -1,137 +1,120 @@
-# NextUpTV - AI-Powered TV Recommendation Platform
+# NextUpTV — AI-Powered TV Recommendation Platform
 
-A cinematic streaming-inspired UI for an AI-powered TV recommendation platform. Built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui.
+NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
 
-## 🎬 Design & Architecture
+## Features
 
-### Design System
-- **Dark mode first** cinematic aesthetic inspired by Netflix + Spotify + Letterboxd
-- **Blue accent color** for primary interactions
-- **Neutral palette** with dark backgrounds for immersive viewing
-- **Inter typography** for modern, readable presentation
-- **Rounded corners** and subtle shadows for polish
+- **AI recommendations** — Claude Sonnet 4.6 analyses your favourites and returns tailored picks with per-show reasoning
+- **Real-time streaming** — recommendations appear progressively as Claude generates them (SSE)
+- **Two-pass enrichment** — show titles are looked up in TVDB in parallel during generation; each card arrives with poster, synopsis, year, runtime, genres, content rating, and average user rating
+- **Streaming platform icons** — direct search links for Netflix, Prime Video, Disney+, Max, Hulu, Apple TV+, Peacock, Paramount+, and more
+- **Interactive filter panel** — client-side sliders for genre tone (comedy, horror), year range, minimum rating, runtime, and watch-list size; no repeat API calls
+- **Manage Favourites** — upload a plain-text or CSV watch history (up to 5 MB) and add free-text keywords; input is persisted to localStorage between sessions
+- **Session persistence** — recommendations, filter state, and favourites input survive page reloads via localStorage
+- **Prompt safety** — user input is wrapped in XML delimiters server-side; strict token budgets and length caps prevent abuse
+- **Cinematic dark-mode UI** — inspired by Netflix, Spotify, and Letterboxd; responsive across desktop, tablet, and mobile
 
-### Theme Colors
-- **Background**: Deep charcoal (`oklch(0.13 0 0)`)
-- **Foreground**: Off-white text (`oklch(0.98 0 0)`)
-- **Card**: Slightly lighter background (`oklch(0.16 0 0)`)
-- **Accent**: Electric blue (`oklch(0.35 0.15 256)`)
+## Tech Stack
 
-## 📐 Application Shell
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript 5.7 |
+| UI | React 19, shadcn/ui, Tailwind CSS 4 |
+| AI | Anthropic Claude Sonnet 4.6 |
+| Media data | TVDB v4 API |
+| Analytics | Vercel Analytics |
 
-### Top Navigation
-- Fixed header with app logo and tab navigation
-- Two main navigation tabs:
-  - **Recommendations** (default): Shows personalized recommendations
-  - **Manage Favourites**: Upload preferences and keywords
-- Clean, minimal design matching streaming platforms
+## Environment Variables
 
-### Layout System
-- **Desktop** (>1024px): 30% filter panel + 70% content
-- **Tablet** (768-1024px): 35% filter panel + 65% content  
-- **Mobile** (<768px): Full-width with filter drawer
+Create a `.env.local` file at the project root:
 
-## 📁 Component Structure
+```
+ANTHROPIC_API_KEY=sk-ant-...
+TVDB_API_KEY=your-tvdb-api-key
+EVAL_USER=admin
+EVAL_PASSWORD=changeme
+```
 
-### Core Application
-- `components/app-shell.tsx` - Main app wrapper with routing
-- `components/top-navigation.tsx` - Fixed header with tab navigation
+Obtain a TVDB API key at [thetvdb.com](https://thetvdb.com).
 
-### Pages
-- `components/pages/recommendations.tsx` - Recommendations page with state management
-- `components/pages/favourites.tsx` - Manage favourites upload & form
+`EVAL_USER` and `EVAL_PASSWORD` gate the `/eval` workbench via HTTP Basic Auth. If `EVAL_PASSWORD` is unset the route is open (useful in local dev).
 
-### Dashboard
-- `components/dashboard-layout.tsx` - Split layout with filters and content
-- `components/recommendation-card.tsx` - Placeholder recommendation cards with hover effects
-- `components/loading-skeleton.tsx` - Animated skeleton loading states
-
-## 🔄 Recommendation States
-
-### Empty State
-- Centered message when no recommendations exist
-- CTA button to navigate to Manage Favourites tab
-- Friendly, encouraging UI
-
-### Loading State
-- Animated skeleton grid for perceived performance
-- Displays "Generating recommendations..." message
-- Hides filter panel during loading
-
-### Success State
-- Dashboard with filter panel and recommendation grid
-- Shows "Last updated [date]" label
-- Interactive filter sliders (Year Range, Minimum Rating)
-
-### Error State
-- Full-width error banner with retry button
-- Clear error messaging
-- Preserves any previously loaded recommendations
-
-## 🎨 UI Components Used
-
-- **shadcn/ui Cards** - Recommendation display
-- **Sliders** - Year range and rating filters
-- **Buttons** - Navigation and interactions
-- **Skeleton** - Loading placeholders
-- **Alert** - Error messaging
-- **Sheet** - Mobile filter drawer
-- **Textarea** - Keywords input
-- **Label** - Form labels
-
-## 📱 Responsive Breakpoints
-
-| Device | Width | Layout |
-|--------|-------|--------|
-| Mobile | <768px | Full-width, filter drawer |
-| Tablet | 768-1024px | 35/65 split |
-| Desktop | >1024px | 30/70 split |
-
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Run development server
-pnpm dev
-
-# Build for production
+pnpm dev          # http://localhost:3000
 pnpm build
-
-# Start production server
 pnpm start
 ```
 
-The application will be available at `http://localhost:3000`
+## Architecture
 
-## 🛠️ Key Features
+### Recommendation flow
 
-- ✅ Responsive sidebar navigation (filter panel)
-- ✅ Fixed top navigation with tab routing
-- ✅ Dashboard layout with content grid
-- ✅ Recommendation card component with placeholders
-- ✅ Placeholder loading states with skeletons
-- ✅ Empty state UI
-- ✅ Error state handling
-- ✅ Mobile-friendly filter drawer
-- ✅ Dark mode first design
-- ✅ Cinematic streaming-inspired aesthetic
+1. The user uploads a watch-history file and/or enters keywords on the **Manage Favourites** tab, then triggers a recommendation run.
+2. The browser opens an SSE connection to `/api/recommendations`.
+3. The server streams Claude's JSON response token by token. As each show title appears in the stream, a TVDB lookup fires immediately — so enrichment runs in parallel with generation rather than after it.
+4. `partial_recommendation` events push poster cards to the UI as TVDB results arrive, giving the user visible progress.
+5. Once Claude finishes, the server merges the full Claude output with the TVDB data, deduplicates, filters out any input shows, and emits a final `complete` event with the sorted recommendation set.
+6. All filtering (sliders) happens entirely in the browser against the cached result — no additional API calls.
 
-## 📝 Notes
+### Persistence
 
-- No backend logic implemented yet (placeholder only)
-- No mock APIs (prepare for real backend integration)
-- File upload and form submission are non-functional placeholders
-- Filter sliders are interactive but don't filter recommendations yet
-- Recommendation states can be manually triggered via state changes
+| Key | Contents |
+|---|---|
+| `nextuptv_recommendations` | Last recommendation set |
+| `nextuptv_filter_state` | Filter slider positions |
+| `nextuptv_favourites_input` | Last favourites file content + keywords |
 
-## 🎯 Next Steps
+## Project Structure
 
-When implementing backend functionality:
-1. ~~Connect to AI recommendation API~~
-2. Implement file upload handling
-3. Add real filtering logic
-4. Connect to database for persistence
-5. Add user authentication (optional)
-6. Implement localStorage persistence for filter state
+```
+app/
+  api/
+    recommendations/   SSE recommendation endpoint
+    eval/              Prompt evaluation endpoint
+  eval/                Developer evaluation workbench
+  layout.tsx
+  page.tsx
+components/
+  app-shell.tsx        Root state and routing
+  top-navigation.tsx   Fixed header and tab nav
+  dashboard-layout.tsx Filter panel + recommendation grid
+  recommendation-card.tsx
+  streaming-view.tsx   SSE consumer and progressive UI
+  streaming-platform-icons.tsx
+  loading-skeleton.tsx
+  pages/
+    recommendations.tsx
+    favourites.tsx
+lib/
+  types.ts             Shared TypeScript interfaces
+  title-utils.ts       Shared title normalisation and JSON extraction
+  tvdb.ts              TVDB v4 API client with 1-hour cache
+  prompts.ts           Claude system prompt
+  streaming-platforms.ts Platform registry and search URLs
+  utils.ts             clsx / tailwind-merge helper
+public/
+  streaming-icons/     SVG icons for each platform
+  eval-reports/        Generated HTML evaluation reports
+specs/
+  product-overview.md
+  design-system.md
+  features/            Per-feature specifications
+```
+
+## Responsive Layout
+
+| Device | Width | Layout |
+|---|---|---|
+| Mobile | < 768 px | Full-width; filter panel in drawer |
+| Tablet | 768 – 1024 px | 35 / 65 split |
+| Desktop | > 1024 px | 30 / 70 split |
+
+## Upcoming Phases
+
+- **User Profiles** — named preference profiles with save, load, and switch
+- **Preference Persistence** — backend-backed storage for favourites and recommendation history
+- **Additional Filters** — language, country of origin, network, content rating

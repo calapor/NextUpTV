@@ -4,6 +4,7 @@ import type { PartialRecommendation, RecommendationsRequest, RecommendationsResp
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
 import testRecommendations from '@/lib/test-data/recommendations.json'
+import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
 
 const anthropic = new Anthropic()
 const encoder = new TextEncoder()
@@ -32,30 +33,6 @@ function sanitizeReason(reason: string): string {
     .trim()
 }
 
-function normalizeTitle(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]/g, '')
-}
-
-function buildInputTitleSet(lines: string): Set<string> {
-  return new Set(lines.split(/[\n,;]+/).map(l => normalizeTitle(l.trim())).filter(Boolean))
-}
-
-function isInputShow(title: string, inputTitles: Set<string>): boolean {
-  const n = normalizeTitle(title)
-  for (const t of inputTitles) {
-    if (t === n || t.includes(n) || n.includes(t)) return true
-  }
-  return false
-}
-
-function extractJson(text: string): string {
-  const start = text.indexOf('{')
-  const end = text.lastIndexOf('}')
-  if (start === -1 || end === -1 || end < start) {
-    throw new SyntaxError('No JSON object found in Claude response')
-  }
-  return text.slice(start, end + 1)
-}
 
 function sseResponse(stream: ReadableStream): Response {
   return new Response(stream, {
@@ -105,9 +82,16 @@ export async function POST(req: NextRequest) {
 
   const { fileContent, keywords, count } = (await req.json()) as RecommendationsRequest
 
+  if ((fileContent?.length ?? 0) > 100_000) {
+    return new Response('File content too large', { status: 400 })
+  }
+  if ((keywords?.length ?? 0) > 5_000) {
+    return new Response('Keywords too long', { status: 400 })
+  }
+
   const userContent = [
-    fileContent && `My favourite shows (from uploaded file):\n${fileContent}`,
-    keywords && `Keywords, shows and genres I enjoy:\n${keywords}`,
+    fileContent && `My favourite shows (from uploaded file):\n<user_input>\n${fileContent}\n</user_input>`,
+    keywords && `Keywords, shows and genres I enjoy:\n<user_input>\n${keywords}\n</user_input>`,
     `Please return ${count} recommendations.`,
   ]
     .filter(Boolean)
@@ -125,7 +109,7 @@ export async function POST(req: NextRequest) {
 
         const anthropicStream = anthropic.messages.stream({
           model: 'claude-sonnet-4-6',
-          max_tokens: 8192,
+          max_tokens: 6144,
           system: RECOMMENDATIONS_SYSTEM_PROMPT,
           messages: [{ role: 'user', content: userContent }],
         })
