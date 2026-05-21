@@ -232,7 +232,7 @@ export function LibraryPage({ shows, loading, hasLibrary, onNavigate }: LibraryP
         <CalendarDays className="w-12 h-12 text-muted-foreground" />
         <h2 className="text-lg font-semibold text-foreground">No library uploaded</h2>
         <p className="text-sm text-muted-foreground max-w-xs">
-          Upload your TV show library in the Manage Favourites tab to see upcoming episodes.
+          Upload your TV favourite TV shows  in the Manage Favourites tab to see their current status and when you can watch them next.
         </p>
         <button
           onClick={() => onNavigate('favourites')}

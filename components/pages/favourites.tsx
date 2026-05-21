@@ -285,7 +285,7 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
                   id="keywords"
                   value={keywords}
                   onChange={handleKeywordsChange}
-                  placeholder="e.g. Breaking Bad, sci-fi, psychological thrillers"
+                  placeholder="e.g. Breaking Bad, Matthew Rhys, sci-fi, psychological thrillers"
                   className={`min-h-48 resize-none transition-colors ${
                     isOverCharLimit ? 'border-red-500' : ''
                   }`}
