@@ -9,7 +9,6 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { StreamingPlatformIcons } from '@/components/streaming-platform-icons'
 import type { Recommendation, PartialRecommendation, ShowDetails } from '@/lib/types'
 
@@ -185,20 +184,25 @@ export function ShowDetailSheet({ recommendation: rec, open, onOpenChange }: Sho
                     <h3 className="text-sm font-semibold text-foreground mb-3">Cast</h3>
                     <div className="flex gap-4 overflow-x-auto pb-2">
                       {details.cast.map((member, i) => (
-                        <div key={i} className="flex flex-col items-center gap-1 shrink-0 w-16">
-                          <Avatar className="w-16 h-16">
-                            {member.image && (
-                              <AvatarImage src={member.image} alt={member.actor} />
+                        <div key={i} className="flex flex-col items-center gap-1 shrink-0 w-14">
+                          <div className="w-14 h-20 rounded-md overflow-hidden bg-muted flex items-center justify-center shrink-0">
+                            {member.image ? (
+                              <img
+                                src={member.image}
+                                alt={member.actor}
+                                className="w-full h-full object-cover object-top"
+                              />
+                            ) : (
+                              <span className="text-xs font-medium text-muted-foreground">
+                                {member.actor
+                                  .split(' ')
+                                  .map((w) => w[0])
+                                  .join('')
+                                  .slice(0, 2)
+                                  .toUpperCase()}
+                              </span>
                             )}
-                            <AvatarFallback className="text-xs">
-                              {member.actor
-                                .split(' ')
-                                .map((w) => w[0])
-                                .join('')
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
+                          </div>
                           <span className="text-xs text-foreground text-center leading-tight line-clamp-2 w-full">
                             {member.actor}
                           </span>
