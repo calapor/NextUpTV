@@ -77,6 +77,19 @@ export interface ShowDetails {
   full_overview: string
 }
 
+export interface LibraryShow {
+  id: number
+  title: string
+  poster?: string
+  tvdb_url?: string
+  status: string
+  season_count: number
+  last_aired?: string
+  last_episode?: { season: number; number: number }
+  next_aired?: string
+  next_episode?: { season: number; number: number }
+}
+
 // Eval types
 export interface CriterionScore {
   score: number

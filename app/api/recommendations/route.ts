@@ -140,7 +140,11 @@ export async function POST(req: NextRequest) {
                     streaming_platforms: tvdb.streaming_platforms,
                     average_user_rating: tvdb.average_user_rating,
                   }
-                  controller.enqueue(sseEvent({ type: 'partial_recommendation', recommendation: partial }))
+                  try {
+                    controller.enqueue(sseEvent({ type: 'partial_recommendation', recommendation: partial }))
+                  } catch {
+                    // Stream already closed — TVDB fetch resolved after stream ended
+                  }
                 }
               })
               controller.enqueue(sseEvent({ type: 'status', message: `Suggesting: ${sanitized}` }))
