@@ -27,14 +27,20 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   }, [])
 
   // Runtime uses a max-threshold: slider at right (Long) = show all, move left = filter out longer shows
-  const [runtimeMax, setRuntimeMax] = useState(0)
-  const [ratingMin, setRatingMin]   = useState(0)
-  const [comedyMin, setComedyMin]   = useState(0)
-  const [horrorMin, setHorrorMin]   = useState(0)
-  const [yearMin, setYearMin]       = useState(0)
-  const [listCount, setListCount]   = useState(10)
+  const [runtimeMax, setRuntimeMax]           = useState(0)
+  const [ratingMin, setRatingMin]             = useState(0)
+  const [comedyMin, setComedyMin]             = useState(0)
+  const [horrorMin, setHorrorMin]             = useState(0)
+  const [yearMin, setYearMin]                 = useState(0)
+  const [listCount, setListCount]             = useState(10)
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
 
   const initialized = useRef(false)
+
+  const availablePlatforms = useMemo(() => {
+    const all = recommendations.flatMap(r => r.streaming_platforms ?? [])
+    return [...new Set(all)].sort()
+  }, [recommendations])
 
   const dataRanges = useMemo(() => {
     if (recommendations.length === 0) return null
@@ -65,6 +71,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
         setHorrorMin (Math.max(dataRanges.horror.min,  Math.min(saved.horrorMin  ?? dataRanges.horror.min,  dataRanges.horror.max)))
         setYearMin   (Math.max(dataRanges.year.min,    Math.min(saved.yearMin    ?? dataRanges.year.min,    dataRanges.year.max)))
         setListCount (saved.listCount ?? 10)
+        setSelectedPlatforms(saved.selectedPlatforms ?? [])
         return
       }
     }
@@ -79,20 +86,25 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   useEffect(() => {
     if (!dataRanges) return
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount, selectedPlatforms }))
     } catch {}
-  }, [runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount, dataRanges])
+  }, [runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount, selectedPlatforms, dataRanges])
 
   const filteredRecommendations = useMemo(() => {
-    const result = recommendations.filter(r =>
-      r.episode_runtime_minutes <= runtimeMax &&
-      r.imdb_rating >= ratingMin &&
-      r.comedy_score >= comedyMin &&
-      r.horror_score >= horrorMin &&
-      r.release_year >= yearMin
-    )
+    const result = recommendations.filter(r => {
+      const platformMatch = selectedPlatforms.length === 0 ||
+        selectedPlatforms.some(p => r.streaming_platforms?.includes(p))
+      return (
+        r.episode_runtime_minutes <= runtimeMax &&
+        r.imdb_rating >= ratingMin &&
+        r.comedy_score >= comedyMin &&
+        r.horror_score >= horrorMin &&
+        r.release_year >= yearMin &&
+        platformMatch
+      )
+    })
     return result.slice(0, listCount)
-  }, [recommendations, runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount])
+  }, [recommendations, runtimeMax, ratingMin, comedyMin, horrorMin, yearMin, listCount, selectedPlatforms])
 
   const resetFilters = () => {
     if (!dataRanges) return
@@ -102,6 +114,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
     setHorrorMin (dataRanges.horror.min)
     setYearMin   (dataRanges.year.min)
     setListCount (Math.min(10, recommendations.length))
+    setSelectedPlatforms([])
   }
 
   const filterContent = (
@@ -216,6 +229,36 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
           <div className="flex justify-between mt-1">
             <span className="text-xs text-muted-foreground">{dataRanges.year.min}</span>
             <span className="text-xs text-muted-foreground">{dataRanges.year.max}</span>
+          </div>
+        </div>
+      )}
+
+      {availablePlatforms.length > 0 && <Separator />}
+
+      {availablePlatforms.length > 0 && (
+        <div>
+          <Label className="text-base font-semibold">Streaming Platforms</Label>
+          <div className="flex flex-wrap gap-2 mt-3">
+            {availablePlatforms.map(platform => {
+              const selected = selectedPlatforms.includes(platform)
+              return (
+                <button
+                  key={platform}
+                  onClick={() =>
+                    setSelectedPlatforms(prev =>
+                      selected ? prev.filter(p => p !== platform) : [...prev, platform]
+                    )
+                  }
+                  className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                    selected
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'
+                  }`}
+                >
+                  {platform}
+                </button>
+              )
+            })}
           </div>
         </div>
       )}

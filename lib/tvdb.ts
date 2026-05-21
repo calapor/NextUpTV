@@ -76,7 +76,7 @@ export async function fetchTvdbData(title: string): Promise<TvdbEnrichment | nul
     const best = results[0]
     const tvdbId = parseInt(best.tvdb_id, 10)
 
-    const seriesRes = await fetch(`${TVDB_BASE}/series/${tvdbId}`, { headers })
+    const seriesRes = await fetch(`${TVDB_BASE}/series/${tvdbId}/extended`, { headers })
     if (!seriesRes.ok) {
       showCache.set(cacheKey, { data: null, expiresAt: Date.now() + SHOW_CACHE_TTL })
       return null
