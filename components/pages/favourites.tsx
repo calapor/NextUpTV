@@ -301,7 +301,8 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: Favourites
               disabled={!isFormValid}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Update Preferences & Get Recommendations
+              <span className="sm:hidden">Update &amp; Get Recommendations</span>
+              <span className="hidden sm:inline">Update Preferences &amp; Get Recommendations</span>
             </Button>
 
             <Button

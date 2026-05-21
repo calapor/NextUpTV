@@ -107,7 +107,7 @@ export function ShowDetailSheet({ recommendation: rec, open, onOpenChange }: Sho
                     <img
                       src={rec.tvdb_poster_thumbnail_url}
                       alt={`${rec.title} poster`}
-                      className="w-full aspect-[2/3] object-cover rounded-md"
+                      className="w-full aspect-[2/3] object-cover object-top rounded-md"
                     />
                   ) : (
                     <div className="w-full aspect-[2/3] rounded-md bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
