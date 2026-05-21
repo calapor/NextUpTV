@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server'
 import type { PartialRecommendation, RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
+import testRecommendations from '@/lib/test-data/recommendations.json'
 import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
 
 const anthropic = new Anthropic()
@@ -33,7 +34,52 @@ function sanitizeReason(reason: string): string {
 }
 
 
+function sseResponse(stream: ReadableStream): Response {
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  })
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function handleTestRequest(): Promise<Response> {
+  const stream = new ReadableStream({
+    async start(controller) {
+      controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
+      await delay(400)
+      controller.enqueue(sseEvent({ type: 'status', message: 'Generating recommendations...' }))
+      await delay(400)
+
+      for (const rec of testRecommendations) {
+        controller.enqueue(sseEvent({ type: 'partial_recommendation', recommendation: rec }))
+        await delay(300)
+      }
+
+      controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
+      await delay(400)
+
+      for (const rec of testRecommendations) {
+        controller.enqueue(sseEvent({ type: 'recommendation', recommendation: rec }))
+      }
+
+      controller.enqueue(sseEvent({ type: 'complete', recommendations: testRecommendations }))
+      controller.close()
+    },
+  })
+  return sseResponse(stream)
+}
+
 export async function POST(req: NextRequest) {
+  if (new URL(req.url).searchParams.get('test') === 'true') {
+    return handleTestRequest()
+  }
+
   const { fileContent, keywords, count } = (await req.json()) as RecommendationsRequest
 
   if ((fileContent?.length ?? 0) > 100_000) {
@@ -162,11 +208,5 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    },
-  })
+  return sseResponse(stream)
 }

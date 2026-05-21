@@ -54,7 +54,8 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
     const controller = new AbortController()
 
     async function run() {
-      const res = await fetch('/api/recommendations', {
+      const url = pendingRequest.isTest ? '/api/recommendations?test=true' : '/api/recommendations'
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -180,8 +181,8 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {liveRecs.map((rec) => (
-            <RecommendationCard key={rec.title} recommendation={rec} />
+          {liveRecs.map((rec, i) => (
+            <RecommendationCard key={rec.id ?? `${i}-${rec.title}`} recommendation={rec} />
           ))}
           {Array.from({ length: skeletonCount }).map((_, i) => (
             <LoadingSkeletonCard key={`skeleton-${i}`} />

@@ -55,6 +55,7 @@ export interface PendingRequest {
   fileContent: string
   keywords: string
   fileName?: string
+  isTest?: boolean
 }
 
 export interface CachedFavouritesInput {

@@ -304,6 +304,16 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput }: Favourites
               Update Preferences & Get Recommendations
             </Button>
 
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="w-full"
+              onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
+            >
+              Test with Sample Data
+            </Button>
+
             {/* Form hints */}
             {!isFormValid && (
               <p className="text-sm text-muted-foreground text-center">
