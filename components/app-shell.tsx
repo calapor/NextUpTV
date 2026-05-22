@@ -11,6 +11,7 @@ type Page = 'recommendations' | 'favourites' | 'library'
 
 const RECS_KEY = 'nextuptv_recommendations'
 const FAVS_KEY = 'nextuptv_favourites_input'
+const LIBRARY_KEY = 'nextuptv_library_shows'
 
 export function AppShell() {
   const [currentPage, setCurrentPage] = useState<Page>('recommendations')
@@ -46,6 +47,7 @@ export function AppShell() {
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
+      const allShows: LibraryShow[] = []
 
       while (true) {
         const { done, value } = await reader.read()
@@ -60,9 +62,12 @@ export function AppShell() {
           try {
             const event = JSON.parse(part.slice(6))
             if (event.type === 'show') {
-              setLibraryShows((prev) => [...prev, event.show as LibraryShow])
+              const show = event.show as LibraryShow
+              allShows.push(show)
+              setLibraryShows((prev) => [...prev, show])
             } else if (event.type === 'complete') {
               setLibraryLoading(false)
+              try { localStorage.setItem(LIBRARY_KEY, JSON.stringify(allShows)) } catch {}
             }
           } catch {}
         }
@@ -90,6 +95,14 @@ export function AppShell() {
         if (parsed && typeof parsed.keywords === 'string') {
           setCachedFavouritesInput(parsed)
         }
+      }
+    } catch {}
+
+    try {
+      const raw = localStorage.getItem(LIBRARY_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed) && parsed.length > 0) setLibraryShows(parsed)
       }
     } catch {}
   }, [])
@@ -124,12 +137,15 @@ export function AppShell() {
       localStorage.setItem(FAVS_KEY, JSON.stringify(newCached))
     } catch {}
     try { localStorage.removeItem(RECS_KEY) } catch {}
+    setLibraryShows([])
+    try { localStorage.removeItem(LIBRARY_KEY) } catch {}
   }
 
   const handleClearAll = () => {
     libraryAbortRef.current?.abort()
     try { localStorage.removeItem(RECS_KEY) } catch {}
     try { localStorage.removeItem(FAVS_KEY) } catch {}
+    try { localStorage.removeItem(LIBRARY_KEY) } catch {}
     setRecommendations([])
     setPendingRequest(null)
     setCachedFavouritesInput(null)
