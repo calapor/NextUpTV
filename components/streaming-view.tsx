@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { LoadingSkeletonCard } from '@/components/loading-skeleton'
 import { RecommendationCard } from '@/components/recommendation-card'
 import type { PartialRecommendation, PendingRequest, Recommendation } from '@/lib/types'
+import { getTestShowsList, TEST_RECS_CACHE_KEY } from '@/lib/test-data/sample-shows'
 
 function formatElapsed(ms: number): string {
   const total = ms / 1000
@@ -54,15 +55,28 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
     const controller = new AbortController()
 
     async function run() {
-      const url = pendingRequest.isTest ? '/api/recommendations?test=true' : '/api/recommendations'
-      const res = await fetch(url, {
+      // For test mode, try the permanent demo cache before calling the API
+      if (pendingRequest.isTest) {
+        try {
+          const raw = localStorage.getItem(TEST_RECS_CACHE_KEY)
+          if (raw) {
+            const cached: Recommendation[] = JSON.parse(raw)
+            if (cached.length > 0) {
+              await simulateCachedRecs(cached, controller.signal)
+              return
+            }
+          }
+        } catch {}
+      }
+
+      // Real API call: use sample shows list for test mode, user data otherwise
+      const fileContent = pendingRequest.isTest ? getTestShowsList() : pendingRequest.fileContent
+      const keywords = pendingRequest.isTest ? '' : pendingRequest.keywords
+
+      const res = await fetch('/api/recommendations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileContent: pendingRequest.fileContent,
-          keywords: pendingRequest.keywords,
-          count: 20,
-        }),
+        body: JSON.stringify({ fileContent, keywords, count: 20 }),
         signal: controller.signal,
       })
 
@@ -102,20 +116,55 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
             setLiveRecs(prev => {
               const deduped = prev.filter(r => r.title !== newRec.title)
               const merged = [...deduped, newRec].sort((a, b) => {
-                const ra = 'imdb_rating' in a ? a.imdb_rating : -1
-                const rb = 'imdb_rating' in b ? b.imdb_rating : -1
-                return rb - ra
+                const ra = 'imdb_rating' in a ? (a as Recommendation).imdb_rating : -1
+                const rb = 'imdb_rating' in b ? (b as Recommendation).imdb_rating : -1
+                return (rb ?? -1) - (ra ?? -1)
               })
               return merged.slice(0, 10)
             })
           } else if (payload.type === 'complete') {
             setStreaming(false)
             onRecommendationsReady(payload.recommendations)
+            if (pendingRequest.isTest) {
+              try { localStorage.setItem(TEST_RECS_CACHE_KEY, JSON.stringify(payload.recommendations)) } catch {}
+            }
           } else if (payload.type === 'error') {
             setErrorMessage(payload.message)
             setErrorDetail(payload.detail ?? null)
           }
         }
+      }
+    }
+
+    async function simulateCachedRecs(recs: Recommendation[], signal: AbortSignal) {
+      function delay(ms: number) { return new Promise<void>(r => setTimeout(r, ms)) }
+      setPhase('Analyzing your favorites...')
+      await delay(400); if (signal.aborted) return
+      setPhase('Generating recommendations...')
+      await delay(400)
+      for (const rec of recs) {
+        if (signal.aborted) return
+        setLiveRecs(prev => prev.some(r => r.title === rec.title) ? prev : [...prev, rec].slice(0, 10))
+        await delay(300)
+      }
+      if (signal.aborted) return
+      setPhase('Fetching show details...')
+      await delay(400)
+      for (const rec of recs) {
+        if (signal.aborted) return
+        setLiveRecs(prev =>
+          [...prev.filter(r => r.title !== rec.title), rec]
+            .sort((a, b) => {
+              const ra = 'imdb_rating' in a && typeof (a as Recommendation).imdb_rating === 'number' ? (a as Recommendation).imdb_rating : 0
+              const rb = 'imdb_rating' in b && typeof (b as Recommendation).imdb_rating === 'number' ? (b as Recommendation).imdb_rating : 0
+              return rb - ra
+            })
+            .slice(0, 10)
+        )
+      }
+      if (!signal.aborted) {
+        setStreaming(false)
+        onRecommendationsReady(recs)
       }
     }
 

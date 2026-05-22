@@ -1,13 +1,26 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Upload, X, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
+import { getTestShowsDisplay } from '@/lib/test-data/sample-shows'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
@@ -47,6 +60,11 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
 
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [fileTruncated, setFileTruncated] = useState(false)
+  const [sampleShowsDisplay, setSampleShowsDisplay] = useState<string[]>([])
+
+  useEffect(() => {
+    setSampleShowsDisplay(getTestShowsDisplay())
+  }, [])
 
   // File validation
   const validateFile = (file: File): string | null => {
@@ -329,15 +347,27 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
               <span className="hidden sm:inline">Update Preferences &amp; Get Recommendations</span>
             </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="w-full"
-              onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
-            >
-              Test with Sample Data
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
+                >
+                  Test with Sample Data
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs text-left" side="top">
+                <p className="font-semibold mb-1 text-xs">Sample favourites list:</p>
+                <ul className="space-y-0.5">
+                  {sampleShowsDisplay.map(show => (
+                    <li key={show} className="text-xs">{show}</li>
+                  ))}
+                </ul>
+              </TooltipContent>
+            </Tooltip>
 
             {/* Form hints */}
             {!isFormValid && (
@@ -347,16 +377,36 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
             )}
 
             <div className="border-t border-border pt-4">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={handleClearAll}
-                className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Clear all data &amp; reset
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear all data &amp; reset
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Clear all data?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will remove your uploaded favourites, keywords, cached recommendations, and library shows. This cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleClearAll}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Clear all data
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </form>
         </Card>
