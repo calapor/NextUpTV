@@ -39,19 +39,6 @@
     }
   },
   {
-    "id": 448245,
-    "title": "The Beast in Me",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/448245/posters/68f6cffc63f17_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/the-beast-in-me",
-    "status": "Ended",
-    "season_count": 1,
-    "last_aired": "2025-11-13",
-    "last_episode": {
-      "season": 1,
-      "number": 1
-    }
-  },
-  {
     "id": 247897,
     "title": "Homeland",
     "poster": "https://artworks.thetvdb.com/banners/series/247897/posters/62040472_t.jpg",
@@ -65,34 +52,16 @@
     }
   },
   {
-    "id": 454109,
-    "title": "Widow's Bay",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/454109/posters/69ceb33ba3b1e_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/widows-bay",
-    "status": "Continuing",
-    "season_count": 1,
-    "last_aired": "2026-06-17",
-    "last_episode": {
-      "season": 1,
-      "number": 10
-    },
-    "next_aired": "2026-05-27",
-    "next_episode": {
-      "season": 1,
-      "number": 6
-    }
-  },
-  {
-    "id": 368166,
-    "title": "Resident Alien",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/368166/posters/61f2d06533a24_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/resident-alien",
+    "id": 448245,
+    "title": "The Beast in Me",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/448245/posters/68f6cffc63f17_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-beast-in-me",
     "status": "Ended",
-    "season_count": 4,
-    "last_aired": "2025-08-08",
+    "season_count": 1,
+    "last_aired": "2025-11-13",
     "last_episode": {
-      "season": 4,
-      "number": 10
+      "season": 1,
+      "number": 1
     }
   },
   {
@@ -111,6 +80,37 @@
     "next_episode": {
       "season": 4,
       "number": 1
+    }
+  },
+  {
+    "id": 368166,
+    "title": "Resident Alien",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/368166/posters/61f2d06533a24_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/resident-alien",
+    "status": "Ended",
+    "season_count": 4,
+    "last_aired": "2025-08-08",
+    "last_episode": {
+      "season": 4,
+      "number": 10
+    }
+  },
+  {
+    "id": 454109,
+    "title": "Widow's Bay",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/454109/posters/69ceb33ba3b1e_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/widows-bay",
+    "status": "Continuing",
+    "season_count": 1,
+    "last_aired": "2026-06-17",
+    "last_episode": {
+      "season": 1,
+      "number": 10
+    },
+    "next_aired": "2026-05-27",
+    "next_episode": {
+      "season": 1,
+      "number": 6
     }
   },
   {
