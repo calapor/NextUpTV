@@ -90,6 +90,48 @@ export interface LibraryShow {
   next_episode?: { season: number; number: number }
 }
 
+// Usage logging types
+export type UsageRoute = 'recommendations' | 'library-status' | 'show-details'
+
+export interface GeoInfo {
+  city?: string
+  region?: string
+  country?: string
+  countryCode?: string
+}
+
+export interface RecommendationsParams {
+  fileContentChars: number
+  keywordsChars: number
+  count: number
+  isTest: boolean
+}
+
+export interface LibraryStatusParams {
+  fileContentChars: number
+  titleCount: number
+}
+
+export interface ShowDetailsParams {
+  tvdbId: string
+}
+
+export interface UsageLogEntry {
+  ts: string
+  ip: string
+  ua: string
+  route: UsageRoute
+  params: RecommendationsParams | LibraryStatusParams | ShowDetailsParams
+  status: 'success' | 'error'
+  durationMs: number
+  // Only present on routes that call Claude
+  model?: string
+  inputTokens?: number
+  outputTokens?: number
+  costUsd?: number
+  geo?: GeoInfo
+}
+
 // Eval types
 export interface CriterionScore {
   score: number
