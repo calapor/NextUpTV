@@ -1,1 +1,129 @@
-[]
+[
+  {
+    "id": 329089,
+    "title": "Ozark",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/329089/posters/61d7484341f02_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/ozark",
+    "status": "Ended",
+    "season_count": 4,
+    "last_aired": "2022-04-29",
+    "last_episode": {
+      "season": 4,
+      "number": 8
+    }
+  },
+  {
+    "id": 81189,
+    "title": "Breaking Bad",
+    "poster": "https://artworks.thetvdb.com/banners/posters/81189-10_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/breaking-bad",
+    "status": "Ended",
+    "season_count": 5,
+    "last_aired": "2013-09-29",
+    "last_episode": {
+      "season": 5,
+      "number": 16
+    }
+  },
+  {
+    "id": 261690,
+    "title": "The Americans (2013)",
+    "poster": "https://artworks.thetvdb.com/banners/posters/261690-1_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-americans-2013",
+    "status": "Ended",
+    "season_count": 6,
+    "last_aired": "2018-05-30",
+    "last_episode": {
+      "season": 6,
+      "number": 10
+    }
+  },
+  {
+    "id": 448245,
+    "title": "The Beast in Me",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/448245/posters/68f6cffc63f17_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-beast-in-me",
+    "status": "Ended",
+    "season_count": 1,
+    "last_aired": "2025-11-13",
+    "last_episode": {
+      "season": 1,
+      "number": 1
+    }
+  },
+  {
+    "id": 247897,
+    "title": "Homeland",
+    "poster": "https://artworks.thetvdb.com/banners/series/247897/posters/62040472_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/homeland",
+    "status": "Ended",
+    "season_count": 8,
+    "last_aired": "2020-04-26",
+    "last_episode": {
+      "season": 8,
+      "number": 12
+    }
+  },
+  {
+    "id": 454109,
+    "title": "Widow's Bay",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/454109/posters/69ceb33ba3b1e_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/widows-bay",
+    "status": "Continuing",
+    "season_count": 1,
+    "last_aired": "2026-06-17",
+    "last_episode": {
+      "season": 1,
+      "number": 10
+    },
+    "next_aired": "2026-05-27",
+    "next_episode": {
+      "season": 1,
+      "number": 6
+    }
+  },
+  {
+    "id": 368166,
+    "title": "Resident Alien",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/368166/posters/61f2d06533a24_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/resident-alien",
+    "status": "Ended",
+    "season_count": 4,
+    "last_aired": "2025-08-08",
+    "last_episode": {
+      "season": 4,
+      "number": 10
+    }
+  },
+  {
+    "id": 383203,
+    "title": "Ted Lasso",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/383203/posters/61010b6167190_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/ted-lasso",
+    "status": "Continuing",
+    "season_count": 4,
+    "last_aired": "2026-10-07",
+    "last_episode": {
+      "season": 4,
+      "number": 10
+    },
+    "next_aired": "2026-08-05",
+    "next_episode": {
+      "season": 4,
+      "number": 1
+    }
+  },
+  {
+    "id": 446831,
+    "title": "MobLand",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/446831/posters/67eaec7feed20_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-donovans",
+    "status": "Continuing",
+    "season_count": 2,
+    "last_aired": "2025-06-01",
+    "last_episode": {
+      "season": 1,
+      "number": 10
+    }
+  }
+]

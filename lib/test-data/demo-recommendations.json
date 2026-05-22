@@ -1,1 +1,544 @@
-[]
+[
+  {
+    "title": "The Wire",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Thriller"
+    ],
+    "reason": "A grounded, morally nuanced portrait of crime and institutions that fans of Breaking Bad, Ozark, and MobLand will find deeply compelling.",
+    "imdb_rating": 9.3,
+    "release_year": 2002,
+    "episode_runtime_minutes": 60,
+    "comedy_score": 2,
+    "horror_score": 1,
+    "action_score": 5,
+    "drama_score": 10,
+    "suspense_score": 8,
+    "romance_score": 2,
+    "id": 79126,
+    "one_sentence_synopsis": "Follows one single drug and homicide investigation throughout the length of an entire season.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/79126-2_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/the-wire",
+    "streaming_platforms": [
+      "HBO"
+    ],
+    "average_user_rating": 457157
+  },
+  {
+    "title": "Better Call Saul",
+    "genres": [
+      "Drama",
+      "Crime"
+    ],
+    "reason": "Like Breaking Bad and Ozark, it follows a morally complex protagonist descending into the criminal underworld with slow-burn tension and exceptional writing.",
+    "imdb_rating": 8.9,
+    "release_year": 2015,
+    "episode_runtime_minutes": 50,
+    "comedy_score": 3,
+    "horror_score": 1,
+    "action_score": 4,
+    "drama_score": 10,
+    "suspense_score": 9,
+    "romance_score": 3,
+    "id": 273181,
+    "one_sentence_synopsis": "See the rise of Jimmy McGill, a small-time lawyer searching for his destiny, but hustling to make ends meet.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/v4/series/273181/posters/625dca9d408d4_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/better-call-saul",
+    "streaming_platforms": [
+      "AMC"
+    ],
+    "average_user_rating": 1653088
+  },
+  {
+    "title": "Succession",
+    "genres": [
+      "Drama",
+      "Comedy"
+    ],
+    "reason": "Shares Ozark and MobLand's theme of ruthless power struggles within a criminal or powerful family empire, delivered with sharp, darkly witty writing.",
+    "imdb_rating": 8.9,
+    "release_year": 2018,
+    "episode_runtime_minutes": 61,
+    "comedy_score": 4,
+    "horror_score": 1,
+    "action_score": 2,
+    "drama_score": 10,
+    "suspense_score": 8,
+    "romance_score": 3,
+    "id": 338186,
+    "one_sentence_synopsis": "A drama about a dysfunctional media family dynasty in the 21st century.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/series/338186/posters/62089567_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/succession",
+    "streaming_platforms": [
+      "HBO"
+    ],
+    "average_user_rating": 711842
+  },
+  {
+    "title": "Fargo",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Thriller"
+    ],
+    "reason": "Blends the dark crime tension of Breaking Bad and Ozark with the deadpan absurdist humor that fans of Resident Alien and Ted Lasso can appreciate.",
+    "imdb_rating": 8.9,
+    "release_year": 2014,
+    "episode_runtime_minutes": 52,
+    "comedy_score": 6,
+    "horror_score": 3,
+    "action_score": 5,
+    "drama_score": 9,
+    "suspense_score": 8,
+    "romance_score": 3,
+    "id": 269613,
+    "one_sentence_synopsis": "Various chronicles of deception, intrigue and murder in and around frozen Minnesota.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/series/269613/posters/5f593461e4921_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/fargo",
+    "streaming_platforms": [
+      "FX"
+    ],
+    "average_user_rating": 875558
+  },
+  {
+    "title": "Dark",
+    "genres": [
+      "Science Fiction",
+      "Crime",
+      "Thriller",
+      "Mystery"
+    ],
+    "reason": "Like Resident Alien and Ozark, it hides extraordinary secrets beneath a small-town surface, building intense suspense through an intricate, brilliantly constructed mystery.",
+    "imdb_rating": 8.8,
+    "release_year": 2017,
+    "episode_runtime_minutes": 56,
+    "comedy_score": 1,
+    "horror_score": 5,
+    "action_score": 3,
+    "drama_score": 9,
+    "suspense_score": 10,
+    "romance_score": 4,
+    "id": 334824,
+    "one_sentence_synopsis": "Nach dem Verschwinden eines Kindes begeben sich vier Familien auf die verzweifelte Suche nach Antworten und der Lösung eines Rätsels, das drei Generationen umspannt.",
+    "content_rating": "TV-14",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/334824-1_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/dark",
+    "streaming_platforms": [
+      "Netflix"
+    ],
+    "average_user_rating": 2370267
+  },
+  {
+    "title": "Peaky Blinders",
+    "genres": [
+      "Drama",
+      "Crime"
+    ],
+    "reason": "Like MobLand and Ozark, it follows a ruthless crime family navigating shifting power dynamics, betrayal, and violence in a beautifully crafted period setting.",
+    "imdb_rating": 8.8,
+    "release_year": 2013,
+    "episode_runtime_minutes": 59,
+    "comedy_score": 2,
+    "horror_score": 2,
+    "action_score": 7,
+    "drama_score": 9,
+    "suspense_score": 8,
+    "romance_score": 4,
+    "id": 270915,
+    "one_sentence_synopsis": "A gangster family epic set in 1919 Birmingham, England and centered on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby, who means to move up in the world.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/270915-21_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/peaky-blinders",
+    "streaming_platforms": [
+      "BBC One",
+      "BBC Two",
+      "BBC iPlayer",
+      "Netflix"
+    ],
+    "average_user_rating": 3056269
+  },
+  {
+    "title": "Yellowstone",
+    "genres": [
+      "Drama",
+      "Western"
+    ],
+    "reason": "Fans of Ozark and MobLand will appreciate this saga of a powerful family protecting its empire through moral compromise, violence, and political maneuvering.",
+    "imdb_rating": 8.7,
+    "release_year": 2018,
+    "episode_runtime_minutes": 51,
+    "comedy_score": 2,
+    "horror_score": 2,
+    "action_score": 7,
+    "drama_score": 9,
+    "suspense_score": 7,
+    "romance_score": 4,
+    "id": 341164,
+    "one_sentence_synopsis": "Follow the violent world of the Dutton family, who controls the largest contiguous ranch in the United States.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/5d1bfa6c30c50_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/yellowstone-2018",
+    "streaming_platforms": [
+      "Paramount Network",
+      "Paramount+"
+    ],
+    "average_user_rating": 429669
+  },
+  {
+    "title": "Fleabag",
+    "genres": [
+      "Drama",
+      "Comedy"
+    ],
+    "reason": "Like Ted Lasso, it blends warmth, wit, and unexpected emotional depth delivered through a brilliantly written, deeply human central performance.",
+    "imdb_rating": 8.7,
+    "release_year": 2016,
+    "episode_runtime_minutes": 25,
+    "comedy_score": 9,
+    "horror_score": 0,
+    "action_score": 1,
+    "drama_score": 8,
+    "suspense_score": 3,
+    "romance_score": 7,
+    "id": 314614,
+    "one_sentence_synopsis": "Meet Fleabag.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/series/314614/posters/601feb0c8a666_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/fleabag",
+    "streaming_platforms": [
+      "BBC Three"
+    ],
+    "average_user_rating": 676892
+  },
+  {
+    "title": "Severance",
+    "genres": [
+      "Science Fiction",
+      "Drama",
+      "Thriller",
+      "Mystery"
+    ],
+    "reason": "Like Resident Alien and Ozark, it wraps a deeply unsettling premise in sharp writing and dark humor, building immense suspense across a tightly plotted season.",
+    "imdb_rating": 8.7,
+    "release_year": 2022,
+    "episode_runtime_minutes": 49,
+    "comedy_score": 4,
+    "horror_score": 4,
+    "action_score": 3,
+    "drama_score": 9,
+    "suspense_score": 10,
+    "romance_score": 3,
+    "id": 371980,
+    "one_sentence_synopsis": "Mark leads a team of office workers whose memories have been surgically divided between their work and personal lives.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/v4/series/371980/posters/621096b26f0e2_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/severance",
+    "streaming_platforms": [
+      "Apple TV",
+      "YouTube"
+    ],
+    "average_user_rating": 719615
+  },
+  {
+    "title": "Mindhunter",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Thriller"
+    ],
+    "reason": "Shares the methodical tension and dark psychological depth of Breaking Bad and Homeland, following FBI agents profiling serial killers in fascinating procedural detail.",
+    "imdb_rating": 8.6,
+    "release_year": 2017,
+    "episode_runtime_minutes": 54,
+    "comedy_score": 1,
+    "horror_score": 5,
+    "action_score": 2,
+    "drama_score": 9,
+    "suspense_score": 8,
+    "romance_score": 3,
+    "id": 328708,
+    "one_sentence_synopsis": "In the late 1970s two FBI agents expand criminal science by delving into the psychology of murder and getting uneasily close to all-too-real monsters.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/5d4dca1184832_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/mindhunter",
+    "streaming_platforms": [
+      "Netflix"
+    ],
+    "average_user_rating": 1434192
+  },
+  {
+    "title": "Justified",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Action",
+      "Thriller",
+      "Western"
+    ],
+    "reason": "Fans of Breaking Bad and MobLand will love this cat-and-mouse crime drama featuring a charismatic lawman facing off against brilliant, morally complex criminals.",
+    "imdb_rating": 8.6,
+    "release_year": 2010,
+    "episode_runtime_minutes": 45,
+    "comedy_score": 5,
+    "horror_score": 1,
+    "action_score": 7,
+    "drama_score": 8,
+    "suspense_score": 7,
+    "romance_score": 4,
+    "id": 134241,
+    "one_sentence_synopsis": "At the explosive center of the action, Western-style, gun-slinging U.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/134241-14_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/justified",
+    "streaming_platforms": [
+      "FX"
+    ],
+    "average_user_rating": 133595
+  },
+  {
+    "title": "What We Do in the Shadows",
+    "genres": [
+      "Horror",
+      "Fantasy",
+      "Comedy"
+    ],
+    "reason": "Shares Resident Alien's comedic formula of supernatural outsiders navigating the mundane human world with absurdist, brilliantly observed humor.",
+    "imdb_rating": 8.6,
+    "release_year": 2019,
+    "episode_runtime_minutes": 25,
+    "comedy_score": 9,
+    "horror_score": 4,
+    "action_score": 2,
+    "drama_score": 4,
+    "suspense_score": 3,
+    "romance_score": 3,
+    "id": 358211,
+    "one_sentence_synopsis": "A documentary-style look into the daily (or rather, nightly) lives of three vampires in Staten Island who have “lived” together for hundreds and hundreds of years.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/5c9c50f57f0b2_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/what-we-do-in-the-shadows",
+    "streaming_platforms": [
+      "FX"
+    ],
+    "average_user_rating": 267485
+  },
+  {
+    "title": "The Night Of",
+    "genres": [
+      "Crime",
+      "Mystery"
+    ],
+    "reason": "This HBO limited series delivers the same slow-burn moral deterioration and legal tension found in Breaking Bad and Ozark, with a deeply immersive story.",
+    "imdb_rating": 8.5,
+    "release_year": 2016,
+    "episode_runtime_minutes": 66,
+    "comedy_score": 1,
+    "horror_score": 3,
+    "action_score": 2,
+    "drama_score": 10,
+    "suspense_score": 9,
+    "romance_score": 2,
+    "id": 310516,
+    "one_sentence_synopsis": "After a mind-altering night of drugs and passion, Naz finds himself in the cross-hairs of a very life changing situation.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/310516-3_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/the-night-of",
+    "streaming_platforms": [
+      "HBO"
+    ],
+    "average_user_rating": 387964
+  },
+  {
+    "title": "Schitt's Creek",
+    "genres": [
+      "Comedy"
+    ],
+    "reason": "Like Ted Lasso, it uses warmth, optimism, and genuinely funny writing to tell a story about community, growth, and finding the best in people.",
+    "imdb_rating": 8.5,
+    "release_year": 2015,
+    "episode_runtime_minutes": 24,
+    "comedy_score": 9,
+    "horror_score": 0,
+    "action_score": 1,
+    "drama_score": 6,
+    "suspense_score": 2,
+    "romance_score": 7,
+    "id": 287247,
+    "one_sentence_synopsis": "Formerly filthy rich Johnny Rose, wife Moira, and their two kids, David and Alexis, suddenly find themselves broke and forced to live in Schitt's Creek, a small depressing town they once bought as a joke.",
+    "content_rating": "TV-14",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/287247-2_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/schitts-creek",
+    "streaming_platforms": [
+      "CBC",
+      "YouTube"
+    ],
+    "average_user_rating": 252257
+  },
+  {
+    "title": "Rectify",
+    "genres": [
+      "Drama"
+    ],
+    "reason": "Shares the slow-burn emotional depth and moral complexity of Ozark and Breaking Bad, following a death-row exoneree returning to a small Southern town full of secrets.",
+    "imdb_rating": 8.4,
+    "release_year": 2013,
+    "episode_runtime_minutes": 45,
+    "comedy_score": 1,
+    "horror_score": 2,
+    "action_score": 2,
+    "drama_score": 10,
+    "suspense_score": 7,
+    "romance_score": 4,
+    "id": 266609,
+    "one_sentence_synopsis": "Rectify follows the life of Daniel Holden upon his release from jail after serving nineteen years on Georgia's Death Row before DNA evidence disputed the State's original case.",
+    "content_rating": "TV-14",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/266609-4_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/rectify",
+    "streaming_platforms": [
+      "SundanceTV"
+    ],
+    "average_user_rating": 76308
+  },
+  {
+    "title": "Barry",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Comedy"
+    ],
+    "reason": "Like Breaking Bad and Resident Alien, it follows a man living a double life in darkly comic fashion, escalating moral stakes with surprising emotional resonance.",
+    "imdb_rating": 8.4,
+    "release_year": 2018,
+    "episode_runtime_minutes": 30,
+    "comedy_score": 7,
+    "horror_score": 3,
+    "action_score": 6,
+    "drama_score": 8,
+    "suspense_score": 7,
+    "romance_score": 3,
+    "id": 333072,
+    "one_sentence_synopsis": "After following his intended target to an acting class, a hitman finds himself intrigued and decides to become an actor and change his life.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/posters/333072-3_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/barry",
+    "streaming_platforms": [
+      "HBO"
+    ],
+    "average_user_rating": 348915
+  },
+  {
+    "title": "Killing Eve",
+    "genres": [
+      "Drama",
+      "Action",
+      "Thriller"
+    ],
+    "reason": "Like The Americans and Homeland, it centers on a cat-and-mouse intelligence thriller with a charismatic, morally ambiguous antagonist and sharp psychological tension.",
+    "imdb_rating": 8.1,
+    "release_year": 2018,
+    "episode_runtime_minutes": 42,
+    "comedy_score": 4,
+    "horror_score": 2,
+    "action_score": 6,
+    "drama_score": 8,
+    "suspense_score": 9,
+    "romance_score": 5,
+    "id": 340959,
+    "one_sentence_synopsis": "Two women — equally obsessed with each other — go head to head in an epic game of cat and mouse.",
+    "content_rating": "TV-14",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/series/340959/posters/5e8336febba23_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/killing-eve",
+    "streaming_platforms": [
+      "BBC America"
+    ],
+    "average_user_rating": 766850
+  },
+  {
+    "title": "Slow Horses",
+    "genres": [
+      "Suspense",
+      "Thriller"
+    ],
+    "reason": "A gritty, morally complex British spy thriller that echoes The Americans and Homeland with its focus on intelligence agency failures, loyalty, and dark conspiracies.",
+    "imdb_rating": 8.1,
+    "release_year": 2022,
+    "episode_runtime_minutes": 45,
+    "comedy_score": 3,
+    "horror_score": 2,
+    "action_score": 5,
+    "drama_score": 9,
+    "suspense_score": 9,
+    "romance_score": 2,
+    "id": 372264,
+    "one_sentence_synopsis": "This quick-witted spy drama follows a dysfunctional team of MI5 agents – and their obnoxious boss, the notorious Jackson Lamb – as they navigate the espionage world's smoke and mirrors to defend England from sinister forces.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/v4/series/372264/posters/637d209da8190_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/slow-horses",
+    "streaming_platforms": [
+      "Apple TV"
+    ],
+    "average_user_rating": 189947
+  },
+  {
+    "title": "The Sinner",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Suspense",
+      "Thriller",
+      "Mystery"
+    ],
+    "reason": "Delivers the psychological suspense and slow-burn mystery of Ozark and Homeland, with each season peeling back dark secrets beneath ordinary-seeming lives.",
+    "imdb_rating": 7.9,
+    "release_year": 2017,
+    "episode_runtime_minutes": 45,
+    "comedy_score": 1,
+    "horror_score": 5,
+    "action_score": 3,
+    "drama_score": 8,
+    "suspense_score": 9,
+    "romance_score": 3,
+    "id": 326866,
+    "one_sentence_synopsis": "In a small New York town, a haunted detective hunts for answers about perplexing crimes while wrestling with his own demons.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/v4/series/326866/posters/614e221101549_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/the-sinner",
+    "streaming_platforms": [
+      "USA Network"
+    ],
+    "average_user_rating": 824248
+  },
+  {
+    "title": "The Diplomat",
+    "genres": [
+      "Drama",
+      "Action",
+      "Thriller",
+      "War"
+    ],
+    "reason": "Combines the geopolitical tension of Homeland and The Americans with sharper comedic writing, following a diplomat thrust into an international crisis.",
+    "imdb_rating": 7.8,
+    "release_year": 2023,
+    "episode_runtime_minutes": 49,
+    "comedy_score": 5,
+    "horror_score": 1,
+    "action_score": 4,
+    "drama_score": 8,
+    "suspense_score": 7,
+    "romance_score": 5,
+    "id": 415239,
+    "one_sentence_synopsis": "Amid an international crisis, a career diplomat juggles her new high-profile job as ambassador to the UK and her turbulent marriage to a political star.",
+    "content_rating": "TV-MA",
+    "tvdb_poster_thumbnail_url": "https://artworks.thetvdb.com/banners/v4/series/415239/posters/642dfff5b602b_t.jpg",
+    "tvdb_show_url": "https://thetvdb.com/series/the-diplomat",
+    "streaming_platforms": [
+      "Netflix"
+    ],
+    "average_user_rating": 172118
+  }
+]
