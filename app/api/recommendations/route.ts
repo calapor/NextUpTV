@@ -128,6 +128,21 @@ export async function POST(req: NextRequest) {
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
         const inputTitles = buildInputTitleSet([fileContent, keywords].filter(Boolean).join('\n'))
+
+        // Fire TVDB lookups for input show titles concurrently with Claude streaming.
+        // This resolves cross-script duplicates (e.g. Hebrew "טהרן" → TVDB id for "Tehran")
+        // that normalizeTitle can't catch because it strips non-ASCII characters.
+        const rawInputTitles = [...new Set(
+          [fileContent, keywords].filter(Boolean).join('\n')
+            .split(/[\n,;]+/).map(l => l.trim()).filter(Boolean).slice(0, 80)
+        )]
+        const inputTvdbIds = new Set<number>()
+        const inputTvdbLookupDone = Promise.all(
+          rawInputTitles.map(t =>
+            fetchTvdbData(t).then(data => { if (data?.id) inputTvdbIds.add(data.id) }).catch(() => {})
+          )
+        )
+
         let fullText = ''
         const tvdbPromises = new Map<string, ReturnType<typeof fetchTvdbData>>()
         const titleRegex = /"title":\s*"([^"]+)"/g
@@ -183,6 +198,7 @@ export async function POST(req: NextRequest) {
         })
 
         await anthropicStream.done()
+        await inputTvdbLookupDone
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
 
@@ -198,6 +214,7 @@ export async function POST(req: NextRequest) {
           rec.title = sanitizeSeriesTitle(rec.title)
           rec.reason = sanitizeReason(rec.reason)
         })
+        parsed.recommendations = parsed.recommendations.filter(rec => (rec.imdb_rating ?? 0) > 0)
 
         const seenTitles = new Set<string>()
         const enriched = []
@@ -206,6 +223,9 @@ export async function POST(req: NextRequest) {
           if (isInputShow(rec.title, inputTitles)) continue
           seenTitles.add(rec.title)
           const tvdb = await (tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
+          // Cross-script duplicate check: if the recommended show's TVDB ID matches an input
+          // show's TVDB ID, skip it. Catches cases like Hebrew "טהרן" → English "Tehran".
+          if (tvdb?.id && inputTvdbIds.has(tvdb.id)) continue
           const enrichedRec = {
             ...rec,
             ...(tvdb
