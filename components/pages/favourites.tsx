@@ -12,6 +12,7 @@ import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
 const MAX_KEYWORDS_LENGTH = 1000
+const MAX_FILE_CHARS = 12_000
 
 interface UploadState {
   file: File | null
@@ -45,6 +46,7 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
   const keywordsLength = keywords.length
 
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [fileTruncated, setFileTruncated] = useState(false)
 
   // File validation
   const validateFile = (file: File): string | null => {
@@ -144,6 +146,13 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
         fileContent = cachedFile.fileContent
       }
 
+      if (fileContent.length > MAX_FILE_CHARS) {
+        fileContent = fileContent.slice(0, MAX_FILE_CHARS)
+        setFileTruncated(true)
+      } else {
+        setFileTruncated(false)
+      }
+
       onSubmit?.({ fileContent, keywords, fileName })
     } catch {
       setSubmitError('Failed to read the uploaded file. Please try again.')
@@ -221,6 +230,11 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
                       <p className="text-sm text-muted-foreground mb-3">
                         {(uploadState.file.size / 1024).toFixed(1)} KB
                       </p>
+                      {fileTruncated && (
+                        <p className="text-xs text-amber-600 mb-2">
+                          File trimmed to 12,000 characters to stay within processing limits.
+                        </p>
+                      )}
                       <Button
                         type="button"
                         variant="ghost"

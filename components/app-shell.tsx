@@ -94,14 +94,7 @@ export function AppShell() {
     } catch {}
   }, [])
 
-  // Fetch library whenever fileContent changes
-  useEffect(() => {
-    if (cachedFavouritesInput?.fileContent) {
-      fetchLibrary(cachedFavouritesInput.fileContent)
-    }
-  }, [cachedFavouritesInput?.fileContent, fetchLibrary])
-
-  // Retry if navigating to My Shows with no data and not already loading
+  // Fetch library on navigation to My Shows (deferred to avoid competing with recommendations TVDB calls)
   useEffect(() => {
     if (
       currentPage === 'library' &&
