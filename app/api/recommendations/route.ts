@@ -80,9 +80,15 @@ export async function POST(req: NextRequest) {
     return handleTestRequest()
   }
 
-  const { fileContent, keywords, count } = (await req.json()) as RecommendationsRequest
+  let body: RecommendationsRequest
+  try {
+    body = await req.json()
+  } catch {
+    return new Response('Invalid request body', { status: 400 })
+  }
+  const { fileContent, keywords, count } = body
 
-  if ((fileContent?.length ?? 0) > 100_000) {
+  if ((fileContent?.length ?? 0) > 12_000) {
     return new Response('File content too large', { status: 400 })
   }
   if ((keywords?.length ?? 0) > 5_000) {
