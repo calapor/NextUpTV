@@ -14,8 +14,6 @@ export const SAMPLE_SHOWS_DISPLAY = [
   "Widow's Bay",
 ]
 
-export const TEST_RECS_CACHE_KEY = 'nextuptv_test_recommendations'
-export const TEST_LIBRARY_CACHE_KEY = 'nextuptv_test_library'
 export const TEST_SHOWS_KEY = 'nextuptv_test_shows'
 
 export function getTestShowsList(): string {

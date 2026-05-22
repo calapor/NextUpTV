@@ -5,12 +5,7 @@ import { Loader2, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  SAMPLE_SHOWS_LIST,
-  TEST_RECS_CACHE_KEY,
-  TEST_LIBRARY_CACHE_KEY,
-  TEST_SHOWS_KEY,
-} from '@/lib/test-data/sample-shows'
+import { SAMPLE_SHOWS_LIST, TEST_SHOWS_KEY } from '@/lib/test-data/sample-shows'
 import type { Recommendation, LibraryShow } from '@/lib/types'
 
 export function DemoCachePanel() {
@@ -21,18 +16,19 @@ export function DemoCachePanel() {
   const [busy, setBusy] = useState(false)
 
   useEffect(() => {
+    // Load current shows list from localStorage (admin preference only)
     try {
-      const recs = localStorage.getItem(TEST_RECS_CACHE_KEY)
-      if (recs) setRecsCount(JSON.parse(recs).length)
+      const stored = localStorage.getItem(TEST_SHOWS_KEY)
+      if (stored) setShowsList(stored)
     } catch {}
-    try {
-      const lib = localStorage.getItem(TEST_LIBRARY_CACHE_KEY)
-      if (lib) setLibCount(JSON.parse(lib).length)
-    } catch {}
-    try {
-      const shows = localStorage.getItem(TEST_SHOWS_KEY)
-      if (shows) setShowsList(shows)
-    } catch {}
+    // Load cache status from bundled files via API
+    fetch('/api/admin/demo-cache')
+      .then(r => r.json())
+      .then(({ recsCount, libCount }) => {
+        if (recsCount > 0) setRecsCount(recsCount)
+        if (libCount > 0) setLibCount(libCount)
+      })
+      .catch(() => {})
   }, [])
 
   const handleRegenerate = async () => {
@@ -43,8 +39,6 @@ export function DemoCachePanel() {
     setLibCount(null)
 
     try { localStorage.setItem(TEST_SHOWS_KEY, showsList) } catch {}
-    try { localStorage.removeItem(TEST_RECS_CACHE_KEY) } catch {}
-    try { localStorage.removeItem(TEST_LIBRARY_CACHE_KEY) } catch {}
 
     try {
       // Step 1: Generate recommendations
@@ -74,14 +68,12 @@ export function DemoCachePanel() {
               setStatusMsg(payload.message)
             } else if (payload.type === 'complete') {
               recs = payload.recommendations
-              try { localStorage.setItem(TEST_RECS_CACHE_KEY, JSON.stringify(recs)) } catch {}
-              setRecsCount(recs.length)
             } else if (payload.type === 'error') {
               throw new Error(payload.message)
             }
-          } catch (parseErr) {
-            if (parseErr instanceof SyntaxError) continue
-            throw parseErr
+          } catch (e) {
+            if (e instanceof SyntaxError) continue
+            throw e
           }
         }
       }
@@ -110,17 +102,26 @@ export function DemoCachePanel() {
           if (!part.startsWith('data: ')) continue
           try {
             const event = JSON.parse(part.slice(6))
-            if (event.type === 'show') {
-              allShows.push(event.show as LibraryShow)
-            } else if (event.type === 'complete') {
-              try { localStorage.setItem(TEST_LIBRARY_CACHE_KEY, JSON.stringify(allShows)) } catch {}
-              setLibCount(allShows.length)
-            }
+            if (event.type === 'show') allShows.push(event.show as LibraryShow)
           } catch {}
         }
       }
 
-      setStatusMsg(`Done ✓ — ${recs.length} recommendations, ${allShows.length} library shows cached`)
+      // Step 3: Write results to bundled JSON files
+      setStatusMsg('Saving to files...')
+      const writeRes = await fetch('/api/admin/demo-cache', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recommendations: recs, libraryShows: allShows }),
+      })
+      if (!writeRes.ok) {
+        const err = await writeRes.json()
+        throw new Error(err.error ?? 'Failed to write files')
+      }
+
+      setRecsCount(recs.length)
+      setLibCount(allShows.length)
+      setStatusMsg(`Done ✓ — ${recs.length} recommendations, ${allShows.length} library shows written to lib/test-data/. Commit the updated files to bundle them with the app.`)
     } catch (err) {
       setStatusMsg(`Error: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
@@ -128,14 +129,24 @@ export function DemoCachePanel() {
     }
   }
 
-  const handleClear = () => {
-    try { localStorage.removeItem(TEST_RECS_CACHE_KEY) } catch {}
-    try { localStorage.removeItem(TEST_LIBRARY_CACHE_KEY) } catch {}
-    try { localStorage.removeItem(TEST_SHOWS_KEY) } catch {}
-    setRecsCount(null)
-    setLibCount(null)
-    setShowsList(SAMPLE_SHOWS_LIST)
-    setStatusMsg('Cache cleared')
+  const handleClear = async () => {
+    setBusy(true)
+    try {
+      await fetch('/api/admin/demo-cache', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recommendations: [], libraryShows: [] }),
+      })
+      try { localStorage.removeItem(TEST_SHOWS_KEY) } catch {}
+      setRecsCount(null)
+      setLibCount(null)
+      setShowsList(SAMPLE_SHOWS_LIST)
+      setStatusMsg('Cache cleared — commit the updated files to apply.')
+    } catch (err) {
+      setStatusMsg(`Error: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setBusy(false)
+    }
   }
 
   const statusColor = statusMsg?.startsWith('Done')
@@ -154,14 +165,17 @@ export function DemoCachePanel() {
           <p className="text-sm">
             <span className="text-muted-foreground">Recommendations: </span>
             {recsCount !== null
-              ? <span className="text-emerald-600">{recsCount} shows cached</span>
+              ? <span className="text-emerald-600">{recsCount} shows bundled</span>
               : <span className="text-amber-600">Not generated yet</span>}
           </p>
           <p className="text-sm">
             <span className="text-muted-foreground">Library shows: </span>
             {libCount !== null
-              ? <span className="text-emerald-600">{libCount} shows cached</span>
+              ? <span className="text-emerald-600">{libCount} shows bundled</span>
               : <span className="text-amber-600">Not generated yet</span>}
+          </p>
+          <p className="text-xs text-muted-foreground pt-1">
+            Generated data is stored in <code className="font-mono">lib/test-data/demo-*.json</code>. Commit those files after regenerating to bundle them with the app.
           </p>
         </CardContent>
       </Card>
@@ -175,9 +189,6 @@ export function DemoCachePanel() {
           disabled={busy}
           placeholder="One show per line..."
         />
-        <p className="text-xs text-muted-foreground">
-          Edit this list and click Regenerate to create a new permanent demo cache.
-        </p>
       </div>
 
       <div className="flex gap-3">

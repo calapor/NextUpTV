@@ -21,6 +21,7 @@ import {
 import { Upload, X, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 import { getTestShowsDisplay } from '@/lib/test-data/sample-shows'
+import demoRecsData from '@/lib/test-data/demo-recommendations.json'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
@@ -61,6 +62,8 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [fileTruncated, setFileTruncated] = useState(false)
   const [sampleShowsDisplay, setSampleShowsDisplay] = useState<string[]>([])
+
+  const isDemoReady = (demoRecsData as unknown[]).length > 0
 
   useEffect(() => {
     setSampleShowsDisplay(getTestShowsDisplay())
@@ -356,16 +359,22 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
                   className="w-full"
                   onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
                 >
-                  Test with Sample Data
+                  {isDemoReady ? 'Test with Sample Data' : 'Demo not set up — visit /admin'}
                 </Button>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs text-left" side="top">
-                <p className="font-semibold mb-1 text-xs">Sample favourites list:</p>
-                <ul className="space-y-0.5">
-                  {sampleShowsDisplay.map(show => (
-                    <li key={show} className="text-xs">{show}</li>
-                  ))}
-                </ul>
+                {isDemoReady ? (
+                  <>
+                    <p className="font-semibold mb-1 text-xs">Sample favourites list:</p>
+                    <ul className="space-y-0.5">
+                      {sampleShowsDisplay.map(show => (
+                        <li key={show} className="text-xs">{show}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="text-xs">Demo data not generated yet. Go to /admin → Demo Cache and click Regenerate, then commit the updated files.</p>
+                )}
               </TooltipContent>
             </Tooltip>
 
