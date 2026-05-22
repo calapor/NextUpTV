@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthToken } from '@/lib/tvdb'
 import type { ShowDetails, CastMember } from '@/lib/types'
+import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const CACHE_TTL = 60 * 60 * 1000
@@ -8,19 +9,30 @@ const CACHE_TTL = 60 * 60 * 1000
 const detailCache = new Map<string, { data: ShowDetails | null; expiresAt: number }>()
 
 export async function GET(req: NextRequest) {
+  const startedAt = Date.now()
+  const ip = extractIp(req)
+  const ua = extractUa(req)
   const { searchParams } = new URL(req.url)
-  const tvdbId = searchParams.get('tvdbId')
+  const tvdbId = searchParams.get('tvdbId') ?? ''
+
+  const respond = async (response: NextResponse, logStatus: 'success' | 'error') => {
+    await logUsage({
+      ts: new Date().toISOString(), ip, ua, route: 'show-details',
+      params: { tvdbId }, status: logStatus, durationMs: Date.now() - startedAt,
+    })
+    return response
+  }
 
   if (!tvdbId || isNaN(Number(tvdbId))) {
-    return NextResponse.json({ error: 'Invalid tvdbId' }, { status: 400 })
+    return respond(NextResponse.json({ error: 'Invalid tvdbId' }, { status: 400 }), 'error')
   }
 
   const cached = detailCache.get(tvdbId)
   if (cached && cached.expiresAt > Date.now()) {
     if (cached.data === null) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+      return respond(NextResponse.json({ error: 'Not found' }, { status: 404 }), 'error')
     }
-    return NextResponse.json(cached.data)
+    return respond(NextResponse.json(cached.data), 'success')
   }
 
   try {
@@ -31,7 +43,7 @@ export async function GET(req: NextRequest) {
 
     if (!res.ok) {
       detailCache.set(tvdbId, { data: null, expiresAt: Date.now() + CACHE_TTL })
-      return NextResponse.json({ error: 'TVDB fetch failed' }, { status: 502 })
+      return respond(NextResponse.json({ error: 'TVDB fetch failed' }, { status: 502 }), 'error')
     }
 
     const { data } = await res.json()
@@ -65,9 +77,9 @@ export async function GET(req: NextRequest) {
 
     const result: ShowDetails = { status, season_count, cast, full_overview }
     detailCache.set(tvdbId, { data: result, expiresAt: Date.now() + CACHE_TTL })
-    return NextResponse.json(result)
+    return respond(NextResponse.json(result), 'success')
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+    return respond(NextResponse.json({ error: message }, { status: 500 }), 'error')
   }
 }

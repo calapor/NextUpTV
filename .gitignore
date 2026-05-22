@@ -14,3 +14,6 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+
+# Usage logs and runtime data
+data/

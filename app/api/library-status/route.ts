@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { getAuthToken } from '@/lib/tvdb'
 import type { LibraryShow } from '@/lib/types'
+import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const CACHE_TTL = 4 * 60 * 60 * 1000
@@ -146,6 +147,10 @@ function resultMatchesQuery(
 }
 
 export async function POST(req: NextRequest) {
+  const startedAt = Date.now()
+  const ip = extractIp(req)
+  const ua = extractUa(req)
+
   let fileContent: string
   try {
     const body = await req.json()
@@ -184,6 +189,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      let streamErrored = false
       try {
         if (titles.length === 0) {
           send({ type: 'complete' })
@@ -207,9 +213,16 @@ export async function POST(req: NextRequest) {
 
         send({ type: 'complete' })
       } catch (err) {
+        streamErrored = true
         send({ type: 'error', message: err instanceof Error ? err.message : 'Unknown error' })
       } finally {
         controller.close()
+        await logUsage({
+          ts: new Date().toISOString(), ip, ua, route: 'library-status',
+          params: { fileContentChars: fileContent.length, titleCount: titles.length },
+          status: streamErrored ? 'error' : 'success',
+          durationMs: Date.now() - startedAt,
+        })
       }
     },
   })

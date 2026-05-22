@@ -5,6 +5,7 @@ import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
 import testRecommendations from '@/lib/test-data/recommendations.json'
 import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
+import { logUsage, extractIp, extractUa, calcCost } from '@/lib/usage-logger'
 
 const anthropic = new Anthropic()
 const encoder = new TextEncoder()
@@ -76,7 +77,16 @@ async function handleTestRequest(): Promise<Response> {
 }
 
 export async function POST(req: NextRequest) {
+  const startedAt = Date.now()
+  const ip = extractIp(req)
+  const ua = extractUa(req)
+
   if (new URL(req.url).searchParams.get('test') === 'true') {
+    logUsage({
+      ts: new Date().toISOString(), ip, ua, route: 'recommendations',
+      params: { fileContentChars: 0, keywordsChars: 0, count: 20, isTest: true },
+      status: 'success', durationMs: Date.now() - startedAt,
+    })
     return handleTestRequest()
   }
 
@@ -89,6 +99,9 @@ export async function POST(req: NextRequest) {
     return new Response('Keywords too long', { status: 400 })
   }
 
+  const fileContentChars = fileContent?.length ?? 0
+  const keywordsChars = keywords?.length ?? 0
+
   const userContent = [
     fileContent && `My favourite shows (from uploaded file):\n<user_input>\n${fileContent}\n</user_input>`,
     keywords && `Keywords, shows and genres I enjoy:\n<user_input>\n${keywords}\n</user_input>`,
@@ -99,6 +112,10 @@ export async function POST(req: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
+      let streamErrored = false
+      let inputTokens = 0
+      let outputTokens = 0
+      const MODEL = 'claude-sonnet-4-6'
       try {
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
@@ -108,10 +125,15 @@ export async function POST(req: NextRequest) {
         const titleRegex = /"title":\s*"([^"]+)"/g
 
         const anthropicStream = anthropic.messages.stream({
-          model: 'claude-sonnet-4-6',
+          model: MODEL,
           max_tokens: 6144,
           system: RECOMMENDATIONS_SYSTEM_PROMPT,
           messages: [{ role: 'user', content: userContent }],
+        })
+
+        anthropicStream.on('message', (msg) => {
+          inputTokens = msg.usage.input_tokens
+          outputTokens = msg.usage.output_tokens
         })
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Generating recommendations...' }))
@@ -200,6 +222,7 @@ export async function POST(req: NextRequest) {
         enriched.sort((a, b) => (b.imdb_rating ?? 0) - (a.imdb_rating ?? 0))
         controller.enqueue(sseEvent({ type: 'complete', recommendations: enriched }))
       } catch (err) {
+        streamErrored = true
         const message =
           err instanceof SyntaxError
             ? 'Claude returned invalid JSON. Please try again.'
@@ -208,6 +231,16 @@ export async function POST(req: NextRequest) {
         controller.enqueue(sseEvent({ type: 'error', message, detail }))
       } finally {
         controller.close()
+        await logUsage({
+          ts: new Date().toISOString(), ip, ua, route: 'recommendations',
+          params: { fileContentChars, keywordsChars, count, isTest: false },
+          status: streamErrored ? 'error' : 'success',
+          durationMs: Date.now() - startedAt,
+          model: MODEL,
+          inputTokens,
+          outputTokens,
+          costUsd: calcCost(MODEL, inputTokens, outputTokens),
+        })
       }
     },
   })
