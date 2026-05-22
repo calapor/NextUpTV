@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   if (!ADMIN_PASSWORD) return NextResponse.next()
 
   const auth = req.headers.get('authorization')
