@@ -6,6 +6,7 @@ import { RecommendationsPage } from '@/components/pages/recommendations'
 import { FavouritesPage } from '@/components/pages/favourites'
 import { LibraryPage } from '@/components/pages/library'
 import type { Recommendation, PendingRequest, CachedFavouritesInput, LibraryShow } from '@/lib/types'
+import { getTestShowsList, TEST_LIBRARY_CACHE_KEY } from '@/lib/test-data/sample-shows'
 
 type Page = 'recommendations' | 'favourites' | 'library'
 
@@ -20,13 +21,14 @@ export function AppShell() {
   const [cachedFavouritesInput, setCachedFavouritesInput] = useState<CachedFavouritesInput | null>(null)
   const [libraryShows, setLibraryShows] = useState<LibraryShow[]>([])
   const [libraryLoading, setLibraryLoading] = useState(false)
+  const [isTestMode, setIsTestMode] = useState(false)
   const libraryAbortRef = useRef<AbortController | null>(null)
   const libraryShowsRef = useRef<LibraryShow[]>([])
   const libraryLoadingRef = useRef(false)
   libraryShowsRef.current = libraryShows
   libraryLoadingRef.current = libraryLoading
 
-  const fetchLibrary = useCallback(async (fileContent: string) => {
+  const fetchLibrary = useCallback(async (fileContent: string, isTest = false) => {
     libraryAbortRef.current?.abort()
     const abortController = new AbortController()
     libraryAbortRef.current = abortController
@@ -68,6 +70,9 @@ export function AppShell() {
             } else if (event.type === 'complete') {
               setLibraryLoading(false)
               try { localStorage.setItem(LIBRARY_KEY, JSON.stringify(allShows)) } catch {}
+              if (isTest) {
+                try { localStorage.setItem(TEST_LIBRARY_CACHE_KEY, JSON.stringify(allShows)) } catch {}
+              }
             }
           } catch {}
         }
@@ -115,9 +120,9 @@ export function AppShell() {
       !libraryLoadingRef.current &&
       libraryShowsRef.current.length === 0
     ) {
-      fetchLibrary(cachedFavouritesInput.fileContent)
+      fetchLibrary(cachedFavouritesInput.fileContent, isTestMode)
     }
-  }, [currentPage, cachedFavouritesInput?.fileContent, fetchLibrary])
+  }, [currentPage, cachedFavouritesInput?.fileContent, fetchLibrary, isTestMode])
 
   const handlePageChange = (page: Page) => {
     setCurrentPage(page)
@@ -127,18 +132,44 @@ export function AppShell() {
     setRecommendations([])
     setPendingRequest(req)
     setCurrentPage('recommendations')
-    const newCached: CachedFavouritesInput = {
-      fileContent: req.fileContent,
-      fileName: req.fileName ?? '',
-      keywords: req.keywords,
+
+    if (req.isTest) {
+      setIsTestMode(true)
+      const fileContent = getTestShowsList()
+      const newCached: CachedFavouritesInput = {
+        fileContent,
+        fileName: 'sample-shows.txt',
+        keywords: '',
+      }
+      setCachedFavouritesInput(newCached)
+      try { localStorage.setItem(FAVS_KEY, JSON.stringify(newCached)) } catch {}
+      try { localStorage.removeItem(RECS_KEY) } catch {}
+      // Restore permanent library cache if available — skip API call
+      try {
+        const raw = localStorage.getItem(TEST_LIBRARY_CACHE_KEY)
+        if (raw) {
+          const parsed = JSON.parse(raw)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setLibraryShows(parsed)
+            return
+          }
+        }
+      } catch {}
+      setLibraryShows([])
+      try { localStorage.removeItem(LIBRARY_KEY) } catch {}
+    } else {
+      setIsTestMode(false)
+      const newCached: CachedFavouritesInput = {
+        fileContent: req.fileContent,
+        fileName: req.fileName ?? '',
+        keywords: req.keywords,
+      }
+      setCachedFavouritesInput(newCached)
+      try { localStorage.setItem(FAVS_KEY, JSON.stringify(newCached)) } catch {}
+      try { localStorage.removeItem(RECS_KEY) } catch {}
+      setLibraryShows([])
+      try { localStorage.removeItem(LIBRARY_KEY) } catch {}
     }
-    setCachedFavouritesInput(newCached)
-    try {
-      localStorage.setItem(FAVS_KEY, JSON.stringify(newCached))
-    } catch {}
-    try { localStorage.removeItem(RECS_KEY) } catch {}
-    setLibraryShows([])
-    try { localStorage.removeItem(LIBRARY_KEY) } catch {}
   }
 
   const handleClearAll = () => {
@@ -146,11 +177,13 @@ export function AppShell() {
     try { localStorage.removeItem(RECS_KEY) } catch {}
     try { localStorage.removeItem(FAVS_KEY) } catch {}
     try { localStorage.removeItem(LIBRARY_KEY) } catch {}
+    // Permanent demo cache keys are intentionally NOT cleared here
     setRecommendations([])
     setPendingRequest(null)
     setCachedFavouritesInput(null)
     setLibraryShows([])
     setLibraryLoading(false)
+    setIsTestMode(false)
   }
 
   const handleRecommendationsReady = useCallback((recs: Recommendation[]) => {
