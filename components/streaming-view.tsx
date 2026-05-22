@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { LoadingSkeletonCard } from '@/components/loading-skeleton'
 import { RecommendationCard } from '@/components/recommendation-card'
 import type { PartialRecommendation, PendingRequest, Recommendation } from '@/lib/types'
-import { getTestShowsList, TEST_RECS_CACHE_KEY } from '@/lib/test-data/sample-shows'
+import { getTestShowsList } from '@/lib/test-data/sample-shows'
+import demoRecsData from '@/lib/test-data/demo-recommendations.json'
 
 function formatElapsed(ms: number): string {
   const total = ms / 1000
@@ -55,18 +56,15 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
     const controller = new AbortController()
 
     async function run() {
-      // For test mode, try the permanent demo cache before calling the API
+      // For test mode, use the bundled demo data (generated locally and committed)
       if (pendingRequest.isTest) {
-        try {
-          const raw = localStorage.getItem(TEST_RECS_CACHE_KEY)
-          if (raw) {
-            const cached: Recommendation[] = JSON.parse(raw)
-            if (cached.length > 0) {
-              await simulateCachedRecs(cached, controller.signal)
-              return
-            }
-          }
-        } catch {}
+        const demoRecs = demoRecsData as unknown as Recommendation[]
+        if (demoRecs.length > 0) {
+          await simulateCachedRecs(demoRecs, controller.signal)
+          return
+        }
+        setErrorMessage('Demo not yet generated. Visit /admin → Demo Cache to generate it.')
+        return
       }
 
       // Real API call: use sample shows list for test mode, user data otherwise
@@ -125,9 +123,6 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
           } else if (payload.type === 'complete') {
             setStreaming(false)
             onRecommendationsReady(payload.recommendations)
-            if (pendingRequest.isTest) {
-              try { localStorage.setItem(TEST_RECS_CACHE_KEY, JSON.stringify(payload.recommendations)) } catch {}
-            }
           } else if (payload.type === 'error') {
             setErrorMessage(payload.message)
             setErrorDetail(payload.detail ?? null)
