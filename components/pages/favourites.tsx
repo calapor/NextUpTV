@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,7 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Upload, X, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
+import { Upload, X, CheckCircle, AlertCircle, Trash2, Info } from 'lucide-react'
 import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 import { getTestShowsDisplay } from '@/lib/test-data/sample-shows'
 import demoRecsData from '@/lib/test-data/demo-recommendations.json'
@@ -350,33 +350,34 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
               <span className="hidden sm:inline">Update Preferences &amp; Get Recommendations</span>
             </Button>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  className="w-full"
-                  onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
-                >
-                  {isDemoReady ? 'Test with Sample Data' : 'Demo not set up — visit /admin'}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs text-left" side="top">
-                {isDemoReady ? (
-                  <>
+            <div className="flex gap-2 w-full">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="flex-1"
+                onClick={() => onSubmit?.({ fileContent: '', keywords: '', isTest: true })}
+              >
+                {isDemoReady ? 'Test with Sample Data' : 'Demo not set up — visit /admin'}
+              </Button>
+              {isDemoReady && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button type="button" variant="outline" size="lg" aria-label="See sample shows">
+                      <Info className="w-4 h-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="max-w-xs text-left" side="top">
                     <p className="font-semibold mb-1 text-xs">Sample favourites list:</p>
                     <ul className="space-y-0.5">
                       {sampleShowsDisplay.map(show => (
                         <li key={show} className="text-xs">{show}</li>
                       ))}
                     </ul>
-                  </>
-                ) : (
-                  <p className="text-xs">Demo data not generated yet. Go to /admin → Demo Cache and click Regenerate, then commit the updated files.</p>
-                )}
-              </TooltipContent>
-            </Tooltip>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
 
             {/* Form hints */}
             {!isFormValid && (

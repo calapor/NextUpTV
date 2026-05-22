@@ -15,6 +15,8 @@ function sseEvent(obj: object): Uint8Array {
 }
 
 function sanitizeSeriesTitle(title: string): string {
+  // Strip leading type prefixes e.g. "Miniseries: Band of Brothers", "Limited Series: Chernobyl"
+  title = title.replace(/^(?:Mini(?:series)?|Limited\s+Series|Anthology|Documentary|Reality|Animation|Animated)\s*:\s*/i, '').trim()
   // Strip dash-based self-corrections e.g. "Night Agent — instead: Longmire"
   title = title.replace(/\s*[—–-]\s*(?:instead|actually|wait|correction|oops)[^]*$/i, '').trim()
   // Strip parenthetical self-corrections Claude sometimes emits

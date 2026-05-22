@@ -1,15 +1,15 @@
 [
   {
-    "id": 329089,
-    "title": "Ozark",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/329089/posters/61d7484341f02_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/ozark",
+    "id": 261690,
+    "title": "The Americans (2013)",
+    "poster": "https://artworks.thetvdb.com/banners/posters/261690-1_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-americans-2013",
     "status": "Ended",
-    "season_count": 4,
-    "last_aired": "2022-04-29",
+    "season_count": 6,
+    "last_aired": "2018-05-30",
     "last_episode": {
-      "season": 4,
-      "number": 8
+      "season": 6,
+      "number": 10
     }
   },
   {
@@ -26,16 +26,29 @@
     }
   },
   {
-    "id": 261690,
-    "title": "The Americans (2013)",
-    "poster": "https://artworks.thetvdb.com/banners/posters/261690-1_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/the-americans-2013",
+    "id": 329089,
+    "title": "Ozark",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/329089/posters/61d7484341f02_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/ozark",
     "status": "Ended",
-    "season_count": 6,
-    "last_aired": "2018-05-30",
+    "season_count": 4,
+    "last_aired": "2022-04-29",
     "last_episode": {
-      "season": 6,
-      "number": 10
+      "season": 4,
+      "number": 8
+    }
+  },
+  {
+    "id": 448245,
+    "title": "The Beast in Me",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/448245/posters/68f6cffc63f17_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/the-beast-in-me",
+    "status": "Ended",
+    "season_count": 1,
+    "last_aired": "2025-11-13",
+    "last_episode": {
+      "season": 1,
+      "number": 1
     }
   },
   {
@@ -52,15 +65,64 @@
     }
   },
   {
-    "id": 448245,
-    "title": "The Beast in Me",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/448245/posters/68f6cffc63f17_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/the-beast-in-me",
-    "status": "Ended",
+    "id": 454109,
+    "title": "Widow's Bay",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/454109/posters/69ceb33ba3b1e_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/widows-bay",
+    "status": "Continuing",
     "season_count": 1,
-    "last_aired": "2025-11-13",
+    "last_aired": "2026-06-17",
     "last_episode": {
       "season": 1,
+      "number": 10
+    },
+    "next_aired": "2026-05-27",
+    "next_episode": {
+      "season": 1,
+      "number": 6
+    }
+  },
+  {
+    "id": 433631,
+    "title": "A Knight of the Seven Kingdoms",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/433631/posters/6934ab30720ee_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/a-knight-of-the-seven-kingdoms-the-hedge-knight",
+    "status": "Continuing",
+    "season_count": 1,
+    "last_aired": "2026-02-22",
+    "last_episode": {
+      "season": 1,
+      "number": 6
+    }
+  },
+  {
+    "id": 360893,
+    "title": "Chernobyl",
+    "poster": "https://artworks.thetvdb.com/banners/posters/5cc12861c93e4_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/chernobyl",
+    "status": "Ended",
+    "season_count": 1,
+    "last_aired": "2019-06-03",
+    "last_episode": {
+      "season": 1,
+      "number": 5
+    }
+  },
+  {
+    "id": 393159,
+    "title": "Dark Matter (2024)",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/393159/posters/66192e346b768_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/dark-matter-2022",
+    "status": "Continuing",
+    "season_count": 2,
+    "last_aired": "2026-10-30",
+    "last_episode": {
+      "season": 2,
+      "number": 10
+    },
+    "next_aired": "2026-08-28",
+    "next_episode": {
+      "season": 2,
       "number": 1
     }
   },
@@ -83,47 +145,21 @@
     }
   },
   {
-    "id": 368166,
-    "title": "Resident Alien",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/368166/posters/61f2d06533a24_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/resident-alien",
-    "status": "Ended",
-    "season_count": 4,
-    "last_aired": "2025-08-08",
-    "last_episode": {
-      "season": 4,
-      "number": 10
-    }
-  },
-  {
-    "id": 454109,
-    "title": "Widow's Bay",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/454109/posters/69ceb33ba3b1e_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/widows-bay",
+    "id": 356202,
+    "title": "For All Mankind",
+    "poster": "https://artworks.thetvdb.com/banners/series/356202/posters/600304db98362_t.jpg",
+    "tvdb_url": "https://thetvdb.com/series/for-all-mankind",
     "status": "Continuing",
-    "season_count": 1,
-    "last_aired": "2026-06-17",
+    "season_count": 5,
+    "last_aired": "2026-05-29",
     "last_episode": {
-      "season": 1,
+      "season": 5,
       "number": 10
     },
-    "next_aired": "2026-05-27",
+    "next_aired": "2026-05-22",
     "next_episode": {
-      "season": 1,
-      "number": 6
-    }
-  },
-  {
-    "id": 446831,
-    "title": "MobLand",
-    "poster": "https://artworks.thetvdb.com/banners/v4/series/446831/posters/67eaec7feed20_t.jpg",
-    "tvdb_url": "https://thetvdb.com/series/the-donovans",
-    "status": "Continuing",
-    "season_count": 2,
-    "last_aired": "2025-06-01",
-    "last_episode": {
-      "season": 1,
-      "number": 10
+      "season": 5,
+      "number": 9
     }
   }
 ]
