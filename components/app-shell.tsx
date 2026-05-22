@@ -144,11 +144,11 @@ export function AppShell() {
     setLibraryLoading(false)
   }
 
-  const handleRecommendationsReady = (recs: Recommendation[]) => {
+  const handleRecommendationsReady = useCallback((recs: Recommendation[]) => {
     setRecommendations(recs)
     setPendingRequest(null)
     try { localStorage.setItem(RECS_KEY, JSON.stringify(recs)) } catch {}
-  }
+  }, [])
 
   return (
     <div className="flex flex-col h-screen bg-background">
