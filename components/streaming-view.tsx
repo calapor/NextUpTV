@@ -132,8 +132,21 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
 
   return (
     <div className="mt-16 h-[calc(100vh-64px)] flex flex-col overflow-hidden">
+      {!errorMessage && (
+        <div className="px-4 lg:px-6 py-3 border-b border-border shrink-0">
+          <p className="text-sm font-medium text-foreground">{phase}</p>
+          {isProcessing && (
+            <div className="flex items-center gap-2 mt-1">
+              <div className="w-3.5 h-3.5 rounded-full border-2 border-muted-foreground/25 border-t-foreground animate-spin" />
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {formatElapsed(elapsed)}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
       <div className="flex-1 overflow-y-auto p-4 lg:p-6">
-        {errorMessage ? (
+        {errorMessage && (
           <Alert variant="destructive" className="mb-6 max-w-lg">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Something went wrong</AlertTitle>
@@ -166,18 +179,6 @@ export function StreamingView({ pendingRequest, onRecommendationsReady, onNaviga
               )}
             </AlertDescription>
           </Alert>
-        ) : (
-          <div className="mb-6">
-            <p className="text-sm font-medium text-foreground mb-2">{phase}</p>
-            {isProcessing && (
-              <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded-full border-2 border-muted-foreground/25 border-t-foreground animate-spin" />
-                <span className="text-xs text-muted-foreground tabular-nums">
-                  {formatElapsed(elapsed)}
-                </span>
-              </div>
-            )}
-          </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
