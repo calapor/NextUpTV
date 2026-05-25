@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # System Architecture
 
 **Document ID:** ARCH  

@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # AI Safety and Input Hardening
 
 **Document ID:** SAFETY  

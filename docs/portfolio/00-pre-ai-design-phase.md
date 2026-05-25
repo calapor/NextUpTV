@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # Pre-AI Design Phase
 
 **Document ID:** PREAI  

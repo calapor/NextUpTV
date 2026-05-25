@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # Data Model Reference
 
 **Document ID:** DATA  

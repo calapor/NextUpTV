@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # Engineering Decision Log
 
 **Document ID:** EDL  

@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # Product Design Brief
 
 **Document ID:** PDB  

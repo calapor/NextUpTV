@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # Streaming Architecture and Progressive UI
 
 **Document ID:** STREAM  
