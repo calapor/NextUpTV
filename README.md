@@ -2,6 +2,13 @@
 
 NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
 
+---
+
+> **Portfolio documentation** — architecture, prompt engineering lifecycle, evaluation framework, AI safety, and engineering decision log:
+> 📄 [docs/portfolio/README.md](docs/portfolio/README.md)
+
+---
+
 ## Features
 
 - **AI recommendations** — Claude Sonnet 4.6 analyses your favourites and returns tailored picks with per-show reasoning
