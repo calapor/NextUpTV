@@ -135,7 +135,7 @@ Each log entry is displayed in a table row showing:
 
 The viewer is for operational insight — it is not an analytics dashboard. There is no aggregation, charting, or alerting. It answers the question "what has happened recently" rather than "what are the trends."
 
-![Usage logs admin tab — per-request cost, token counts, and geo data](assets/screenshots/admin-usage-logs.png)
+![Usage logs admin tab — per-request cost, token counts, and geo data](assets/screenshots/observeabilitycost.png)
 *The usage log viewer showing recent API requests. Visible fields include timestamp, route, input/output token counts, cost in USD, geo-location (city and country), and response duration. The test/live indicator distinguishes demo mode requests from real API calls.*
 
 ---

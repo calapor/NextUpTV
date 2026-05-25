@@ -34,6 +34,9 @@ The specifications then served as grounding material for all subsequent AI-assis
 
 Wireframes for the two-panel recommendation layout were created and iterated before any specification writing began. The wireframe file (`wireframes/TV Recommendations.pdf`) established the core spatial decisions that every subsequent specification and implementation decision referred back to.
 
+![Original wireframes — two-panel layout and mobile drawer design](assets/screenshots/wireframes.png)
+*The original wireframes created before any specification writing or code generation began. The 30/70 filter/results split, bottom drawer on mobile, and card grid layout were all established at this stage.*
+
 **Key decisions made at the wireframe stage:**
 
 ### The 30/70 split
