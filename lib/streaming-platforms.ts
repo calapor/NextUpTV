@@ -4,6 +4,10 @@ export interface StreamingPlatform {
   iconName: string
 }
 
+// Keys cover all naming variants TVDB returns for the same service ('hbo max' vs
+// 'max', 'amazon prime video' vs 'prime video', 'apple tv+' vs 'apple tv plus').
+// TVDB does not normalise platform names across shows, so every observed variant
+// needs its own entry pointing at the canonical platform metadata.
 const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   netflix: {
     name: 'Netflix',

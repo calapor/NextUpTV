@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { getAuthToken } from '@/lib/tvdb'
 import type { LibraryShow } from '@/lib/types'
+import { sseEvent, sseResponse } from '@/lib/sse'
 import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
@@ -110,6 +111,9 @@ async function processShow(title: string, token: string): Promise<LibraryShow | 
 
 const CSV_HEADERS = new Set(['name', 'title', 'show', 'shows', 'series', 'tvshow', 'program'])
 
+// Library exports from Trakt, Letterboxd, JustWatch etc. embed episode markers
+// (S01E01, 1x01) and year suffixes that TVDB's search endpoint doesn't understand.
+// Stripping them yields the bare show title so search lands on the right series.
 function extractBaseTitle(line: string): string {
   return line
     .replace(/\s+[-–]\s+[Ss]\d{1,2}[Ee]\d{1,3}.*$/, '')
@@ -177,13 +181,11 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const encoder = new TextEncoder()
-
   const stream = new ReadableStream({
     async start(controller) {
       const send = (data: object) => {
         try {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
+          controller.enqueue(sseEvent(data))
         } catch {
           // stream already closed
         }
@@ -199,6 +201,10 @@ export async function POST(req: NextRequest) {
         const token = await getAuthToken()
         const seenIds = new Set<number>()
 
+        // Process titles in concurrent batches of 5. TVDB doesn't publish a hard
+        // rate limit, but parallel-within-batch + sequential-across-batches has
+        // proven reliable in practice without triggering 429s, while staying fast
+        // enough that a 150-title library finishes in ~10s.
         for (let i = 0; i < titles.length; i += 5) {
           const batch = titles.slice(i, i + 5)
           await Promise.all(
@@ -227,11 +233,5 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    },
-  })
+  return sseResponse(stream)
 }
