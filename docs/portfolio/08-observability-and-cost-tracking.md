@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 Every Claude API call in this application is logged with token counts, cost in USD, request duration, geo-location, and user agent. Logs are written as JSONL files on the server and readable through a browser-based admin interface. The cost calculation was used to validate that the token reduction commit (`d0609b3`) actually reduced inference spend, not just generation time.
 
@@ -152,7 +152,7 @@ The `/admin` page consolidates three operational tools:
 | **Usage Logs** | View per-request usage data and cost | Yes |
 | **Demo Cache** | Regenerate bundled demo recommendations and library data | Yes (blocked in production) |
 
-All three tabs are gated by HTTP Basic Auth. The credentials are set via environment variables (`EVAL_USER`, `EVAL_PASSWORD`). If both are unset, the admin interface is open — this is the default for local development.
+All three tabs are gated by HTTP Basic Auth, enforced by `proxy.ts` (Next.js middleware). The password is set via the `ADMIN_PASSWORD` environment variable. If unset, the admin interface is open — the default for local development. `EVAL_PASSWORD`, used in earlier versions, was replaced by `ADMIN_PASSWORD` in commit `3415c94`.
 
 The admin interface was consolidated in commit `3415c94: Add demo cache, sample data tooltip, and consolidated admin page`, which merged what were previously separate `/eval` and `/admin` pages.
 

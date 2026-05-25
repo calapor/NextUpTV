@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 Before any AI tooling was invoked and before any application code was generated, the project was fully specified in writing: product scope, user flows, visual design direction, data models, feature-level layouts, filter behaviour, and a first-draft AI prompt. This phase is documented here because it reflects a deliberate practice — use AI to accelerate execution, not to substitute for thinking.
 

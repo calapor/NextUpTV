@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 Prompts in this project were treated as code: versioned in git, tested with a purpose-built evaluation framework, and iterated based on measured output quality. The production prompt went through eight significant revisions across 43 commits, each traceable to a specific failure mode observed in either the eval framework or the live application output. The full iteration history — including regressions — is preserved in git and in 27 committed HTML evaluation reports.
 

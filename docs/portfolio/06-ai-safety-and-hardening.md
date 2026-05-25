@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 Any application that sends user-controlled text to an LLM must consider prompt injection. NextUpTV addresses this with layered mitigations: XML tag isolation of user content, server-side input length caps, output sanitization to strip Claude generation artifacts, and a resilient JSON parser that handles malformed or adversarially crafted responses. None of these mitigations degraded recommendation quality — the eval score was unaffected by the hardening commit.
 

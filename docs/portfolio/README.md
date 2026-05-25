@@ -55,7 +55,6 @@ NextUpTV is a full-stack web application that takes a user's watch history (uplo
 ## Source Repository
 
 Working directory: `denver/`  
-Branch: `calapor/denver`  
 Key source files referenced throughout these documents:
 
 - `app/api/recommendations/route.ts` — main AI endpoint

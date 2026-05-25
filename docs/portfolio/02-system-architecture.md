@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 NextUpTV runs entirely on Vercel with no separate backend service. AI logic lives in Next.js API routes. The core innovation is a two-pass streaming pipeline: Claude streams titles mid-generation, TVDB lookups fire immediately in parallel, and recommendation cards appear in the browser progressively rather than all at once after a long wait.
 
@@ -109,7 +109,7 @@ API keys never reach the browser. The architecture enforces this structurally:
 
 - `ANTHROPIC_API_KEY` — read only in `/api/recommendations` and `/api/eval` (server-side functions)
 - `TVDB_API_KEY` — read only in `lib/tvdb.ts`, which is called only from API routes
-- `EVAL_USER` / `EVAL_PASSWORD` — read only in `/api/eval` for HTTP Basic Auth gate
+- `ADMIN_PASSWORD` — read by `proxy.ts` (Next.js middleware) to gate `/admin` and all admin API routes via HTTP Basic Auth. If unset, admin routes are open — the default for local development.
 
 The browser receives only the processed output of these calls — recommendation data as JSON events over SSE. No API key, token, or credential appears in any client-side bundle or network response visible in browser dev tools.
 

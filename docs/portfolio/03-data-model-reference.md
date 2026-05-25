@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 The domain model is defined in a single file (`lib/types.ts`) shared by all server routes and client components. The most interesting design decision is the two-phase `PartialRecommendation` / `Recommendation` split: cards arrive from TVDB with poster and metadata, then upgrade with Claude-generated attributes when the full JSON is parsed. This separation is what enables the progressive streaming UX.
 

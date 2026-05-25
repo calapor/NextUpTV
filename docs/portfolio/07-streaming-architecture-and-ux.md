@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR
+## 
 
 Generating 10 AI recommendations with real-time TV metadata takes 8–15 seconds. Rendering nothing until it finishes is not acceptable UX. The solution is a two-pass streaming architecture: Claude streams titles character by character, TVDB lookups fire immediately in parallel, and recommendation cards appear in the browser as each one resolves — typically starting within 2–3 seconds of submission. The total generation time is displayed as a live elapsed timer.
 
