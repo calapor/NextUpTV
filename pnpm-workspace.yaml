@@ -1,2 +1,8 @@
 allowBuilds:
   sharp: false
+  unrs-resolver: true
+
+# Disable the minimum package age check — this supply-chain policy defaults to
+# 24 hours in pnpm 11 and causes CI failures when a transitive dep is freshly
+# published. Acceptable for a portfolio project with no production SLA.
+minimumReleaseAge: 0

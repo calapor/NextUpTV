@@ -1,3 +1,7 @@
+// Prompt-injection guard: the "Important:" clause below wraps user-uploaded content
+// in <user_input> tags so text like "ignore previous instructions" is treated as
+// data, not a directive. Without it, a malicious favourites file could redirect
+// Claude's output.
 export const RECOMMENDATIONS_SYSTEM_PROMPT = `You are a personalised TV show recommendation engine.
 
 The user will provide a list of favourites — TV shows, films, genres, or keywords —
