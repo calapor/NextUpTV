@@ -1,3 +1,5 @@
+![NextUpTV](docs/portfolio/assets/nextuptv-logo-1280x200.jpg)
+
 # NextUpTV — AI-Powered TV Recommendation Platform
 
 NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
