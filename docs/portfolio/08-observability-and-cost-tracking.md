@@ -168,9 +168,9 @@ The admin interface was consolidated in commit `3415c94: Add demo cache, sample 
 
 ## Supporting File References
 
-- `lib/usage-logger.ts` — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()` (65 lines)
-- `lib/types.ts:93–133` — usage logging types
-- `app/api/usage-logs/route.ts` — log file reader for the admin UI
-- `app/admin/page.tsx` — admin page with three tabs
-- `components/admin/eval-panel.tsx` — eval workbench UI
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()` (65 lines)
+- [`lib/types.ts`](../../lib/types.ts)`:93–133` — usage logging types
+- [`app/api/usage-logs/route.ts`](../../app/api/usage-logs/route.ts) — log file reader for the admin UI
+- [`app/admin/page.tsx`](../../app/admin/page.tsx) — admin page with three tabs
+- [`components/admin/eval-panel.tsx`](../../components/admin/eval-panel.tsx) — eval workbench UI
 - `data/usage-logs/` — JSONL log files (gitignored; not committed)

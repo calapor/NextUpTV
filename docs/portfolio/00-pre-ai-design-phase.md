@@ -308,13 +308,13 @@ Phase 1 was entirely human-authored. Phases 2 and 3 used AI tooling, but both we
 
 ## Supporting File References
 
-- `specs/product-overview.md` — product definition, core capabilities, out-of-scope list
-- `specs/user-flows.md` — four user journeys with numbered steps
-- `specs/design-system.md` — visual identity and component conventions
-- `specs/data-models.md` — TV Show, AI Recommendation Attributes, Recommendation Metadata
-- `specs/features/dashboard.md` — shell structure, tab navigation, global states, responsive breakpoints
-- `specs/features/ManageFavourites.md` — upload states, keywords input, v0 AI system prompt, validation rules
-- `specs/features/Recommendations.md` — two-panel layout, all six slider definitions, card structure
-- `specs/ai-rules.md` — coding standards applied to all AI-generated code
+- [`specs/product-overview.md`](../../specs/product-overview.md) — product definition, core capabilities, out-of-scope list
+- [`specs/user-flows.md`](../../specs/user-flows.md) — four user journeys with numbered steps
+- [`specs/design-system.md`](../../specs/design-system.md) — visual identity and component conventions
+- [`specs/data-models.md`](../../specs/data-models.md) — TV Show, AI Recommendation Attributes, Recommendation Metadata
+- [`specs/features/dashboard.md`](../../specs/features/dashboard.md) — shell structure, tab navigation, global states, responsive breakpoints
+- [`specs/features/ManageFavourites.md`](../../specs/features/ManageFavourites.md) — upload states, keywords input, v0 AI system prompt, validation rules
+- [`specs/features/Recommendations.md`](../../specs/features/Recommendations.md) — two-panel layout, all six slider definitions, card structure
+- [`specs/ai-rules.md`](../../specs/ai-rules.md) — coding standards applied to all AI-generated code
 - Git commit `8abb99f` — "Initial commit": all spec files, no application code
 - Git commit `7325071` — "Adding v0 scaffold": first application code, generated using specs as context

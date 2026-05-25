@@ -238,8 +238,8 @@ The two usage patterns demonstrate different engineering choices for integrating
 
 ## Supporting File References
 
-- `lib/prompts.ts` — production system prompt (37 lines)
-- `app/api/eval/route.ts:12–64` — judge system prompt
-- `lib/tvdb.ts` — `inferStreamingServices()` function
-- `lib/title-utils.ts` — `sanitizeSeriesTitle()`, `sanitizeReason()`, `extractJson()`
-- `public/eval-reports/` — 27 committed HTML evaluation reports
+- [`lib/prompts.ts`](../../lib/prompts.ts) — production system prompt (37 lines)
+- [`app/api/eval/route.ts`](../../app/api/eval/route.ts)`:12–64` — judge system prompt
+- [`lib/tvdb.ts`](../../lib/tvdb.ts) — `inferStreamingServices()` function
+- [`lib/title-utils.ts`](../../lib/title-utils.ts) — `sanitizeSeriesTitle()`, `sanitizeReason()`, `extractJson()`
+- [`public/eval-reports/`](../../public/eval-reports/) — 27 committed HTML evaluation reports

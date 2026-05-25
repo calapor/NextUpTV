@@ -257,8 +257,8 @@ The `[DATA]` model is stable. The only fields added after the initial definition
 
 ## Supporting File References
 
-- `lib/types.ts` — single source of truth for all domain interfaces (159 lines)
-- `lib/eval-data.ts` — eval test preset constants
-- `app/api/recommendations/route.ts` — produces `Recommendation[]`
-- `app/api/eval/route.ts` — produces `EvalRunResult`
-- `lib/usage-logger.ts` — writes `UsageLogEntry` to JSONL
+- [`lib/types.ts`](../../lib/types.ts) — single source of truth for all domain interfaces (159 lines)
+- [`lib/eval-data.ts`](../../lib/eval-data.ts) — eval test preset constants
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts) — produces `Recommendation[]`
+- [`app/api/eval/route.ts`](../../app/api/eval/route.ts) — produces `EvalRunResult`
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — writes `UsageLogEntry` to JSONL

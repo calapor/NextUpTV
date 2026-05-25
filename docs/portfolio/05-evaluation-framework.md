@@ -202,9 +202,9 @@ All reports are committed to git. The full history of 27 experiments is browsabl
 
 ## Supporting File References
 
-- `app/api/eval/route.ts` — evaluation pipeline and judge prompt (420 lines)
-- `lib/eval-data.ts` — five test preset constants
-- `public/eval-reports/manifest.json` — run history metadata
-- `public/eval-reports/index.html` — browsable report index
-- `components/admin/eval-panel.tsx` — eval workbench UI component
-- `lib/types.ts:135–158` — `EvalRunResult`, `EvalCriteria`, `EvalGrade` interfaces
+- [`app/api/eval/route.ts`](../../app/api/eval/route.ts) — evaluation pipeline and judge prompt (420 lines)
+- [`lib/eval-data.ts`](../../lib/eval-data.ts) — five test preset constants
+- [`public/eval-reports/manifest.json`](../../public/eval-reports/manifest.json) — run history metadata
+- [`public/eval-reports/index.html`](../../public/eval-reports/index.html) — browsable report index
+- [`components/admin/eval-panel.tsx`](../../components/admin/eval-panel.tsx) — eval workbench UI component
+- [`lib/types.ts`](../../lib/types.ts)`:135–158` — `EvalRunResult`, `EvalCriteria`, `EvalGrade` interfaces

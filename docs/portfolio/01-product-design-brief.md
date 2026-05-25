@@ -202,11 +202,11 @@ The navigation uses three tabs:
 
 ## Supporting File References
 
-- `specs/product-overview.md` — original product scope document
-- `specs/user-flows.md` — user journey specification
-- `specs/design-system.md` — colour palette, typography, spacing tokens
-- `specs/features/ManageFavourites.md` — detailed favourites management spec
-- `specs/features/Recommendations.md` — recommendations feature spec
-- `app/page.tsx` — root page entry
-- `components/app-shell.tsx` — root layout and tab navigation
-- `components/top-navigation.tsx` — tab nav component
+- [`specs/product-overview.md`](../../specs/product-overview.md) — original product scope document
+- [`specs/user-flows.md`](../../specs/user-flows.md) — user journey specification
+- [`specs/design-system.md`](../../specs/design-system.md) — colour palette, typography, spacing tokens
+- [`specs/features/ManageFavourites.md`](../../specs/features/ManageFavourites.md) — detailed favourites management spec
+- [`specs/features/Recommendations.md`](../../specs/features/Recommendations.md) — recommendations feature spec
+- [`app/page.tsx`](../../app/page.tsx) — root page entry
+- [`components/app-shell.tsx`](../../components/app-shell.tsx) — root layout and tab navigation
+- [`components/top-navigation.tsx`](../../components/top-navigation.tsx) — tab nav component

@@ -182,13 +182,13 @@ The trade-off is repository size inflation and the need to periodically regenera
 
 All decisions reference source evidence. Key files:
 
-- `app/api/recommendations/route.ts` — decisions 1, 2, 6, 9, 10
-- `lib/tvdb.ts` — decisions 4, 8
-- `lib/usage-logger.ts` — decision (observability rationale)
-- `lib/prompts.ts` — decisions 6, 9, 10
-- `lib/title-utils.ts` — decision 9
-- `public/eval-reports/manifest.json` — decision 5
-- `lib/test-data/demo-recommendations.json` — decision 7
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts) — decisions 1, 2, 6, 9, 10
+- [`lib/tvdb.ts`](../../lib/tvdb.ts) — decisions 4, 8
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — decision (observability rationale)
+- [`lib/prompts.ts`](../../lib/prompts.ts) — decisions 6, 9, 10
+- [`lib/title-utils.ts`](../../lib/title-utils.ts) — decision 9
+- [`public/eval-reports/manifest.json`](../../public/eval-reports/manifest.json) — decision 5
+- [`lib/test-data/demo-recommendations.json`](../../lib/test-data/demo-recommendations.json) — decision 7
 - Git commit `d45dadc` — decision 8 (TVMaze → TVDB)
 - Git commit `0c955dc` — decision 10 (prompt injection hardening)
 - Git commit `f7215a1` — decision 6 (genre scores)

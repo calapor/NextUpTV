@@ -129,11 +129,11 @@ The browser receives only the processed output of these calls — recommendation
 
 ## Supporting File References
 
-- `app/api/recommendations/route.ts` — main AI endpoint (277 lines)
-- `app/api/eval/route.ts` — evaluation pipeline (420 lines)
-- `app/api/library-status/route.ts` — library status SSE endpoint
-- `lib/tvdb.ts` — TVDB v4 client with caching (168 lines)
-- `lib/title-utils.ts` — JSON extraction, title sanitization, deduplication
-- `lib/prompts.ts` — production system prompt
-- `components/streaming-view.tsx` — SSE consumer and progressive card rendering
-- `components/app-shell.tsx` — root state management and tab navigation
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts) — main AI endpoint (277 lines)
+- [`app/api/eval/route.ts`](../../app/api/eval/route.ts) — evaluation pipeline (420 lines)
+- [`app/api/library-status/route.ts`](../../app/api/library-status/route.ts) — library status SSE endpoint
+- [`lib/tvdb.ts`](../../lib/tvdb.ts) — TVDB v4 client with caching (168 lines)
+- [`lib/title-utils.ts`](../../lib/title-utils.ts) — JSON extraction, title sanitization, deduplication
+- [`lib/prompts.ts`](../../lib/prompts.ts) — production system prompt
+- [`components/streaming-view.tsx`](../../components/streaming-view.tsx) — SSE consumer and progressive card rendering
+- [`components/app-shell.tsx`](../../components/app-shell.tsx) — root state management and tab navigation

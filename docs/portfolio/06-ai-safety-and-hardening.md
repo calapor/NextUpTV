@@ -153,8 +153,8 @@ The mitigation is **additive, not a tradeoff**. Recommendation quality was not d
 
 ## Supporting File References
 
-- `app/api/recommendations/route.ts:103–119` — input validation and length caps
-- `app/api/recommendations/route.ts:113–119` — `<user_input>` XML wrapping
-- `lib/prompts.ts:17–18` — meta-instruction for injection isolation
-- `lib/title-utils.ts` — `extractJson()`, `sanitizeSeriesTitle()`, `sanitizeReason()`
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts)`:103–119` — input validation and length caps
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts)`:113–119` — `<user_input>` XML wrapping
+- [`lib/prompts.ts`](../../lib/prompts.ts)`:17–18` — meta-instruction for injection isolation
+- [`lib/title-utils.ts`](../../lib/title-utils.ts) — `extractJson()`, `sanitizeSeriesTitle()`, `sanitizeReason()`
 - Git commit `0c955dc` — "Harden against prompt injection and tighten token budgets"

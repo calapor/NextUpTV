@@ -165,10 +165,10 @@ The streaming icons (Netflix, Hulu, etc.) are SVG files in `/public/streaming-ic
 
 ## Supporting File References
 
-- `app/api/recommendations/route.ts:40–79` — SSE event emission functions and types
-- `app/api/recommendations/route.ts:130–248` — two-pass streaming pipeline
-- `components/streaming-view.tsx` — SSE consumer, state machine, timer, progressive cards
-- `components/recommendation-card.tsx` — card rendering with poster fallback
-- `components/dashboard-layout.tsx` — filter panel and responsive grid layout
-- `lib/title-utils.ts` — `buildInputTitleSet()`, `isInputShow()`, `extractJson()`
-- `lib/test-data/demo-recommendations.json` — bundled demo data
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts)`:40–79` — SSE event emission functions and types
+- [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts)`:130–248` — two-pass streaming pipeline
+- [`components/streaming-view.tsx`](../../components/streaming-view.tsx) — SSE consumer, state machine, timer, progressive cards
+- [`components/recommendation-card.tsx`](../../components/recommendation-card.tsx) — card rendering with poster fallback
+- [`components/dashboard-layout.tsx`](../../components/dashboard-layout.tsx) — filter panel and responsive grid layout
+- [`lib/title-utils.ts`](../../lib/title-utils.ts) — `buildInputTitleSet()`, `isInputShow()`, `extractJson()`
+- [`lib/test-data/demo-recommendations.json`](../../lib/test-data/demo-recommendations.json) — bundled demo data
