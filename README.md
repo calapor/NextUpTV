@@ -2,6 +2,13 @@
 
 NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
 
+---
+
+> **Portfolio documentation** — architecture, prompt engineering lifecycle, evaluation framework, AI safety, and engineering decision log:
+> 📄 [docs/portfolio/README.md](docs/portfolio/README.md)
+
+---
+
 ## Features
 
 - **AI recommendations** — Claude Sonnet 4.6 analyses your favourites and returns tailored picks with per-show reasoning
@@ -32,13 +39,12 @@ Create a `.env.local` file at the project root:
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 TVDB_API_KEY=your-tvdb-api-key
-EVAL_USER=admin
-EVAL_PASSWORD=changeme
+ADMIN_PASSWORD=changeme
 ```
 
 Obtain a TVDB API key at [thetvdb.com](https://thetvdb.com).
 
-`EVAL_USER` and `EVAL_PASSWORD` gate the `/eval` workbench via HTTP Basic Auth. If `EVAL_PASSWORD` is unset the route is open (useful in local dev).
+`ADMIN_PASSWORD` gates the `/admin` page and its API routes (`/api/eval`, `/api/usage-logs`, `/api/admin/demo-cache`) via HTTP Basic Auth middleware. If `ADMIN_PASSWORD` is unset the admin interface is open — this is the default for local development. `EVAL_PASSWORD` was used in earlier versions and is no longer required.
 
 ## Getting Started
 
