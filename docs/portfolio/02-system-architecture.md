@@ -9,7 +9,7 @@
 
 ## TL;DR
 
-NextUpTV v2 runs entirely on Vercel with no separate backend service. AI logic lives in Next.js API routes. The core innovation is a two-pass streaming pipeline: Claude streams titles mid-generation, TVDB lookups fire immediately in parallel, and recommendation cards appear in the browser progressively rather than all at once after a long wait.
+NextUpTV runs entirely on Vercel with no separate backend service. AI logic lives in Next.js API routes. The core innovation is a two-pass streaming pipeline: Claude streams titles mid-generation, TVDB lookups fire immediately in parallel, and recommendation cards appear in the browser progressively rather than all at once after a long wait.
 
 ---
 

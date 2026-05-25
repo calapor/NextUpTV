@@ -9,7 +9,7 @@
 
 ## TL;DR
 
-This document records ten deliberate engineering decisions made during the development of NextUpTV v2. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, and security. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
+This document records ten deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, and security. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
 
 ---
 

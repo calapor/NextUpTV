@@ -11,7 +11,7 @@
 
 ![Recommendations grid — desktop layout showing filter panel and card grid](assets/screenshots/recommendations-grid-desktop.png)
 
-NextUpTV v2 is a consumer-facing AI recommendation tool built to demonstrate applied AI product engineering — not as a production service. The scope was deliberately constrained to show that deliberate trade-off thinking, not feature volume, is the mark of a senior engineer. The tech stack was chosen for maximum leverage with minimum infrastructure.
+NextUpTV is a consumer-facing AI recommendation tool built to demonstrate applied AI product engineering — not as a production service. The scope was deliberately constrained to show that deliberate trade-off thinking, not feature volume, is the mark of a senior engineer. The tech stack was chosen for maximum leverage with minimum infrastructure.
 
 ---
 
