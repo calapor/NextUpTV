@@ -1,3 +1,5 @@
+![NextUpTV](assets/nextuptv-logo-1280x200.jpg)
+
 # NextUpTV — Portfolio Documentation Index
 
 This suite of documents describes the design, build, and hardening of **NextUpTV**, an AI-powered TV show recommendation platform built as a portfolio project to demonstrate applied AI engineering skills.
