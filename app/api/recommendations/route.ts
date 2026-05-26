@@ -79,9 +79,10 @@ export async function POST(req: NextRequest) {
   const fileContentChars = fileContent?.length ?? 0
   const keywordsChars = keywords?.length ?? 0
 
+  const combinedFavourites = [fileContent, keywords].filter(Boolean).join('\n').trim()
+
   const userContent = [
-    fileContent && `My favourite shows (from uploaded file):\n<user_input>\n${fileContent}\n</user_input>`,
-    keywords && `Keywords, shows and genres I enjoy:\n<user_input>\n${keywords}\n</user_input>`,
+    combinedFavourites && `My favourites — TV shows, films, genres, or keywords:\n<user_input>\n${combinedFavourites}\n</user_input>`,
     `Please return ${count} recommendations.`,
   ]
     .filter(Boolean)
