@@ -3,7 +3,7 @@
 # Pre-AI Design Phase
 
 **Document ID:** PREAI  
-**Related:** [PDB](01-product-design-brief.md) | [ARCH](02-system-architecture.md) | [DATA](03-data-model-reference.md) | [PROMPT](04-prompt-engineering-lifecycle.md)  
+**Related:** [PDB](00-product-design-brief.md) | [ARCH](02-system-architecture.md) | [DATA](03-data-model-reference.md) | [PROMPT](04-prompt-engineering-lifecycle.md)  
 **Last Updated:** May 2026  
 **Status:** Final
 
