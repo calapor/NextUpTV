@@ -38,7 +38,7 @@ export function RecommendationsPage({
           Upload your TV favourite TV shows (current or past) in the Manage Favourites tab to see a curated list of recommended TV Shows AI recommends that you should watch next and why.
         </p>
         <button
-          onClick={() => onNavigate('favourites')}
+          onClick={() => onNavigate?.('favourites')}
           className="text-sm text-primary hover:underline"
         >
           Go to Manage Favourites →

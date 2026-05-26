@@ -6,6 +6,9 @@ import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const CACHE_TTL = 60 * 60 * 1000
 
+// In-process cache: show metadata is stable, so per-instance memory is acceptable
+// and avoids the operational cost of Redis. Null entries are also cached to prevent
+// re-hitting TVDB for tvdbIds that are known to return 404/502.
 const detailCache = new Map<string, { data: ShowDetails | null; expiresAt: number }>()
 
 export async function GET(req: NextRequest) {
@@ -50,6 +53,9 @@ export async function GET(req: NextRequest) {
 
     const status: string = data?.status?.name ?? 'Unknown'
 
+    // TVDB returns multiple season orderings (Aired, DVD, Alternate, Absolute) plus a
+    // "season 0" bucket for specials. Only 'Aired Order' with number > 0 represents
+    // the broadcast seasons users actually count.
     const seasons: Array<{ number: number; type?: { name: string } }> = data?.seasons ?? []
     const season_count = seasons.filter(
       (s) => s.type?.name === 'Aired Order' && s.number > 0

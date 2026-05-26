@@ -4,48 +4,17 @@ import type { PartialRecommendation, RecommendationsRequest, RecommendationsResp
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
 import testRecommendations from '@/lib/test-data/recommendations.json'
-import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
+import {
+  buildInputTitleSet,
+  extractJson,
+  isInputShow,
+  sanitizeSeriesTitle,
+  sanitizeReason,
+} from '@/lib/title-utils'
+import { sseEvent, sseResponse } from '@/lib/sse'
 import { logUsage, extractIp, extractUa, calcCost } from '@/lib/usage-logger'
 
 const anthropic = new Anthropic()
-const encoder = new TextEncoder()
-
-function sseEvent(obj: object): Uint8Array {
-  return encoder.encode(`data: ${JSON.stringify(obj)}\n\n`)
-}
-
-function sanitizeSeriesTitle(title: string): string {
-  // Strip leading type prefixes e.g. "Miniseries: Band of Brothers", "Limited Series: Chernobyl"
-  title = title.replace(/^(?:Mini(?:series)?|Limited\s+Series|Anthology|Documentary|Reality|Animation|Animated)\s*:\s*/i, '').trim()
-  // Strip dash-based self-corrections e.g. "Night Agent — instead: Longmire"
-  title = title.replace(/\s*[—–-]\s*(?:instead|actually|wait|correction|oops)[^]*$/i, '').trim()
-  // Strip parenthetical self-corrections Claude sometimes emits
-  // e.g. "(wait — already listed)", "(already recommended)"
-  title = title.replace(/\s*\([^)]*\b(?:wait|already listed|already recommended|correction|oops|I mean)\b[^)]*\)/gi, '').trim()
-  // Strip trailing season/series/part qualifiers e.g. "(Season 1)", ": Series 2", " - Part 3"
-  return title.replace(/[\s:–\-]*\(?(?:Season|Series|Part)\s+\d+\)?$/i, '').trim()
-}
-
-function sanitizeReason(reason: string): string {
-  // Strip dash-based self-corrections e.g. "something — instead: something else"
-  reason = reason.replace(/\s*[—–-]\s*(?:instead|actually|wait|correction|oops)[^]*$/i, '').trim()
-  // Strip parenthetical self-corrections Claude sometimes emits mid-generation
-  // e.g. "(wait — already listed)", "(already recommended)", "(correction: ...)"
-  return reason
-    .replace(/\s*\([^)]*\b(?:wait|already listed|already recommended|correction|oops|I mean)\b[^)]*\)/gi, '')
-    .trim()
-}
-
-
-function sseResponse(stream: ReadableStream): Response {
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    },
-  })
-}
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
