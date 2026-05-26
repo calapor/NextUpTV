@@ -126,3 +126,4 @@ specs/
 - **User Profiles** — named preference profiles with save, load, and switch
 - **Preference Persistence** — backend-backed storage for favourites and recommendation history
 - **Additional Filters** — language, country of origin, network, content rating
+- **Favourite TV alerts** - air date, status, spin off series 
