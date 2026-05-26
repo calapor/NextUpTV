@@ -47,7 +47,7 @@ API route handler
               model, inputTokens, outputTokens, costUsd
             })
                 │
-                ├── geolocateIp(ip) → ip-api.com (3s timeout; skips private IPs)
+                ├── geolocateIp(ip) → ipwho.is (HTTPS, 3s timeout; skips private IPs)
                 │
                 └── appendEntry(entry)              [lib/usage-storage.ts]
                         │
@@ -92,7 +92,7 @@ Full `UsageLogEntry` structure (from `lib/types.ts`):
 | `geo.region` | string | Region/state |
 | `geo.country` | string | Country name |
 | `geo.countryCode` | string | ISO 3166-1 alpha-2 code |
-| `inputText` | string | User's keywords/shows input, plain text (recommendations route only) |
+| `inputText` | string | Uploaded favourites file + typed keywords as two labelled sections (recommendations route only) |
 | `outputText` | string | Newline-separated list of recommended show titles (recommendations route only) |
 
 **Route-specific params for recommendations:**
@@ -181,6 +181,14 @@ The admin interface was consolidated in commit `3415c94: Add demo cache, sample 
 **Cost data validated the token reduction.** The token budget change in commit `d0609b3` was motivated by noticing that generation was slow for large inputs. Usage logs showed average input tokens dropping by approximately 15% and output tokens by approximately 20% after the change. The eval score for that session initially regressed (F range) before recovering to B — a reminder that token budget changes require immediate eval validation.
 
 **Average cost per production request** is approximately $0.015–0.026 USD for a 10-recommendation run with a medium-length watch history file. At this rate, 1,000 recommendation requests would cost approximately $15–26 USD in inference fees — a reasonable cost for a portfolio application that is not rate-limited.
+
+**Per-phase timing logs caught a silent serialization bug.** Reports of 50–60s recommendation requests prompted adding `[recommendations] +Xms <label>` markers at each phase of the route (Claude stream start/end, TVDB enrichment start/end, log write). The markers showed that the post-stream enrichment loop was `await`ing each TVDB fetch one-at-a-time when a recommendation hadn't been detected during streaming — turning N parallel network calls into a serial chain. Replacing the `for...of await` with `Promise.all` collapsed enrichment time from sum-of-calls to max-of-calls. The timing markers stay in place as a permanent observability layer.
+
+**A second silent bug surfaced in the same investigation.** The `enriched` array was block-scoped inside the `try`, but the `finally` log call read it — a `ReferenceError` that was silently swallowed by the surrounding `try/catch`. The result: `outputText` (and anything else logged after the throw) never made it into the `usage_logs` table. Hoisting `enriched` to the outer function scope fixed it. This is a useful reminder that "logging failures never propagate to the user" (section 2) has a flip side — failures in the logger itself can also be invisible. Per-phase timing markers were what made the missing `logUsage done` line visible.
+
+**`inputText` now captures the full prompt, not just keywords.** The original capture only stored the typed keywords box, leaving the Input column blank for file-only requests (the common case). It now stores `--- Uploaded favourites ---\n<file>` and `--- Keywords ---\n<keywords>` as separate labelled sections so the admin viewer reproduces the full user-facing prompt.
+
+**Geo provider swap.** `ip-api.com` (HTTP, 45 requests/minute per source IP) was replaced by `ipwho.is` (HTTPS, 10k requests/month, no key). On Vercel, all serverless functions in a region share a small egress IP pool, so the per-IP per-minute quota was hit quickly across all users and geo lookups silently fell back to `{}`. The new provider has a per-IP-per-month quota at the source level rather than per-minute, which fits Vercel's egress profile.
 
 ---
 

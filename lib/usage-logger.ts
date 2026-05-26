@@ -19,18 +19,21 @@ const LOCAL_IPS = new Set(['unknown', '127.0.0.1', '::1', 'localhost'])
 async function geolocateIp(ip: string): Promise<GeoInfo> {
   if (LOCAL_IPS.has(ip) || ip.startsWith('192.168.') || ip.startsWith('10.')) return {}
   try {
+    // ipwho.is: HTTPS, no API key required, 10k requests/month free.
+    // Chosen over ip-api.com (HTTP-only, 45/min per source IP — too tight for
+    // Vercel's shared egress IP pool) so geo lookups don't silently fail in prod.
     const res = await fetch(
-      `http://ip-api.com/json/${ip}?fields=country,countryCode,city,regionName`,
+      `https://ipwho.is/${ip}?fields=success,country,country_code,city,region`,
       { signal: AbortSignal.timeout(3000) }
     )
     if (!res.ok) return {}
     const data = await res.json()
-    if (data.status === 'fail') return {}
+    if (data.success === false) return {}
     return {
       city: data.city || undefined,
-      region: data.regionName || undefined,
+      region: data.region || undefined,
       country: data.country || undefined,
-      countryCode: data.countryCode || undefined,
+      countryCode: data.country_code || undefined,
     }
   } catch {
     return {}
