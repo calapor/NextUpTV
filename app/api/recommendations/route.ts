@@ -95,9 +95,16 @@ export async function POST(req: NextRequest) {
       let outputTokens = 0
       let enriched: Array<RecommendationsResponse['recommendations'][number]> = []
       const MODEL = 'claude-sonnet-4-6'
-      const mark = (label: string) => console.log(`[recommendations] +${Date.now() - startedAt}ms ${label}`)
+      const timings: Array<{ label: string; durationMs: number }> = []
+      let lastTimeMs = startedAt
+      const time = (label: string) => {
+        const now = Date.now()
+        const durationMs = now - lastTimeMs
+        lastTimeMs = now
+        timings.push({ label, durationMs })
+        console.log(`[recommendations] +${now - startedAt}ms ${label} (Δ${durationMs}ms)`)
+      }
       try {
-        mark('stream start')
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
         const inputTitles = buildInputTitleSet([fileContent, keywords].filter(Boolean).join('\n'))
@@ -171,9 +178,9 @@ export async function POST(req: NextRequest) {
         })
 
         await anthropicStream.done()
-        mark('anthropic stream done')
+        time('Anthropic streaming')
         await inputTvdbLookupDone
-        mark('input tvdb lookups done')
+        time('TVDB input lookups (wait)')
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
 
@@ -201,11 +208,10 @@ export async function POST(req: NextRequest) {
 
         // Kick off any TVDB fetches not already started during streaming, so they all
         // run in parallel rather than serializing one-per-iteration.
-        mark(`enrichment start (${candidates.length} candidates)`)
         const tvdbResults = await Promise.all(
           candidates.map((rec) => tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
         )
-        mark('enrichment done')
+        time(`Enrichment (${candidates.length} candidates)`)
 
         candidates.forEach((rec, i) => {
           const tvdb = tvdbResults[i]
@@ -235,7 +241,7 @@ export async function POST(req: NextRequest) {
 
         enriched.sort((a, b) => (b.imdb_rating ?? 0) - (a.imdb_rating ?? 0))
         controller.enqueue(sseEvent({ type: 'complete', recommendations: enriched }))
-        mark('stream complete')
+        time('Finalize')
       } catch (err) {
         streamErrored = true
         const message =
@@ -248,7 +254,7 @@ export async function POST(req: NextRequest) {
         controller.close()
         await logUsage({
           ts: new Date().toISOString(), ip, ua, route: 'recommendations',
-          params: { fileContentChars, keywordsChars, count, isTest: false },
+          params: { fileContentChars, keywordsChars, count, isTest: false, timings },
           status: streamErrored ? 'error' : 'success',
           durationMs: Date.now() - startedAt,
           model: MODEL,
@@ -261,7 +267,7 @@ export async function POST(req: NextRequest) {
           ].filter(Boolean).join('\n\n') || undefined,
           outputText: enriched.length > 0 ? enriched.map(r => r.title).join('\n') : undefined,
         })
-        mark('logUsage done')
+        console.log(`[recommendations] +${Date.now() - startedAt}ms logUsage done`)
       }
     },
   })
