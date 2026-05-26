@@ -178,9 +178,9 @@ interface UsageLogEntry {
   inputTokens?: number
   outputTokens?: number
   costUsd?: number                                        // Calculated at $3/M input, $15/M output
-  geo?: GeoInfo                                           // Resolved from ip-api.com
+  geo?: GeoInfo                                           // Resolved from ipwho.is
   // Plain-text capture — recommendations route only
-  inputText?: string                                      // User's keywords input
+  inputText?: string                                      // Uploaded favourites file + keywords (labelled sections)
   outputText?: string                                     // Newline-separated recommended show titles
 }
 

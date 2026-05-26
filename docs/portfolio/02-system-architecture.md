@@ -39,7 +39,7 @@ Vercel Serverless Functions
 External Services
   ├── Anthropic API          (Claude Sonnet 4.6)
   ├── TVDB v4 API            (show metadata, posters)
-  └── ip-api.com             (geolocation, usage logging only)
+  └── ipwho.is               (geolocation, usage logging only)
 ```
 
 **What does not exist by design:**
