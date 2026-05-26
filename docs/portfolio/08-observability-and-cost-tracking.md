@@ -35,31 +35,7 @@ Logging is implemented in `lib/usage-logger.ts` as an `async` function called in
 
 The write path is split across two files: `lib/usage-logger.ts` owns the domain logic (cost calculation, IP geolocation), and `lib/usage-storage.ts` owns persistence. The storage layer chooses between two backends at runtime based on whether `DATABASE_URL` is defined in the environment.
 
-```
-API route handler
-    │
-    ├── [AI call + response streaming]
-    │
-    └── finally:
-            logUsage({
-              ts, ip, ua, route, params,
-              status, durationMs,
-              model, inputTokens, outputTokens, costUsd
-            })
-                │
-                ├── geolocateIp(ip) → ipwho.is (HTTPS, 3s timeout; skips private IPs)
-                │
-                └── appendEntry(entry)              [lib/usage-storage.ts]
-                        │
-                        ├── if process.env.DATABASE_URL is set:
-                        │     INSERT INTO usage_logs (...)        ← Neon Postgres
-                        │
-                        └── else:
-                              fs.appendFile(
-                                'data/usage-logs/YYYY-MM-DD.jsonl',
-                                JSON.stringify(entry) + '\n'
-                              )                                    ← local disk
-```
+![Usage logging flow — finally block calls logUsage, which geolocates then appends entry to Neon Postgres or local JSONL](assets/diagrams/usage-logging-flow.png)
 
 **Production storage (Vercel + Neon):** When deployed, the app writes to a Postgres `usage_logs` table on Neon using the `@neondatabase/serverless` HTTP driver. Concurrent writes are handled by Postgres natively (no race conditions). Preview deploys use a branched copy of the database — preview traffic does not pollute production logs.
 

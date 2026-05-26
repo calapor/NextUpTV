@@ -1,0 +1,25 @@
+@startuml EvaluationPipeline
+
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor #F5F5F5
+  BorderColor #444
+}
+
+start
+
+:/admin → Eval Tab\n(HTTP Basic Auth: EVAL_USER / EVAL_PASSWORD);
+
+:POST /api/eval;
+
+:**Step 1 — Generate Recommendations**\nInput: system prompt + shows list\nModel: claude-sonnet-4-6, max_tokens: 3072\nOutput: Recommendation[] (parsed JSON);
+
+:**Step 2 — Judge the Recommendations**\nInput: EVAL_JUDGE_SYSTEM_PROMPT + taste profile + recs\nModel: claude-sonnet-4-6, max_tokens: 1024\nOutput: EvalCriteria (5 scores + rationales) + rawCritique;
+
+:**Step 3 — Score and Grade**\nOverall: mean of 5 criterion scores (1 decimal)\nGrade: A (≥9) / B (≥8) / C (≥7) / D (≥6) / F (<6)\nGenerate HTML report with colour-coded grade card;
+
+:**Step 4 — Persist**\nSave HTML to /public/eval-reports/YYYY-MM-DDTHH-MM-SS-{grade}-{score}.html\nAppend to manifest.json: { filename, runAt, grade, overallScore }\nRegenerate index.html;
+
+stop
+
+@enduml

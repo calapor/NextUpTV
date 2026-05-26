@@ -1,0 +1,44 @@
+@startuml RuntimeTopology
+
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam nodesep 50
+skinparam ranksep 80
+
+node "Browser\n(React 19)" as BROWSER {
+  component "app-shell.tsx\n(root state management)" as C1
+  component "streaming-view.tsx\n(SSE consumer)" as C2
+  component "dashboard-layout.tsx\n(filter panel + results grid)" as C3
+  component "show-detail-sheet.tsx\n(fly-over detail panel)" as C4
+  C1 -[hidden]- C2
+  C2 -[hidden]- C3
+  C3 -[hidden]- C4
+}
+
+node "Vercel Serverless\nFunctions" as VERCEL {
+  component "/api/recommendations\n(main AI, maxDuration=60)" as V1
+  component "/api/eval\n(evaluation, maxDuration=60)" as V2
+  component "/api/library-status\n(TVDB check, SSE)" as V3
+  component "/api/show-details\n(extended metadata)" as V4
+  component "/api/usage-logs\n(log reader for admin)" as V5
+  component "/api/admin/demo-cache\n(demo regeneration)" as V6
+  V1 -[hidden]- V2
+  V2 -[hidden]- V3
+  V3 -[hidden]- V4
+  V4 -[hidden]- V5
+  V5 -[hidden]- V6
+}
+
+node "External\nServices" as EXT {
+  component "Anthropic API\n(Claude Sonnet 4.6)" as E1
+  component "TVDB v4 API\n(metadata, posters)" as E2
+  component "ipwho.is\n(geolocation)" as E3
+  E1 -[hidden]- E2
+  E2 -[hidden]- E3
+}
+
+BROWSER --> VERCEL : HTTP / SSE
+VERCEL --> EXT : API calls
+
+@enduml

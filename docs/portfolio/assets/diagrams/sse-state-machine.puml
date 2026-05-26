@@ -1,0 +1,26 @@
+@startuml SSEStateMachine
+
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #F0F4FF
+  BorderColor #5566AA
+  ArrowColor #5566AA
+}
+
+[*] --> Connecting
+
+Connecting --> Analyzing : first 'status' event
+Analyzing : "Analyzing your favorites..."
+
+Analyzing --> Generating : first 'partial_recommendation'\nor generation status event
+Generating : "Generating recommendations..."\nElapsed timer latches here
+
+Generating --> Fetching : Claude done, enrichment underway
+Fetching : "Fetching show details..."
+
+Fetching --> Complete : 'complete' event
+Complete : Cards fully rendered\nElapsed timer stops
+
+Complete --> [*]
+
+@enduml
