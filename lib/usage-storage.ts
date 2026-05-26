@@ -11,10 +11,10 @@ export interface ListResult {
   files: number
 }
 
-const useNeon = () => Boolean(process.env.DATABASE_URL)
+const isNeonConfigured = () => Boolean(process.env.DATABASE_URL)
 
 export async function appendEntry(entry: EntryWithGeo): Promise<void> {
-  if (useNeon()) {
+  if (isNeonConfigured()) {
     await appendEntryNeon(entry)
   } else {
     await appendEntryLocal(entry)
@@ -22,7 +22,7 @@ export async function appendEntry(entry: EntryWithGeo): Promise<void> {
 }
 
 export async function listEntries(opts: { limit: number; date?: string }): Promise<ListResult> {
-  if (useNeon()) {
+  if (isNeonConfigured()) {
     return listEntriesNeon(opts)
   }
   return listEntriesLocal(opts)
