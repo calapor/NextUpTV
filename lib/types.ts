@@ -130,6 +130,9 @@ export interface UsageLogEntry {
   outputTokens?: number
   costUsd?: number
   geo?: GeoInfo
+  // Plain-text capture of user input and AI output (recommendations route only)
+  inputText?: string
+  outputText?: string
 }
 
 // Eval types

@@ -11,20 +11,20 @@ export default function AdminPage() {
       <div className="border-b border-border px-6 py-4">
         <h1 className="text-lg font-semibold">NextUpTV Admin</h1>
       </div>
-      <Tabs defaultValue="cache" className="w-full">
+      <Tabs defaultValue="logs" className="w-full">
         <div className="border-b border-border px-6">
           <TabsList className="h-10 bg-transparent p-0 gap-0">
-            <TabsTrigger
-              value="eval"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 h-10"
-            >
-              Eval
-            </TabsTrigger>
             <TabsTrigger
               value="logs"
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 h-10"
             >
               Usage Logs
+            </TabsTrigger>
+            <TabsTrigger
+              value="eval"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 h-10"
+            >
+              Eval
             </TabsTrigger>
             <TabsTrigger
               value="cache"

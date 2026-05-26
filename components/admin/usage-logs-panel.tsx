@@ -87,7 +87,7 @@ export function UsageLogsPanel() {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="text-sm border border-border rounded-md px-3 py-1.5 bg-background"
+          className="font-sans text-sm border border-border rounded-md px-3 py-1.5 bg-background"
         />
         <Button variant="outline" size="sm" onClick={() => load(date)}>
           <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
@@ -159,14 +159,21 @@ export function UsageLogsPanel() {
                         </Badge>
                       </td>
                       <td className="px-4 py-2.5 font-mono text-xs tabular-nums">{formatDuration(entry.durationMs)}</td>
-                      <td className="px-4 py-2.5 text-xs text-muted-foreground" title={entry.ip}>
+                      <td className="px-4 py-2.5 text-xs text-muted-foreground">
                         {entry.geo?.countryCode ? (
                           <span className="flex items-center gap-1.5">
-                            <span>{countryFlag(entry.geo.countryCode)}</span>
+                            <span
+                              className="cursor-default"
+                              title={[entry.geo.city, entry.geo.region, entry.geo.country]
+                                .filter(Boolean)
+                                .join(', ') + `\nIP: ${entry.ip}`}
+                            >
+                              {countryFlag(entry.geo.countryCode)}
+                            </span>
                             <span>{entry.geo.city ?? entry.geo.country ?? entry.geo.countryCode}</span>
                           </span>
                         ) : (
-                          <span className="font-sans">{entry.ip}</span>
+                          <span className="font-sans" title={entry.ip}>{entry.ip}</span>
                         )}
                       </td>
                       <td className="px-4 py-2.5 text-xs tabular-nums text-muted-foreground"
@@ -177,12 +184,30 @@ export function UsageLogsPanel() {
                     </tr>
                     {expandedIdx === i && (
                       <tr key={`${i}-detail`} className="border-b border-border/50 bg-muted/30">
-                        <td colSpan={6} className="px-4 py-3">
-                          <div className="space-y-1">
-                            <p className="text-xs font-medium text-muted-foreground mb-2">Full entry</p>
-                            <pre className="text-xs font-sans bg-background border border-border rounded p-3 overflow-x-auto">
-                              {JSON.stringify(entry, null, 2)}
-                            </pre>
+                        <td colSpan={7} className="px-4 py-3">
+                          <div className="space-y-3">
+                            {(entry.inputText || entry.outputText) && (
+                              <div className="grid grid-cols-2 gap-3">
+                                {entry.inputText && (
+                                  <div>
+                                    <p className="text-xs font-medium text-muted-foreground mb-1">Input</p>
+                                    <pre className="text-xs font-sans bg-background border border-border rounded p-3 overflow-x-auto whitespace-pre-wrap">{entry.inputText}</pre>
+                                  </div>
+                                )}
+                                {entry.outputText && (
+                                  <div>
+                                    <p className="text-xs font-medium text-muted-foreground mb-1">Recommendations</p>
+                                    <pre className="text-xs font-sans bg-background border border-border rounded p-3 overflow-x-auto whitespace-pre-wrap">{entry.outputText}</pre>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-xs font-medium text-muted-foreground mb-2">Full entry</p>
+                              <pre className="text-xs font-sans bg-background border border-border rounded p-3 overflow-x-auto">
+                                {JSON.stringify(entry, null, 2)}
+                              </pre>
+                            </div>
                           </div>
                         </td>
                       </tr>
