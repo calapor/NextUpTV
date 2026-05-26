@@ -11,6 +11,7 @@ interface RecommendationsPageProps {
   recommendations: Recommendation[]
   pendingRequest: PendingRequest | null
   onRecommendationsReady: (recs: Recommendation[]) => void
+  generationId: number
 }
 
 export function RecommendationsPage({
@@ -18,6 +19,7 @@ export function RecommendationsPage({
   recommendations,
   pendingRequest,
   onRecommendationsReady,
+  generationId,
 }: RecommendationsPageProps) {
   if (pendingRequest) {
     return (
@@ -47,5 +49,5 @@ export function RecommendationsPage({
     )
   }
 
-  return <DashboardLayout recommendations={recommendations} />
+  return <DashboardLayout recommendations={recommendations} generationId={generationId} />
 }

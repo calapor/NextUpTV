@@ -14,9 +14,10 @@ const STORAGE_KEY = 'nextuptv_filter_state'
 
 interface DashboardLayoutProps {
   recommendations: Recommendation[]
+  generationId: number
 }
 
-export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
+export function DashboardLayout({ recommendations, generationId }: DashboardLayoutProps) {
   const [sheetOpen, setSheetOpen] = useState(false)
 
   useEffect(() => {
@@ -57,6 +58,12 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
       year:    { min: Math.min(...years),    max: Math.max(...years),    hasData: Math.min(...years) < Math.max(...years) },
     }
   }, [recommendations])
+
+  useEffect(() => {
+    if (generationId === 0) return
+    initialized.current = false
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+  }, [generationId])
 
   useEffect(() => {
     if (!dataRanges) return

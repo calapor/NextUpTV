@@ -23,6 +23,7 @@ export function AppShell() {
   const [libraryShows, setLibraryShows] = useState<LibraryShow[]>([])
   const [libraryLoading, setLibraryLoading] = useState(false)
   const [isTestMode, setIsTestMode] = useState(false)
+  const [generationId, setGenerationId] = useState(0)
   const libraryAbortRef = useRef<AbortController | null>(null)
   const libraryShowsRef = useRef<LibraryShow[]>([])
   const libraryLoadingRef = useRef(false)
@@ -179,6 +180,7 @@ export function AppShell() {
   const handleRecommendationsReady = useCallback((recs: Recommendation[]) => {
     setRecommendations(recs)
     setPendingRequest(null)
+    setGenerationId(prev => prev + 1)
     try { localStorage.setItem(RECS_KEY, JSON.stringify(recs)) } catch {}
   }, [])
 
@@ -192,6 +194,7 @@ export function AppShell() {
             recommendations={recommendations}
             pendingRequest={pendingRequest}
             onRecommendationsReady={handleRecommendationsReady}
+            generationId={generationId}
           />
         </div>
         <div className={`h-full ${currentPage === 'library' ? '' : 'hidden'}`}>
