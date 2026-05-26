@@ -202,12 +202,23 @@ export function UsageLogsPanel() {
                                 )}
                               </div>
                             )}
-                            <div>
-                              <p className="text-xs font-medium text-muted-foreground mb-2">Full entry</p>
-                              <pre className="text-xs font-sans bg-background border border-border rounded p-3 overflow-x-auto">
-                                {JSON.stringify(entry, null, 2)}
-                              </pre>
-                            </div>
+                            {entry.route === 'recommendations' && (entry.params as RecommendationsParams).timings?.length ? (
+                              <div>
+                                <p className="text-xs font-medium text-muted-foreground mb-1">Timings</p>
+                                <div className="text-xs font-sans bg-background border border-border rounded p-3 space-y-0.5">
+                                  {(entry.params as RecommendationsParams).timings!.map((t, ti) => (
+                                    <div key={ti} className="flex justify-between gap-4">
+                                      <span>{t.label}</span>
+                                      <span className="tabular-nums text-muted-foreground">{formatDuration(t.durationMs)}</span>
+                                    </div>
+                                  ))}
+                                  <div className="flex justify-between gap-4 pt-1 mt-1 border-t border-border font-medium">
+                                    <span>Total</span>
+                                    <span className="tabular-nums">{formatDuration(entry.durationMs)}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : null}
                           </div>
                         </td>
                       </tr>

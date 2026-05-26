@@ -105,6 +105,7 @@ export interface RecommendationsParams {
   keywordsChars: number
   count: number
   isTest: boolean
+  timings?: Array<{ label: string; durationMs: number }>
 }
 
 export interface LibraryStatusParams {
