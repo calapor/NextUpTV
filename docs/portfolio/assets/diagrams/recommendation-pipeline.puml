@@ -1,0 +1,91 @@
+@startuml RecommendationPipeline
+
+<style>
+sequenceDiagram {
+  ParticipantPadding 10
+  MessageAlignment left
+}
+</style>
+
+actor User
+participant "AppShell" as AS
+participant "StreamingView" as SV
+participant "Vercel Node\n/api/recommendations" as API
+participant "Anthropic API\n(Claude Sonnet 4.6)" as ANT
+participant "TVDB API" as TVDB
+participant "Neon Postgres\n+ ipwho.is (geo)" as LOG
+
+autonumber
+
+User -> AS: Submit favourites input\n(file content + keywords)
+AS -> AS: Clear prior state\nSet pendingRequest\nSwitch to Recommendations tab
+AS -> SV: Mount StreamingView
+
+SV -> API: POST /api/recommendations (open SSE stream)
+activate API
+
+API -> API: Validate input lengths\n(file <= 12,000 chars, keywords <= 5,000)
+API -> API: Wrap inputs in <user_input> tags\nBuild user message content array
+note right of API: mark('stream start')
+
+API -> ANT: anthropic.messages.stream(\n  model: 'claude-sonnet-4-6',\n  max_tokens: 6144,\n  system: RECOMMENDATIONS_SYSTEM_PROMPT\n)
+activate ANT
+
+API --> SV: SSE: { type: 'status', message: 'Analyzing...' }
+SV -> SV: Status bar: "Analyzing..."
+
+API -> TVDB: Fetch TVDB IDs for INPUT shows [parallel, concurrent with Claude]
+activate TVDB
+TVDB --> API: Input show TVDB IDs\n(resolves cross-script duplicates)
+deactivate TVDB
+
+API --> SV: SSE: { type: 'status', message: 'Generating...' }
+SV -> SV: Status bar: "Generating..."\nElapsed timer starts
+
+loop stream.on('text', delta)
+    ANT --> API: token delta
+    API -> API: fullText += delta\nScan for new "title": "..." matches
+    API -> TVDB: fetchTvdbData(newTitle) [non-blocking;\nstored in tvdbPromises Map for later reuse]
+    activate TVDB
+    TVDB --> API: Poster, synopsis, genres, runtime
+    deactivate TVDB
+    API --> SV: SSE: { type: 'partial_recommendation', recommendation }
+    SV -> SV: New card appears with\nposter + TVDB metadata
+end
+
+ANT --> API: stream.on('message'): capture inputTokens, outputTokens
+deactivate ANT
+note right of API: mark('anthropic stream done')\nmark('input tvdb lookups done')
+
+API --> SV: SSE: { type: 'status', message: 'Fetching details...' }
+
+API -> API: extractJson(fullText)\nsanitizeSeriesTitle(), sanitizeReason()\nfilter: imdb_rating > 0\ndeduplicate by title\nfilter: isInputShow() by title\n-> build candidates[]
+note right of API: mark('enrichment start (N candidates)')
+
+API -> TVDB: Promise.all(candidates.map(rec =>\n  tvdbPromises.get(rec.title)\n  ?? fetchTvdbData(rec.title)\n))\n[fully parallel; awaits already-flying calls,\nfires only the missing ones in parallel]
+activate TVDB
+TVDB --> API: TVDB metadata for all candidates
+deactivate TVDB
+note right of API: mark('enrichment done')
+
+API -> API: For each candidate (in original order):\n  skip if tvdb.id matches input TVDB ID\n  merge Claude + TVDB fields\n  push to enriched[]
+
+loop per enriched recommendation
+    API --> SV: SSE: { type: 'recommendation', recommendation }
+    SV -> SV: Cards upgrade with Claude attributes\n(genre scores, imdb_rating, reason)
+end
+
+API -> API: enriched.sort(by imdb_rating desc)
+API --> AS: SSE: { type: 'complete', recommendations: [...] }
+AS -> AS: Transfer to state\nStore to localStorage
+note right of API: mark('stream complete')
+
+API -> LOG: logUsage({\n  model, inputTokens, outputTokens, costUsd,\n  geo: await ipwho.is (HTTPS, 3s timeout),\n  inputText: '--- Uploaded favourites ---\\n...\\n--- Keywords ---\\n...',\n  outputText: enriched titles, newline-joined\n})
+activate LOG
+LOG --> API: INSERT INTO usage_logs (Neon)\nor JSONL fallback if DATABASE_URL unset
+deactivate LOG
+note right of API: mark('logUsage done')
+
+deactivate API
+
+@enduml
