@@ -21,26 +21,7 @@ The application is a Next.js 16 App Router project deployed on Vercel. There is 
 
 **Runtime topology:**
 
-```
-Browser (React 19)
-  ├── app-shell.tsx          (root state management)
-  ├── streaming-view.tsx     (SSE consumer)
-  ├── dashboard-layout.tsx   (filter panel + results grid)
-  └── show-detail-sheet.tsx  (fly-over detail panel)
-
-Vercel Serverless Functions
-  ├── /api/recommendations   (main AI endpoint, maxDuration=60)
-  ├── /api/eval              (evaluation pipeline, maxDuration=60)
-  ├── /api/library-status    (TVDB library check, SSE)
-  ├── /api/show-details      (extended show metadata)
-  ├── /api/usage-logs        (log reader for admin UI)
-  └── /api/admin/demo-cache  (demo data regeneration)
-
-External Services
-  ├── Anthropic API          (Claude Sonnet 4.6)
-  ├── TVDB v4 API            (show metadata, posters)
-  └── ipwho.is               (geolocation, usage logging only)
-```
+![Runtime topology — browser, Vercel serverless functions, and external services](assets/diagrams/runtime-topology.png)
 
 **What does not exist by design:**
 - No user database — session state lives in `localStorage`

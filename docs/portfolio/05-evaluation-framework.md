@@ -35,34 +35,7 @@ The specific questions the framework was designed to answer:
 
 ## 2. Framework Architecture
 
-```
-/admin → Eval Tab
-    │
-    │  (HTTP Basic Auth: EVAL_USER / EVAL_PASSWORD)
-    │
-    ▼
-POST /api/eval
-    │
-    ├── Step 1: Generate Recommendations
-    │   ├── Input: system prompt (from textarea) + shows list (from file or preset)
-    │   ├── Model: claude-sonnet-4-6, max_tokens: 3072
-    │   └── Output: Recommendation[] (parsed JSON)
-    │
-    ├── Step 2: Judge the Recommendations
-    │   ├── Input: EVAL_JUDGE_SYSTEM_PROMPT + taste profile + recommendations
-    │   ├── Model: claude-sonnet-4-6, max_tokens: 1024
-    │   └── Output: EvalCriteria (5 scores + rationales) + rawCritique
-    │
-    ├── Step 3: Score and Grade
-    │   ├── Overall score: mean of 5 criterion scores, rounded to 1 decimal
-    │   ├── Grade: A (≥9) / B (≥8) / C (≥7) / D (≥6) / F (<6)
-    │   └── Generate HTML report with colour-coded grade card and criteria breakdown
-    │
-    └── Step 4: Persist
-        ├── Save HTML report to /public/eval-reports/YYYY-MM-DDTHH-MM-SS-{grade}-{score}.html
-        ├── Append to manifest.json: { filename, runAt, grade, overallScore }
-        └── Regenerate index.html listing all past runs
-```
+![Evaluation pipeline — four sequential steps: generate, judge, score, and persist](assets/diagrams/evaluation-pipeline.png)
 
 The eval endpoint is protected by HTTP Basic Auth (`EVAL_USER` / `EVAL_PASSWORD` environment variables). If neither is set, the endpoint is open — useful for local development.
 

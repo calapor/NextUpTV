@@ -79,21 +79,7 @@ The server then:
 
 `StreamingView` manages a state machine with four sequential phases:
 
-```
-Connecting
-    │
-    ▼ (first 'status' event)
-"Analyzing your favorites..."
-    │
-    ▼ (first 'partial_recommendation' or generation status event)
-"Generating recommendations..."  ← timer latches here
-    │
-    ▼ (Claude done, enrichment underway)
-"Fetching show details..."
-    │
-    ▼ ('complete' event)
-[Complete — cards fully rendered]
-```
+![Client-side SSE state machine — Connecting → Analyzing → Generating → Fetching → Complete](assets/diagrams/sse-state-machine.png)
 
 The `liveRecs` array grows throughout this process. New cards are appended as `partial_recommendation` events arrive and sorted by IMDb rating (best first) as `recommendation` events upgrade them with scores.
 
