@@ -71,7 +71,42 @@ API route handler
 
 ---
 
-## 3. What Is Logged Per Request
+## 3. Production Setup
+
+This section records how the production environment is wired so the architecture above is reproducible. The setup is deliberately minimal — one Neon project, one table, no migration tooling — to match the scope of a portfolio application.
+
+### 3.1 Neon Project
+
+A single Neon project, `neon-vercel-db`, holds the `usage_logs` table. The Vercel/Neon integration creates a database branch per Vercel environment: a long-lived branch for production traffic, and short-lived auto-branched copies for preview deploys that are destroyed when the preview is removed. This is what makes the claim in §2 ("preview traffic does not pollute production logs") true at the data layer rather than at application code.
+
+Schema is applied once via the Neon SQL console using `lib/db/schema.sql`. No migration tooling is used — for a single table with one bootstrap step, an ORM or a migration runner would be more ceremony than the table is worth. The schema file uses `CREATE TABLE IF NOT EXISTS` and `CREATE INDEX IF NOT EXISTS`, so re-running it against an existing branch is a no-op.
+
+### 3.2 Vercel Environment Variables
+
+Env vars are scoped per Vercel environment in the project dashboard:
+
+| Variable | Production | Preview | Local Dev |
+|---|---|---|---|
+| `ANTHROPIC_API_KEY` | required | required | required |
+| `TVDB_API_KEY` | required | required | required |
+| `ADMIN_PASSWORD` | required | required | optional |
+| `DATABASE_URL` | Neon prod branch | Neon preview branch (auto) | unset → JSONL fallback |
+
+`DATABASE_URL` for preview deploys is injected per-deployment by the Vercel/Neon integration and points at the auto-branched preview database. Nothing in application code distinguishes production from preview — both paths run the same `appendEntryNeon()` against whatever `DATABASE_URL` Vercel hands the function.
+
+### 3.3 Local Development
+
+Leave `DATABASE_URL` unset in `.env.local`. At runtime, `isNeonConfigured()` in `lib/usage-storage.ts` checks for the env var and dispatches to the JSONL backend when it is missing. Logs land in `data/usage-logs/YYYY-MM-DD.jsonl` (gitignored) and the admin viewer reads from the same files.
+
+To test the Neon code path locally — for example, before changing the SQL query in `listEntriesNeon()` — copy the Neon dev-branch connection string into `.env.local` as `DATABASE_URL`. The dispatch happens on every call, so no restart logic depends on the var being set at boot.
+
+### 3.4 Schema Bootstrap
+
+The one-time bootstrap is to paste the contents of `lib/db/schema.sql` into the Neon SQL console for each branch that needs the table. The file defines the `usage_logs` table and two indexes (`ts DESC` for the admin viewer's reverse-chronological scan, and `route` for per-route filtering). Because the DDL is idempotent, the same file is safe to re-run if a branch is reset or a new branch needs the table.
+
+---
+
+## 4. What Is Logged Per Request
 
 Full `UsageLogEntry` structure (from `lib/types.ts`):
 
@@ -106,7 +141,7 @@ Full `UsageLogEntry` structure (from `lib/types.ts`):
 
 ---
 
-## 4. Cost Calculation
+## 5. Cost Calculation
 
 Cost is calculated at the end of each Claude API call using token counts returned in the response:
 
@@ -137,7 +172,7 @@ The token reduction commit (`d0609b3: Reduce token usage and fix recommendations
 
 ---
 
-## 5. Usage Log Viewer
+## 6. Usage Log Viewer
 
 Logs are readable through the admin interface at `/admin → Usage Logs`. The UI reads from `GET /api/usage-logs`, which returns the contents of today's and recent log files.
 
@@ -158,7 +193,7 @@ The viewer is for operational insight — it is not an analytics dashboard. Ther
 
 ---
 
-## 6. Admin Interface Overview
+## 7. Admin Interface Overview
 
 The `/admin` page consolidates three operational tools:
 
@@ -174,7 +209,7 @@ The admin interface was consolidated in commit `3415c94: Add demo cache, sample 
 
 ---
 
-## 7. Operational Learnings
+## 8. Operational Learnings
 
 **Geo data revealed unexpected real usage.** Once the app was deployed on Vercel, geo-location logs showed requests from locations other than the developer's own. This was not a security concern — the app is intentionally public — but it confirmed that the demo was being tested by people other than the developer, which influenced decisions about demo stability and the test mode UX.
 
