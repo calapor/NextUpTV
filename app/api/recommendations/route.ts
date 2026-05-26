@@ -92,8 +92,11 @@ export async function POST(req: NextRequest) {
       let streamErrored = false
       let inputTokens = 0
       let outputTokens = 0
+      let enriched: Array<RecommendationsResponse['recommendations'][number]> = []
       const MODEL = 'claude-sonnet-4-6'
+      const mark = (label: string) => console.log(`[recommendations] +${Date.now() - startedAt}ms ${label}`)
       try {
+        mark('stream start')
         controller.enqueue(sseEvent({ type: 'status', message: 'Analyzing your favorites...' }))
 
         const inputTitles = buildInputTitleSet([fileContent, keywords].filter(Boolean).join('\n'))
@@ -167,7 +170,9 @@ export async function POST(req: NextRequest) {
         })
 
         await anthropicStream.done()
+        mark('anthropic stream done')
         await inputTvdbLookupDone
+        mark('input tvdb lookups done')
 
         controller.enqueue(sseEvent({ type: 'status', message: 'Fetching show details...' }))
 
@@ -186,15 +191,26 @@ export async function POST(req: NextRequest) {
         parsed.recommendations = parsed.recommendations.filter(rec => (rec.imdb_rating ?? 0) > 0)
 
         const seenTitles = new Set<string>()
-        const enriched = []
-        for (const rec of parsed.recommendations) {
-          if (seenTitles.has(rec.title)) continue
-          if (isInputShow(rec.title, inputTitles)) continue
+        const candidates = parsed.recommendations.filter((rec) => {
+          if (seenTitles.has(rec.title)) return false
+          if (isInputShow(rec.title, inputTitles)) return false
           seenTitles.add(rec.title)
-          const tvdb = await (tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
+          return true
+        })
+
+        // Kick off any TVDB fetches not already started during streaming, so they all
+        // run in parallel rather than serializing one-per-iteration.
+        mark(`enrichment start (${candidates.length} candidates)`)
+        const tvdbResults = await Promise.all(
+          candidates.map((rec) => tvdbPromises.get(rec.title) ?? fetchTvdbData(rec.title))
+        )
+        mark('enrichment done')
+
+        candidates.forEach((rec, i) => {
+          const tvdb = tvdbResults[i]
           // Cross-script duplicate check: if the recommended show's TVDB ID matches an input
           // show's TVDB ID, skip it. Catches cases like Hebrew "טהרן" → English "Tehran".
-          if (tvdb?.id && inputTvdbIds.has(tvdb.id)) continue
+          if (tvdb?.id && inputTvdbIds.has(tvdb.id)) return
           const enrichedRec = {
             ...rec,
             ...(tvdb
@@ -214,10 +230,11 @@ export async function POST(req: NextRequest) {
           }
           enriched.push(enrichedRec)
           controller.enqueue(sseEvent({ type: 'recommendation', recommendation: enrichedRec }))
-        }
+        })
 
         enriched.sort((a, b) => (b.imdb_rating ?? 0) - (a.imdb_rating ?? 0))
         controller.enqueue(sseEvent({ type: 'complete', recommendations: enriched }))
+        mark('stream complete')
       } catch (err) {
         streamErrored = true
         const message =
@@ -237,9 +254,13 @@ export async function POST(req: NextRequest) {
           inputTokens,
           outputTokens,
           costUsd: calcCost(MODEL, inputTokens, outputTokens),
-          inputText: keywords || undefined,
+          inputText: [
+            fileContent && `--- Uploaded favourites ---\n${fileContent}`,
+            keywords && `--- Keywords ---\n${keywords}`,
+          ].filter(Boolean).join('\n\n') || undefined,
           outputText: enriched.length > 0 ? enriched.map(r => r.title).join('\n') : undefined,
         })
+        mark('logUsage done')
       }
     },
   })
