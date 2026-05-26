@@ -32,7 +32,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
   const [comedyMin, setComedyMin]             = useState(0)
   const [horrorMin, setHorrorMin]             = useState(0)
   const [yearMin, setYearMin]                 = useState(0)
-  const [listCount, setListCount]             = useState(10)
+  const [listCount, setListCount]             = useState(0)
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
 
   const initialized = useRef(false)
@@ -70,7 +70,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
         setComedyMin (Math.max(dataRanges.comedy.min,  Math.min(saved.comedyMin  ?? dataRanges.comedy.min,  dataRanges.comedy.max)))
         setHorrorMin (Math.max(dataRanges.horror.min,  Math.min(saved.horrorMin  ?? dataRanges.horror.min,  dataRanges.horror.max)))
         setYearMin   (Math.max(dataRanges.year.min,    Math.min(saved.yearMin    ?? dataRanges.year.min,    dataRanges.year.max)))
-        setListCount (saved.listCount ?? 10)
+        setListCount (saved.listCount ?? recommendations.length)
         setSelectedPlatforms(saved.selectedPlatforms ?? [])
         return
       }
@@ -80,7 +80,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
     setComedyMin (dataRanges.comedy.min)
     setHorrorMin (dataRanges.horror.min)
     setYearMin   (dataRanges.year.min)
-    setListCount (Math.min(10, recommendations.length))
+    setListCount (recommendations.length)
   }, [dataRanges])
 
   useEffect(() => {
@@ -113,7 +113,7 @@ export function DashboardLayout({ recommendations }: DashboardLayoutProps) {
     setComedyMin (dataRanges.comedy.min)
     setHorrorMin (dataRanges.horror.min)
     setYearMin   (dataRanges.year.min)
-    setListCount (Math.min(10, recommendations.length))
+    setListCount (recommendations.length)
     setSelectedPlatforms([])
   }
 

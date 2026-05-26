@@ -23,7 +23,7 @@ import type { PendingRequest, CachedFavouritesInput } from '@/lib/types'
 import { getTestShowsDisplay } from '@/lib/test-data/sample-shows'
 import demoRecsData from '@/lib/test-data/demo-recommendations.json'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 64 * 1024 // 64KB
 const ALLOWED_FILE_TYPES = ['.txt', '.csv']
 const MAX_KEYWORDS_LENGTH = 1000
 const MAX_FILE_CHARS = 12_000
@@ -78,7 +78,7 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      return `File too large. Maximum size is 5MB`
+      return `File too large. Maximum size is 64KB`
     }
 
     return null
