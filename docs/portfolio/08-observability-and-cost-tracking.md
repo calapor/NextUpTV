@@ -92,6 +92,8 @@ Full `UsageLogEntry` structure (from `lib/types.ts`):
 | `geo.region` | string | Region/state |
 | `geo.country` | string | Country name |
 | `geo.countryCode` | string | ISO 3166-1 alpha-2 code |
+| `inputText` | string | User's keywords/shows input, plain text (recommendations route only) |
+| `outputText` | string | Newline-separated list of recommended show titles (recommendations route only) |
 
 **Route-specific params for recommendations:**
 
@@ -144,8 +146,10 @@ Each log entry is displayed in a table row showing:
 - Route and test/live indicator
 - Input/output characters (for recommendations)
 - Token counts and cost in USD
-- Geo-location (city, country)
+- Geo-location — flag icon tooltip shows city, region, country, and IP on hover
 - User agent (truncated)
+
+Clicking a row expands it to show the user's input keywords and the recommended show titles side-by-side in plain text, above the full JSON entry dump. This makes it easy to see at a glance what a user asked for and what was returned without parsing the raw JSON.
 
 The viewer is for operational insight — it is not an analytics dashboard. There is no aggregation, charting, or alerting. It answers the question "what has happened recently" rather than "what are the trends."
 
@@ -160,8 +164,8 @@ The `/admin` page consolidates three operational tools:
 
 | Tab | Purpose | Auth Required |
 |-----|---------|---------------|
+| **Usage Logs** | View per-request usage data and cost — **default landing tab** | Yes |
 | **Eval** | Run prompt evaluation experiments with any system prompt and test preset | Yes (`EVAL_USER` / `EVAL_PASSWORD`) |
-| **Usage Logs** | View per-request usage data and cost | Yes |
 | **Demo Cache** | Regenerate bundled demo recommendations and library data | Yes (blocked in production) |
 
 All three tabs are gated by HTTP Basic Auth, enforced by `proxy.ts` (Next.js middleware). The password is set via the `ADMIN_PASSWORD` environment variable. If unset, the admin interface is open — the default for local development. `EVAL_PASSWORD`, used in earlier versions, was replaced by `ADMIN_PASSWORD` in commit `3415c94`.

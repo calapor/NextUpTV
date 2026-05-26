@@ -237,6 +237,8 @@ export async function POST(req: NextRequest) {
           inputTokens,
           outputTokens,
           costUsd: calcCost(MODEL, inputTokens, outputTokens),
+          inputText: keywords || undefined,
+          outputText: enriched.length > 0 ? enriched.map(r => r.title).join('\n') : undefined,
         })
       }
     },

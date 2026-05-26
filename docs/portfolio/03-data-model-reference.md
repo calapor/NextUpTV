@@ -179,6 +179,9 @@ interface UsageLogEntry {
   outputTokens?: number
   costUsd?: number                                        // Calculated at $3/M input, $15/M output
   geo?: GeoInfo                                           // Resolved from ip-api.com
+  // Plain-text capture — recommendations route only
+  inputText?: string                                      // User's keywords input
+  outputText?: string                                     // Newline-separated recommended show titles
 }
 
 interface GeoInfo {
@@ -195,6 +198,8 @@ interface RecommendationsParams {
   isTest: boolean
 }
 ```
+
+The Neon `usage_logs` table includes corresponding `input_text TEXT` and `output_text TEXT` columns alongside the existing `params` and `geo` JSONB columns.
 
 See `[OPS]` for how these are read, displayed, and interpreted.
 

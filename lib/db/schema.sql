@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS usage_logs (
   output_tokens INTEGER,
   cost_usd      NUMERIC(10, 6),
   params        JSONB NOT NULL,
-  geo           JSONB
+  geo           JSONB,
+  input_text    TEXT,
+  output_text   TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_usage_logs_ts ON usage_logs (ts DESC);

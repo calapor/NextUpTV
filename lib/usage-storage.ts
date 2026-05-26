@@ -36,11 +36,12 @@ async function appendEntryNeon(entry: EntryWithGeo): Promise<void> {
     INSERT INTO usage_logs (
       ts, ip, ua, route, status, duration_ms,
       model, input_tokens, output_tokens, cost_usd,
-      params, geo
+      params, geo, input_text, output_text
     ) VALUES (
       ${entry.ts}, ${entry.ip}, ${entry.ua}, ${entry.route}, ${entry.status}, ${entry.durationMs},
       ${entry.model ?? null}, ${entry.inputTokens ?? null}, ${entry.outputTokens ?? null}, ${entry.costUsd ?? null},
-      ${JSON.stringify(entry.params)}::jsonb, ${entry.geo ? JSON.stringify(entry.geo) : null}::jsonb
+      ${JSON.stringify(entry.params)}::jsonb, ${entry.geo ? JSON.stringify(entry.geo) : null}::jsonb,
+      ${entry.inputText ?? null}, ${entry.outputText ?? null}
     )
   `
 }
@@ -49,7 +50,8 @@ async function listEntriesNeon(opts: { limit: number; date?: string }): Promise<
   const sql = neon(process.env.DATABASE_URL!)
   const rows = (await sql`
     SELECT ts, ip, ua, route, status, duration_ms,
-           model, input_tokens, output_tokens, cost_usd, params, geo
+           model, input_tokens, output_tokens, cost_usd, params, geo,
+           input_text, output_text
     FROM usage_logs
     WHERE (${opts.date ?? null}::date IS NULL OR ts::date = ${opts.date ?? null}::date)
     ORDER BY ts DESC
@@ -71,6 +73,8 @@ async function listEntriesNeon(opts: { limit: number; date?: string }): Promise<
     if (row.output_tokens != null) entry.outputTokens = row.output_tokens as number
     if (row.cost_usd != null) entry.costUsd = Number(row.cost_usd)
     if (row.geo != null) entry.geo = row.geo as GeoInfo
+    if (row.input_text != null) entry.inputText = row.input_text as string
+    if (row.output_text != null) entry.outputText = row.output_text as string
     return entry
   })
 
