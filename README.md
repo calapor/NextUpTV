@@ -38,13 +38,12 @@ NextUpTV generates personalised TV show recommendations by combining your watch 
 
 Create a `.env.local` file at the project root:
 
-```
-ANTHROPIC_API_KEY=sk-ant-...
-TVDB_API_KEY=your-tvdb-api-key
-ADMIN_PASSWORD=changeme
-```
-
-Obtain a TVDB API key at [thetvdb.com](https://thetvdb.com).
+| Variable | Required | Purpose |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Yes | Claude API key for recommendation generation |
+| `TVDB_API_KEY` | Yes | TVDB v4 API key for poster, synopsis, rating enrichment ([thetvdb.com](https://thetvdb.com)) |
+| `ADMIN_PASSWORD` | Optional | Gates `/admin` and its API routes via HTTP Basic Auth; open if unset |
+| `DATABASE_URL` | Optional | Neon Postgres connection string. If set, usage logs are written to Postgres; otherwise they fall back to JSONL files at `data/usage-logs/`. See [docs/portfolio/08-observability-and-cost-tracking.md](docs/portfolio/08-observability-and-cost-tracking.md#3-production-setup) for the Vercel + Neon setup. |
 
 `ADMIN_PASSWORD` gates the `/admin` page and its API routes (`/api/eval`, `/api/usage-logs`, `/api/admin/demo-cache`) via HTTP Basic Auth middleware. If `ADMIN_PASSWORD` is unset the admin interface is open — this is the default for local development. `EVAL_PASSWORD` was used in earlier versions and is no longer required.
 
