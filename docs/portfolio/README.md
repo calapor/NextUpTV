@@ -12,8 +12,8 @@ The project was built using Claude Sonnet 4.6, Next.js 16, and TypeScript. It in
 
 | # | Document | Slug | Audience | Description |
 |---|----------|------|----------|-------------|
-| 0 | [Pre-AI Design Phase](00-pre-ai-design-phase.md) | `PREAI` | All | Wireframes, specs, and design decisions made before any AI tooling |
-| 1 | [Product Design Brief](01-product-design-brief.md) | `PDB` | All | Problem statement, scope decisions, tech choices |
+| 0 | [Product Design Brief](00-product-design-brief.md) | `PDB` | All | Problem statement, scope decisions, tech choices |
+| 1 | [Pre-AI Design Phase](01-pre-ai-design-phase.md) | `PREAI` | All | Wireframes, specs, and design decisions made before any AI tooling |
 | 2 | [System Architecture](02-system-architecture.md) | `ARCH` | Technical | End-to-end pipeline with ASCII diagrams |
 | 3 | [Data Model Reference](03-data-model-reference.md) | `DATA` | Technical | TypeScript interfaces and domain model |
 | 4 | [Prompt Engineering Lifecycle](04-prompt-engineering-lifecycle.md) | `PROMPT` | AI-focused | Prompt evolution from v0 to production |

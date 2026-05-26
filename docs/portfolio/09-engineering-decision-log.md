@@ -3,7 +3,7 @@
 # Engineering Decision Log
 
 **Document ID:** EDL  
-**Related:** [PDB](01-product-design-brief.md) | [ARCH](02-system-architecture.md) | [DATA](03-data-model-reference.md) | [PROMPT](04-prompt-engineering-lifecycle.md) | [EVAL](05-evaluation-framework.md) | [SAFETY](06-ai-safety-and-hardening.md) | [STREAM](07-streaming-architecture-and-ux.md) | [OPS](08-observability-and-cost-tracking.md)  
+**Related:** [PDB](00-product-design-brief.md) | [ARCH](02-system-architecture.md) | [DATA](03-data-model-reference.md) | [PROMPT](04-prompt-engineering-lifecycle.md) | [EVAL](05-evaluation-framework.md) | [SAFETY](06-ai-safety-and-hardening.md) | [STREAM](07-streaming-architecture-and-ux.md) | [OPS](08-observability-and-cost-tracking.md)  
 **Last Updated:** May 2026  
 **Status:** Final
 
