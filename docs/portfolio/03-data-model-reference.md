@@ -161,7 +161,7 @@ interface ShowDetails {
 
 ## 4. Usage Logging Schema
 
-Every API request that invokes Claude is logged as a `UsageLogEntry`. Log files are written in JSONL format, one file per day, at `data/usage-logs/YYYY-MM-DD.jsonl`.
+Every API request that invokes Claude is logged as a `UsageLogEntry`. The persistence layer chooses between two backends at runtime based on whether `DATABASE_URL` is set: in production on Vercel, entries are inserted into a Neon Postgres `usage_logs` table (typed columns for queryable fields, JSONB for `params` and `geo`); in local development, entries append to JSONL files at `data/usage-logs/YYYY-MM-DD.jsonl`. The `UsageLogEntry` shape below is the canonical representation in both backends — see `[OPS § 2]` for the full storage architecture and `[EDL § 11]` for the rationale.
 
 ```typescript
 type UsageRoute = 'recommendations' | 'library-status' | 'show-details'
@@ -263,4 +263,6 @@ The `[DATA]` model is stable. The only fields added after the initial definition
 - [`lib/eval-data.ts`](../../lib/eval-data.ts) — eval test preset constants
 - [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts) — produces `Recommendation[]`
 - [`app/api/eval/route.ts`](../../app/api/eval/route.ts) — produces `EvalRunResult`
-- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — writes `UsageLogEntry` to JSONL
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — builds `UsageLogEntry` and delegates persistence to the storage layer
+- [`lib/usage-storage.ts`](../../lib/usage-storage.ts) — Neon and local-disk backends
+- [`lib/db/schema.sql`](../../lib/db/schema.sql) — Postgres schema for `usage_logs`

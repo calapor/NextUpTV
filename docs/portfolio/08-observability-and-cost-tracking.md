@@ -33,6 +33,8 @@ This project added usage logging (commit `fefc7c5: Add usage logging with geo, c
 
 Logging is implemented in `lib/usage-logger.ts` as an `async` function called in the `finally` block of each API route. It is non-blocking: the server response is sent before the log write completes.
 
+The write path is split across two files: `lib/usage-logger.ts` owns the domain logic (cost calculation, IP geolocation), and `lib/usage-storage.ts` owns persistence. The storage layer chooses between two backends at runtime based on whether `DATABASE_URL` is defined in the environment.
+
 ```
 API route handler
     │
@@ -47,15 +49,25 @@ API route handler
                 │
                 ├── geolocateIp(ip) → ip-api.com (3s timeout; skips private IPs)
                 │
-                └── fs.appendFile(
-                      'data/usage-logs/YYYY-MM-DD.jsonl',
-                      JSON.stringify({ ...entry, geo }) + '\n'
-                    )
+                └── appendEntry(entry)              [lib/usage-storage.ts]
+                        │
+                        ├── if process.env.DATABASE_URL is set:
+                        │     INSERT INTO usage_logs (...)        ← Neon Postgres
+                        │
+                        └── else:
+                              fs.appendFile(
+                                'data/usage-logs/YYYY-MM-DD.jsonl',
+                                JSON.stringify(entry) + '\n'
+                              )                                    ← local disk
 ```
 
-**Storage format:** JSONL (one JSON object per line, newline-delimited). One file per calendar day, named `YYYY-MM-DD.jsonl`. This format is simple, appendable without locking, and directly readable by standard log tooling.
+**Production storage (Vercel + Neon):** When deployed, the app writes to a Postgres `usage_logs` table on Neon using the `@neondatabase/serverless` HTTP driver. Concurrent writes are handled by Postgres natively (no race conditions). Preview deploys use a branched copy of the database — preview traffic does not pollute production logs.
 
-**Failure handling:** The log write is wrapped in a `try/catch`. If it fails (disk full, permission error, geo API timeout), the error is logged to `console.error` and silently swallowed — a logging failure never propagates to the user response.
+**Local development storage:** When `DATABASE_URL` is unset (the default for local dev), the storage layer falls back to JSONL files — one file per calendar day at `data/usage-logs/YYYY-MM-DD.jsonl`. This avoids the need to run a database locally and keeps the dev loop fast.
+
+**Schema:** The `usage_logs` table uses typed columns for the universal/queryable fields (`ts`, `route`, `cost_usd`, `duration_ms`, token counts) and JSONB columns for the polymorphic `params` and optional `geo` block. This hybrid layout matches how the JSONL records were already shaped and keeps the queryable surface SQL-friendly without forcing rigid columns onto fields that legitimately vary by route. Schema definition lives at `lib/db/schema.sql` and was applied once via the Neon SQL console — no migration tooling is needed for a single table.
+
+**Failure handling:** The log write is wrapped in a `try/catch`. If it fails (DB unreachable, geo API timeout, disk full in local mode), the error is logged to `console.error` and silently swallowed — a logging failure never propagates to the user response.
 
 ---
 
@@ -170,9 +182,12 @@ The admin interface was consolidated in commit `3415c94: Add demo cache, sample 
 
 ## Supporting File References
 
-- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()` (65 lines)
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()`
+- [`lib/usage-storage.ts`](../../lib/usage-storage.ts) — storage abstraction (Neon and local-disk backends), `appendEntry()` and `listEntries()`
+- [`lib/db/schema.sql`](../../lib/db/schema.sql) — one-shot Postgres schema for the `usage_logs` table
 - [`lib/types.ts`](../../lib/types.ts)`:93–133` — usage logging types
-- [`app/api/usage-logs/route.ts`](../../app/api/usage-logs/route.ts) — log file reader for the admin UI
+- [`app/api/usage-logs/route.ts`](../../app/api/usage-logs/route.ts) — log reader for the admin UI
 - [`app/admin/page.tsx`](../../app/admin/page.tsx) — admin page with three tabs
 - [`components/admin/eval-panel.tsx`](../../components/admin/eval-panel.tsx) — eval workbench UI
-- `data/usage-logs/` — JSONL log files (gitignored; not committed)
+- `data/usage-logs/` — JSONL log files in local-dev mode (gitignored; not committed)
+- Neon project `neon-vercel-db` — production storage; connection string supplied to Vercel as `DATABASE_URL`
