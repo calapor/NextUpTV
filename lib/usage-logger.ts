@@ -1,6 +1,5 @@
-import fs from 'fs/promises'
-import path from 'path'
 import type { GeoInfo, UsageLogEntry } from './types'
+import { appendEntry } from './usage-storage'
 
 // Pricing in USD per token — verify at https://www.anthropic.com/pricing
 const MODEL_COSTS: Record<string, { input: number; output: number }> = {
@@ -13,12 +12,6 @@ export function calcCost(model: string, inputTokens: number, outputTokens: numbe
   const costs = MODEL_COSTS[model]
   if (!costs) return 0
   return costs.input * inputTokens + costs.output * outputTokens
-}
-
-const LOG_DIR = path.join(process.cwd(), 'data', 'usage-logs')
-
-function todayFilePath() {
-  return path.join(LOG_DIR, `${new Date().toISOString().slice(0, 10)}.jsonl`)
 }
 
 const LOCAL_IPS = new Set(['unknown', '127.0.0.1', '::1', 'localhost'])
@@ -47,8 +40,7 @@ async function geolocateIp(ip: string): Promise<GeoInfo> {
 export async function logUsage(entry: UsageLogEntry): Promise<void> {
   try {
     const geo = await geolocateIp(entry.ip)
-    await fs.mkdir(LOG_DIR, { recursive: true })
-    await fs.appendFile(todayFilePath(), JSON.stringify({ ...entry, geo }) + '\n', 'utf-8')
+    await appendEntry({ ...entry, geo })
   } catch (err) {
     console.error('[usage-logger] write failed:', err)
   }

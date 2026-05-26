@@ -21,7 +21,7 @@ The project was built using Claude Sonnet 4.6, Next.js 16, and TypeScript. It in
 | 6 | [AI Safety and Hardening](06-ai-safety-and-hardening.md) | `SAFETY` | Security / EM | Threat model and mitigations |
 | 7 | [Streaming Architecture and UX](07-streaming-architecture-and-ux.md) | `STREAM` | Frontend | SSE streaming, progressive rendering |
 | 8 | [Observability and Cost Tracking](08-observability-and-cost-tracking.md) | `OPS` | EM / Operators | Usage logging, geo, cost per request |
-| 9 | [Engineering Decision Log](09-engineering-decision-log.md) | `EDL` | All | 10 deliberate tradeoffs with rationale |
+| 9 | [Engineering Decision Log](09-engineering-decision-log.md) | `EDL` | All | 11 deliberate tradeoffs with rationale |
 
 ---
 
@@ -61,4 +61,6 @@ Key source files referenced throughout these documents:
 - `lib/prompts.ts` — production system prompt
 - `lib/types.ts` — TypeScript domain model
 - `lib/usage-logger.ts` — cost tracking and observability
+- `lib/usage-storage.ts` — Neon Postgres / local-disk storage abstraction for usage logs
+- `lib/db/schema.sql` — Postgres schema for `usage_logs`
 - `public/eval-reports/` — 27 committed HTML evaluation reports

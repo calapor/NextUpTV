@@ -11,7 +11,7 @@
 
 ## 
 
-This document records ten deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, and security. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
+This document records eleven deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, and security. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
 
 ---
 
@@ -180,6 +180,27 @@ The trade-off is repository size inflation and the need to periodically regenera
 
 ---
 
+## Decision 11: Neon Postgres in Production, Local Disk in Development for Usage Logs
+
+**Decision:** Usage logs persist to a Neon Postgres `usage_logs` table when `DATABASE_URL` is set in the environment, and to JSONL files on local disk when it isn't. A thin storage abstraction in `lib/usage-storage.ts` dispatches between the two backends.
+
+**Alternatives considered:**
+- **Vercel Blob with daily JSONL objects.** Read the existing day's blob, append the new line, write it back.
+- **Vercel Blob with per-entry blobs.** One blob per log line, listed by prefix to read.
+- **Vercel KV (Redis).** `LPUSH` per entry, `LRANGE` to read.
+- **External observability SaaS (Axiom, Logtail).** Free tier, drop-in HTTP client.
+- **Keep JSONL only and accept the Vercel limitation.** Treat the cloud deploy as ephemeral and only inspect logs in local dev.
+
+**Rationale:** Vercel's serverless filesystem is read-only at runtime, so the existing JSONL-on-disk approach silently dropped every cloud-deploy log entry. A backend was required. Vercel Blob was the obvious first reach but was the wrong primitive on three counts: it is an object store optimised for write-once read-many media, so an append-on-every-request pattern requires read-modify-write and races under concurrent invocations; it only supports `access: 'public'` blobs, which is a privacy concern given the logs contain IP addresses, geo data, and per-request costs; and per-entry blobs would push the read path into a `list + N-fetch` loop, which is fine until it isn't. Vercel KV would solve the concurrency and privacy problems but offers no queryability — the admin dashboard becomes a manual scan rather than `SELECT … WHERE date = …`. An external SaaS was a reasonable choice but adds another vendor dependency for a portfolio app already using Vercel and Neon. Neon Postgres gives concurrent atomic appends for free, private-by-default access, a SQL surface that maps cleanly onto the existing admin UI, and a generous Hobby-tier free plan. The `@neondatabase/serverless` driver uses HTTP rather than long-lived TCP connections, which matches the serverless invocation model with no pooling required.
+
+Keeping local disk as the dev backend avoids forcing every contributor to provision a database, keeps the local dev loop fast, and means the project still demonstrates the JSONL approach (which is the right answer when you control the filesystem).
+
+The storage layer dispatches on `process.env.DATABASE_URL` presence rather than `process.env.VERCEL`. This means a developer can opt into testing against the cloud DB simply by setting the env var locally — the abstraction does not assume Vercel is the only production target.
+
+**Outcome:** Production deploys now persist usage telemetry to Neon, with preview deploys writing to branched copies of the database that auto-destroy when the preview is removed. The dev experience is unchanged for contributors who do not set `DATABASE_URL`. The per-request response shape returned by `/api/usage-logs` was preserved, so the admin UI required no changes when the backend swapped.
+
+---
+
 ## Supporting File References
 
 All decisions reference source evidence. Key files:
@@ -187,6 +208,7 @@ All decisions reference source evidence. Key files:
 - [`app/api/recommendations/route.ts`](../../app/api/recommendations/route.ts) — decisions 1, 2, 6, 9, 10
 - [`lib/tvdb.ts`](../../lib/tvdb.ts) — decisions 4, 8
 - [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — decision (observability rationale)
+- [`lib/usage-storage.ts`](../../lib/usage-storage.ts), [`lib/db/schema.sql`](../../lib/db/schema.sql) — decision 11 (Neon + local-disk hybrid)
 - [`lib/prompts.ts`](../../lib/prompts.ts) — decisions 6, 9, 10
 - [`lib/title-utils.ts`](../../lib/title-utils.ts) — decision 9
 - [`public/eval-reports/manifest.json`](../../public/eval-reports/manifest.json) — decision 5
