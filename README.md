@@ -9,6 +9,8 @@ NextUpTV generates personalised TV show recommendations by combining your watch 
 > **Portfolio documentation** — architecture, prompt engineering lifecycle, evaluation framework, AI safety, and engineering decision log:
 > 📄 [docs/portfolio/README.md](docs/portfolio/README.md)
 
+> **Built with AI** — both the application code and the portfolio documentation were produced with Claude (Anthropic) as the primary coding and writing collaborator. I scoped the product, made the architecture and product decisions, designed the prompts and evaluation framework, reviewed and tested the output, and own the result. The project is intended to demonstrate applied AI engineering — scoping, prompting, evaluating, and shipping with AI tools in the loop — not to claim line-by-line authorship.
+
 ---
 
 ## Features
