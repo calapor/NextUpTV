@@ -35,7 +35,7 @@ The application is a Next.js 16 App Router project deployed on Vercel. There is 
 
 This is the core user-facing flow. The following traces a single request from browser submission to rendered cards.
 
-![Plant UML Diagram detailing user flow](assets/screenshots/plantumlflow.png)
+![Plant UML Diagram detailing user flow](assets/diagrams/system-arch-flow.png)
 
 ---
 
