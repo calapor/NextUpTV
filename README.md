@@ -9,8 +9,6 @@ NextUpTV generates personalised TV show recommendations by combining your watch 
 > **Portfolio documentation** — architecture, prompt engineering lifecycle, evaluation framework, AI safety, and engineering decision log:
 > 📄 [docs/portfolio/README.md](docs/portfolio/README.md)
 
-> **Built with AI** — both the application code and the portfolio documentation were produced with Claude (Anthropic) as the primary coding and writing collaborator. I scoped the product, made the architecture and product decisions, designed the prompts and evaluation framework, reviewed and tested the output, and own the result. The project is intended to demonstrate applied AI engineering — scoping, prompting, evaluating, and shipping with AI tools in the loop — not to claim line-by-line authorship.
-
 ---
 
 ## Features
@@ -128,3 +126,7 @@ specs/
 - **Preference Persistence** — backend-backed storage for favourites and recommendation history
 - **Additional Filters** — language, country of origin, network, content rating
 - **Favourite TV alerts** - air date, status, spin off series 
+
+## Credits
+
+Built with Claude Code. The application code, portfolio documentation, and architecture diagrams in this repo were produced in collaboration with Claude (Anthropic). The product scope, architecture decisions, prompt design, evaluation framework, and shipping calls are mine. The project is intended to demonstrate applied AI engineering — scoping, prompting, evaluating, and shipping with AI in the loop. See the [Engineering Decision Log](docs/portfolio/09-engineering-decision-log.md) for the full rationale.
