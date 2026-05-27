@@ -41,7 +41,7 @@ done
 
 | `.puml` | UML type | Referenced from |
 |---|---|---|
-| `recommendation-pipeline.puml` | Sequence | `02-system-architecture.md` (via `screenshots/plantumlflow.png`) |
+| `system-arch-flow.puml` | Sequence | `02-system-architecture.md` |
 | `runtime-topology.puml` | Component (C4 Container) | `02-system-architecture.md` |
 | `evaluation-pipeline.puml` | Activity | `05-evaluation-framework.md` |
 | `sse-state-machine.puml` | State | `07-streaming-architecture-and-ux.md` |
