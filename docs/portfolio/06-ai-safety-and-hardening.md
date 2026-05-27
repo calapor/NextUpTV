@@ -119,7 +119,6 @@ This approach is resilient to injected trailing content — even if a user craft
 | **Content moderation of input** | The input domain is TV show titles and free-text preferences. The risk of genuinely harmful input reaching Claude in this context is very low, and moderation infrastructure would be disproportionate. |
 | **Rate limiting** | Delegated to Vercel's infrastructure. At the usage scale of a portfolio project, platform-level rate limiting is sufficient. |
 | **Output filtering for inappropriate recommendations** | TV recommendations from Claude's training data are unlikely to be harmful. The domain does not warrant a moderation pass on output. |
-| **SSRF protection for ipwho.is calls** | The geolocation API URL is hardcoded in the server — it is not user-controlled. No SSRF risk exists. |
 | **Prompt version disclosure prevention** | The system prompt is not a secret worth protecting. Hiding it would provide security theatre with no material benefit. |
 
 Each of these omissions is deliberate and documented. Security hardening should be proportionate to the actual threat surface.

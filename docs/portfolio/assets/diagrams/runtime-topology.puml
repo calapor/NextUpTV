@@ -33,10 +33,14 @@ node "Vercel Serverless\nFunctions" as VERCEL {
 node "External\nServices" as EXT {
   component "Anthropic API\n(Claude Sonnet 4.6)" as E1
   component "TVDB v4 API\n(metadata, posters)" as E2
-  component "ipwho.is\n(geolocation)" as E3
   E1 -[hidden]- E2
-  E2 -[hidden]- E3
 }
+
+note right of VERCEL
+  Geolocation comes from Vercel-injected
+  x-vercel-ip-* request headers — no
+  outbound call for geo lookup.
+end note
 
 BROWSER --> VERCEL : HTTP / SSE
 VERCEL --> EXT : API calls

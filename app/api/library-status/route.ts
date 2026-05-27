@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { getAuthToken } from '@/lib/tvdb'
 import type { LibraryShow } from '@/lib/types'
 import { sseEvent, sseResponse } from '@/lib/sse'
-import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
+import { logUsage, extractIp, extractUa, extractGeo } from '@/lib/usage-logger'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const CACHE_TTL = 4 * 60 * 60 * 1000
@@ -154,6 +154,7 @@ export async function POST(req: NextRequest) {
   const startedAt = Date.now()
   const ip = extractIp(req)
   const ua = extractUa(req)
+  const geo = extractGeo(req)
 
   let fileContent: string
   try {
@@ -224,7 +225,7 @@ export async function POST(req: NextRequest) {
       } finally {
         controller.close()
         await logUsage({
-          ts: new Date().toISOString(), ip, ua, route: 'library-status',
+          ts: new Date().toISOString(), ip, ua, geo, route: 'library-status',
           params: { fileContentChars: fileContent.length, titleCount: titles.length },
           status: streamErrored ? 'error' : 'success',
           durationMs: Date.now() - startedAt,

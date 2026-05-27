@@ -111,7 +111,13 @@ export function getAvailablePlatforms(
   platformNames: string[] | undefined
 ): StreamingPlatform[] {
   if (!platformNames) return []
-  return platformNames
-    .map((name) => getPlatformInfo(name))
-    .filter((p): p is StreamingPlatform => p !== null)
+  const seen = new Set<string>()
+  const result: StreamingPlatform[] = []
+  for (const name of platformNames) {
+    const platform = getPlatformInfo(name)
+    if (!platform || seen.has(platform.name)) continue
+    seen.add(platform.name)
+    result.push(platform)
+  }
+  return result
 }

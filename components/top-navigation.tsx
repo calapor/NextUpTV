@@ -47,6 +47,13 @@ export function TopNavigation({ currentPage, onPageChange }: TopNavigationProps)
               </button>
             ))}
           </nav>
+
+          <a
+            href="/admin"
+            className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Admin
+          </a>
         </div>
       </header>
 
