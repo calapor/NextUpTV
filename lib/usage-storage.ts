@@ -3,8 +3,6 @@ import path from 'path'
 import { neon } from '@neondatabase/serverless'
 import type { GeoInfo, UsageLogEntry } from './types'
 
-type EntryWithGeo = UsageLogEntry & { geo?: GeoInfo }
-
 export interface ListResult {
   entries: UsageLogEntry[]
   total: number
@@ -13,7 +11,7 @@ export interface ListResult {
 
 const isNeonConfigured = () => Boolean(process.env.DATABASE_URL)
 
-export async function appendEntry(entry: EntryWithGeo): Promise<void> {
+export async function appendEntry(entry: UsageLogEntry): Promise<void> {
   if (isNeonConfigured()) {
     await appendEntryNeon(entry)
   } else {
@@ -30,7 +28,7 @@ export async function listEntries(opts: { limit: number; date?: string }): Promi
 
 // --- Neon backend -----------------------------------------------------------
 
-async function appendEntryNeon(entry: EntryWithGeo): Promise<void> {
+async function appendEntryNeon(entry: UsageLogEntry): Promise<void> {
   const sql = neon(process.env.DATABASE_URL!)
   await sql`
     INSERT INTO usage_logs (
@@ -89,7 +87,7 @@ function todayFilePath() {
   return path.join(LOG_DIR, `${new Date().toISOString().slice(0, 10)}.jsonl`)
 }
 
-async function appendEntryLocal(entry: EntryWithGeo): Promise<void> {
+async function appendEntryLocal(entry: UsageLogEntry): Promise<void> {
   await fs.mkdir(LOG_DIR, { recursive: true })
   await fs.appendFile(todayFilePath(), JSON.stringify(entry) + '\n', 'utf-8')
 }

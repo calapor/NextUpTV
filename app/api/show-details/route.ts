@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthToken } from '@/lib/tvdb'
 import type { ShowDetails, CastMember } from '@/lib/types'
-import { logUsage, extractIp, extractUa } from '@/lib/usage-logger'
+import { logUsage, extractIp, extractUa, extractGeo } from '@/lib/usage-logger'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const CACHE_TTL = 60 * 60 * 1000
@@ -15,12 +15,13 @@ export async function GET(req: NextRequest) {
   const startedAt = Date.now()
   const ip = extractIp(req)
   const ua = extractUa(req)
+  const geo = extractGeo(req)
   const { searchParams } = new URL(req.url)
   const tvdbId = searchParams.get('tvdbId') ?? ''
 
   const respond = async (response: NextResponse, logStatus: 'success' | 'error') => {
     await logUsage({
-      ts: new Date().toISOString(), ip, ua, route: 'show-details',
+      ts: new Date().toISOString(), ip, ua, geo, route: 'show-details',
       params: { tvdbId }, status: logStatus, durationMs: Date.now() - startedAt,
     })
     return response

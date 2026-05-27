@@ -14,36 +14,9 @@ export function calcCost(model: string, inputTokens: number, outputTokens: numbe
   return costs.input * inputTokens + costs.output * outputTokens
 }
 
-const LOCAL_IPS = new Set(['unknown', '127.0.0.1', '::1', 'localhost'])
-
-async function geolocateIp(ip: string): Promise<GeoInfo> {
-  if (LOCAL_IPS.has(ip) || ip.startsWith('192.168.') || ip.startsWith('10.')) return {}
-  try {
-    // ipwho.is: HTTPS, no API key required, 10k requests/month free.
-    // Chosen over ip-api.com (HTTP-only, 45/min per source IP — too tight for
-    // Vercel's shared egress IP pool) so geo lookups don't silently fail in prod.
-    const res = await fetch(
-      `https://ipwho.is/${ip}?fields=success,country,country_code,city,region`,
-      { signal: AbortSignal.timeout(3000) }
-    )
-    if (!res.ok) return {}
-    const data = await res.json()
-    if (data.success === false) return {}
-    return {
-      city: data.city || undefined,
-      region: data.region || undefined,
-      country: data.country || undefined,
-      countryCode: data.country_code || undefined,
-    }
-  } catch {
-    return {}
-  }
-}
-
 export async function logUsage(entry: UsageLogEntry): Promise<void> {
   try {
-    const geo = await geolocateIp(entry.ip)
-    await appendEntry({ ...entry, geo })
+    await appendEntry(entry)
   } catch (err) {
     console.error('[usage-logger] write failed:', err)
   }
@@ -56,4 +29,20 @@ export function extractIp(req: Request): string {
 
 export function extractUa(req: Request): string {
   return (req.headers.get('user-agent') ?? 'unknown').slice(0, 200)
+}
+
+// Vercel populates these headers at the edge for every incoming request.
+// Locally (next dev), they're absent → returns an empty GeoInfo, which the
+// admin UI handles via its IP-only fallback.
+export function extractGeo(req: Request): GeoInfo {
+  const countryCode = req.headers.get('x-vercel-ip-country') ?? undefined
+  const cityEncoded = req.headers.get('x-vercel-ip-city')
+  const region = req.headers.get('x-vercel-ip-country-region') ?? undefined
+  const countryName = req.headers.get('x-vercel-ip-country-name') ?? undefined
+  return {
+    city: cityEncoded ? decodeURIComponent(cityEncoded) : undefined,
+    region,
+    country: countryName ?? countryCode,
+    countryCode,
+  }
 }

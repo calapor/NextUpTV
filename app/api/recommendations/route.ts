@@ -12,7 +12,7 @@ import {
   sanitizeReason,
 } from '@/lib/title-utils'
 import { sseEvent, sseResponse } from '@/lib/sse'
-import { logUsage, extractIp, extractUa, calcCost } from '@/lib/usage-logger'
+import { logUsage, extractIp, extractUa, extractGeo, calcCost } from '@/lib/usage-logger'
 
 const anthropic = new Anthropic()
 
@@ -51,10 +51,11 @@ export async function POST(req: NextRequest) {
   const startedAt = Date.now()
   const ip = extractIp(req)
   const ua = extractUa(req)
+  const geo = extractGeo(req)
 
   if (new URL(req.url).searchParams.get('test') === 'true') {
     logUsage({
-      ts: new Date().toISOString(), ip, ua, route: 'recommendations',
+      ts: new Date().toISOString(), ip, ua, geo, route: 'recommendations',
       params: { fileContentChars: 0, keywordsChars: 0, count: 20, isTest: true },
       status: 'success', durationMs: Date.now() - startedAt,
     })
@@ -253,7 +254,7 @@ export async function POST(req: NextRequest) {
       } finally {
         controller.close()
         await logUsage({
-          ts: new Date().toISOString(), ip, ua, route: 'recommendations',
+          ts: new Date().toISOString(), ip, ua, geo, route: 'recommendations',
           params: { fileContentChars, keywordsChars, count, isTest: false, timings },
           status: streamErrored ? 'error' : 'success',
           durationMs: Date.now() - startedAt,
