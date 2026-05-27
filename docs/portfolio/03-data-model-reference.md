@@ -178,7 +178,7 @@ interface UsageLogEntry {
   inputTokens?: number
   outputTokens?: number
   costUsd?: number                                        // Calculated at $3/M input, $15/M output
-  geo?: GeoInfo                                           // Resolved from ipwho.is
+  geo?: GeoInfo                                           // Resolved from Vercel x-vercel-ip-* edge headers
   // Plain-text capture — recommendations route only
   inputText?: string                                      // Uploaded favourites file + keywords (labelled sections)
   outputText?: string                                     // Newline-separated recommended show titles

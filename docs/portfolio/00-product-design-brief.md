@@ -100,7 +100,7 @@ The evaluation framework (see `[EVAL]`) was built specifically to make criteria 
 | **@anthropic-ai/sdk v0.95.2** | Anthropic client | Native streaming support (`messages.stream()`); typed response objects |
 | **TVDB v4 API** | TV metadata | Richer metadata than TVMaze (content ratings, extended cast, streaming platform companies); official API with stable endpoints; free tier covers this use case |
 | **Vercel** | Hosting | Zero-config Next.js deployment; SSE streaming supported natively; `maxDuration = 60` on long-running API routes |
-| **ipwho.is** | Geolocation | Free HTTPS API (10k requests/month, no key required) for IP → city/country lookup; used only in usage logging; fails gracefully. Replaced `ip-api.com` because its 45-request-per-minute-per-source-IP limit silently throttled Vercel's shared egress pool. |
+| **Vercel edge geo headers** | Geolocation | `x-vercel-ip-country`, `x-vercel-ip-city`, `x-vercel-ip-country-region`, `x-vercel-ip-country-name` are populated by Vercel at the edge on every request — used only in usage logging. Earlier iterations called external providers (`ip-api.com`, then `ipwho.is`); both were unreliable from Vercel's shared egress IP pool, so the code now reads what the platform already provides. |
 
 **What was replaced during development:** TVMaze was the initial metadata provider. It was replaced with TVDB in commit `d45dadc` after TVMaze was found to lack content ratings and to have weaker coverage for streaming platform data. See `[EDL]` for the full decision record.
 

@@ -13,7 +13,7 @@ participant "StreamingView" as SV
 participant "Vercel Node\n/api/recommendations" as API
 participant "Anthropic API\n(Claude Sonnet 4.6)" as ANT
 participant "TVDB API" as TVDB
-participant "Neon Postgres\n+ ipwho.is (geo)" as LOG
+participant "Neon Postgres" as LOG
 
 autonumber
 
@@ -80,7 +80,7 @@ API --> AS: SSE: { type: 'complete', recommendations: [...] }
 AS -> AS: Transfer to state\nStore to localStorage
 note right of API: mark('stream complete')
 
-API -> LOG: logUsage({\n  model, inputTokens, outputTokens, costUsd,\n  geo: await ipwho.is (HTTPS, 3s timeout),\n  inputText: '--- Uploaded favourites ---\\n...\\n--- Keywords ---\\n...',\n  outputText: enriched titles, newline-joined\n})
+API -> LOG: logUsage({\n  model, inputTokens, outputTokens, costUsd,\n  geo: extractGeo(req) (from x-vercel-ip-* headers),\n  inputText: '--- Uploaded favourites ---\\n...\\n--- Keywords ---\\n...',\n  outputText: enriched titles, newline-joined\n})
 activate LOG
 LOG --> API: INSERT INTO usage_logs (Neon)\nor JSONL fallback if DATABASE_URL unset
 deactivate LOG

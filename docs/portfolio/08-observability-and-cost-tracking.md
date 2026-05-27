@@ -33,9 +33,9 @@ This project added usage logging (commit `fefc7c5: Add usage logging with geo, c
 
 Logging is implemented in `lib/usage-logger.ts` as an `async` function called in the `finally` block of each API route. It is non-blocking: the server response is sent before the log write completes.
 
-The write path is split across two files: `lib/usage-logger.ts` owns the domain logic (cost calculation, IP geolocation), and `lib/usage-storage.ts` owns persistence. The storage layer chooses between two backends at runtime based on whether `DATABASE_URL` is defined in the environment.
+The write path is split across two files: `lib/usage-logger.ts` owns the domain logic (cost calculation, geo extraction from Vercel edge headers), and `lib/usage-storage.ts` owns persistence. The storage layer chooses between two backends at runtime based on whether `DATABASE_URL` is defined in the environment.
 
-![Usage logging flow — finally block calls logUsage, which geolocates then appends entry to Neon Postgres or local JSONL](assets/diagrams/usage-logging-flow.png)
+![Usage logging flow — finally block calls logUsage, which reads Vercel geo headers then appends entry to Neon Postgres or local JSONL](assets/diagrams/usage-logging-flow.png)
 
 **Production storage (Vercel + Neon):** When deployed, the app writes to a Postgres `usage_logs` table on Neon using the `@neondatabase/serverless` HTTP driver. Concurrent writes are handled by Postgres natively (no race conditions). Preview deploys use a branched copy of the database — preview traffic does not pollute production logs.
 
@@ -43,7 +43,7 @@ The write path is split across two files: `lib/usage-logger.ts` owns the domain 
 
 **Schema:** The `usage_logs` table uses typed columns for the universal/queryable fields (`ts`, `route`, `cost_usd`, `duration_ms`, token counts) and JSONB columns for the polymorphic `params` and optional `geo` block. This hybrid layout matches how the JSONL records were already shaped and keeps the queryable surface SQL-friendly without forcing rigid columns onto fields that legitimately vary by route. Schema definition lives at `lib/db/schema.sql` and was applied once via the Neon SQL console — no migration tooling is needed for a single table.
 
-**Failure handling:** The log write is wrapped in a `try/catch`. If it fails (DB unreachable, geo API timeout, disk full in local mode), the error is logged to `console.error` and silently swallowed — a logging failure never propagates to the user response.
+**Failure handling:** The log write is wrapped in a `try/catch`. If it fails (DB unreachable, disk full in local mode), the error is logged to `console.error` and silently swallowed — a logging failure never propagates to the user response.
 
 ---
 
@@ -199,13 +199,13 @@ The admin interface was consolidated in commit `3415c94: Add demo cache, sample 
 
 **`inputText` now captures the full prompt, not just keywords.** The original capture only stored the typed keywords box, leaving the Input column blank for file-only requests (the common case). It now stores `--- Uploaded favourites ---\n<file>` and `--- Keywords ---\n<keywords>` as separate labelled sections so the admin viewer reproduces the full user-facing prompt.
 
-**Geo provider swap.** `ip-api.com` (HTTP, 45 requests/minute per source IP) was replaced by `ipwho.is` (HTTPS, 10k requests/month, no key). On Vercel, all serverless functions in a region share a small egress IP pool, so the per-IP per-minute quota was hit quickly across all users and geo lookups silently fell back to `{}`. The new provider has a per-IP-per-month quota at the source level rather than per-minute, which fits Vercel's egress profile.
+**Geolocation moved off external APIs entirely.** The first iteration called `ip-api.com` (HTTP, 45 requests/minute per source IP). When usage logs showed nearly all geo lookups silently falling back to `{}`, the cause was clear: Vercel functions in a region share a small egress IP pool, so the per-IP per-minute quota was exhausted across all users within seconds. The fix tried `ipwho.is` (HTTPS, 10k requests/month, no key) on the assumption that a per-month-per-source quota would fit Vercel's egress profile. It didn't — inspecting the database after the swap showed a 100% failure rate from Vercel; the `catch {}` had been masking that every call was failing. The eventual fix was to stop making outbound calls altogether and read Vercel's edge-populated headers (`x-vercel-ip-country`, `x-vercel-ip-city`, `x-vercel-ip-country-region`, `x-vercel-ip-country-name`) — free, instant, zero-failure. The lesson worth keeping: when the platform already provides what you're paying a third party for, reach for the platform first; and a silent `catch {}` around external calls is exactly the place where a one-line `console.warn` on failure pays for itself many times over.
 
 ---
 
 ## Supporting File References
 
-- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()`
+- [`lib/usage-logger.ts`](../../lib/usage-logger.ts) — `logUsage()`, `calcCost()`, `extractIp()`, `extractUa()`, `extractGeo()`
 - [`lib/usage-storage.ts`](../../lib/usage-storage.ts) — storage abstraction (Neon and local-disk backends), `appendEntry()` and `listEntries()`
 - [`lib/db/schema.sql`](../../lib/db/schema.sql) — one-shot Postgres schema for the `usage_logs` table
 - [`lib/types.ts`](../../lib/types.ts)`:93–133` — usage logging types

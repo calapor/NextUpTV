@@ -10,13 +10,13 @@ start
 
 :API route handler\n**finally** block;
 
-:logUsage({\n  ts, ip, ua, route, params,\n  status, durationMs,\n  model, inputTokens, outputTokens, costUsd\n});
+:extractGeo(req)\nreads x-vercel-ip-country / -city /\n-country-region / -country-name\n(no outbound call);
+
+:logUsage({\n  ts, ip, ua, geo, route, params,\n  status, durationMs,\n  model, inputTokens, outputTokens, costUsd\n});
 
 partition "logUsage (lib/usage-logger.ts)\ntry/catch — swallows errors" {
 
-  :geolocateIp(ip)\nipwho.is (HTTPS, 3s timeout)\nskips private IPs;
-
-  :appendEntry({ ...entry, geo })\n[lib/usage-storage.ts];
+  :appendEntry(entry)\n[lib/usage-storage.ts];
 
   if (process.env.DATABASE_URL set?) then (yes)
     :INSERT INTO usage_logs (...)\n**Neon Postgres**;
