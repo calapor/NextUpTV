@@ -39,5 +39,11 @@ to each provider's terms of service.
   See the [TheTVDB API Terms](https://thetvdb.com/api-information) and
   [Site Terms of Use](https://thetvdb.com/terms-of-use).
 
+## Development Tooling
+
+- **Anthropic Claude (via Claude Code)** was used as the primary coding and
+  writing collaborator during development. Scope, architecture, prompt design,
+  evaluation, and shipping decisions were made by the project author.
+
 If you fork or redistribute this project, please preserve this NOTICE file and
 ensure compliance with each provider's terms.

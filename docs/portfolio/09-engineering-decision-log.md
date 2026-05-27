@@ -11,7 +11,7 @@
 
 ## 
 
-This document records eleven deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, and security. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
+This document records twelve deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, security, and the development workflow itself. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
 
 ---
 
@@ -198,6 +198,23 @@ Keeping local disk as the dev backend avoids forcing every contributor to provis
 The storage layer dispatches on `process.env.DATABASE_URL` presence rather than `process.env.VERCEL`. This means a developer can opt into testing against the cloud DB simply by setting the env var locally — the abstraction does not assume Vercel is the only production target.
 
 **Outcome:** Production deploys now persist usage telemetry to Neon, with preview deploys writing to branched copies of the database that auto-destroy when the preview is removed. The dev experience is unchanged for contributors who do not set `DATABASE_URL`. The per-request response shape returned by `/api/usage-logs` was preserved, so the admin UI required no changes when the backend swapped.
+
+---
+
+## Decision 12: AI-Assisted Development with Human Direction
+
+**Decision:** Use Claude Code as the primary coding and documentation collaborator throughout the build. Retain human ownership of the work that does not transfer to the model: product scope, architecture decisions, prompt design, evaluation criteria, and the call on what to ship.
+
+**Alternatives considered:**
+- **Hand-written code, AI only for autocomplete.** Honest about the line between human and machine, but slower, and a poor demonstration of the very skill the project sets out to evidence.
+- **AI for code only, hand-written documentation.** Avoids questions about authorship in the prose, but creates two voices in the repo and effectively hides the workflow the project is meant to showcase.
+- **No AI assistance.** Would have produced a smaller surface area in the same time budget and contradicted the project's thesis.
+
+**Rationale:** The point of NextUpTV is to demonstrate applied AI engineering. Building it without AI in the loop would have undermined the demonstration. The senior-engineer skills that matter — choosing the problem, scoping the surface area, designing the prompt contract, building an evaluation harness, deciding when output is good enough to ship — do not transfer to the model. Coding velocity and prose drafting do. Spending the saved hours on evaluation runs, decision documentation, and product judgment was a better use of the time than typing the same code by hand.
+
+Documenting the workflow openly is more credible than pretending otherwise. A reader can see the result and infer the tooling; saying so directly removes ambiguity and matches the way the work will increasingly be done.
+
+**Outcome:** The repo ships with code, portfolio documentation, and architecture diagrams co-authored with Claude. Development used [Conductor](https://conductor.build) to run several Claude Code agents in parallel across isolated git worktrees, with integration and review happening at the merge boundary — a pattern that mirrors how an engineering manager coordinates work across a small team. The evaluation framework (Decision 5) and the prompt hardening (Decision 10) are the clearest examples of work that benefited from the saved coding hours — both required iteration that would have been hard to justify in a hand-written timeline. The most useful discipline learned was treating the model's first answer as a draft rather than a result: the obvious solution is often right, but when it isn't, the cost of pushing back is small and the cost of accepting it is large. Several entries in this log (notably 4, 8, and 11) record cases where the second answer was the one that shipped. A more visible example sits in the portfolio documentation itself: the first cut of the architecture diagrams was text-based ASCII flow blocks rendered inline in the markdown. I directed a switch to PlantUML source files rendered to PNGs (commit `c01a050`); `.puml` is now the canonical source for every architecture diagram in the repo. The ASCII version would have shipped if the first answer had been accepted.
 
 ---
 
