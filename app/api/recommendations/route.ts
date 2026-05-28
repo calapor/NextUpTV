@@ -13,6 +13,12 @@ import {
 } from '@/lib/title-utils'
 import { sseEvent, sseResponse } from '@/lib/sse'
 import { logUsage, extractIp, extractUa, extractGeo, calcCost } from '@/lib/usage-logger'
+import {
+  buildUserContent,
+  extractRawInputTitles,
+  filterAndDedupeRecommendations,
+  validateInputSize,
+} from '@/lib/recommendations-pipeline'
 
 const anthropic = new Anthropic()
 
@@ -70,24 +76,15 @@ export async function POST(req: NextRequest) {
   }
   const { fileContent, keywords, count } = body
 
-  if ((fileContent?.length ?? 0) > 12_000) {
-    return new Response('File content too large', { status: 400 })
-  }
-  if ((keywords?.length ?? 0) > 5_000) {
-    return new Response('Keywords too long', { status: 400 })
+  const validation = validateInputSize(fileContent, keywords)
+  if (!validation.ok) {
+    return new Response(validation.error, { status: validation.status })
   }
 
   const fileContentChars = fileContent?.length ?? 0
   const keywordsChars = keywords?.length ?? 0
 
-  const combinedFavourites = [fileContent, keywords].filter(Boolean).join('\n').trim()
-
-  const userContent = [
-    combinedFavourites && `My favourites — TV shows, films, genres, or keywords:\n<user_input>\n${combinedFavourites}\n</user_input>`,
-    `Please return ${count} recommendations.`,
-  ]
-    .filter(Boolean)
-    .join('\n\n')
+  const userContent = buildUserContent(fileContent, keywords, count)
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -113,10 +110,7 @@ export async function POST(req: NextRequest) {
         // Fire TVDB lookups for input show titles concurrently with Claude streaming.
         // This resolves cross-script duplicates (e.g. Hebrew "טהרן" → TVDB id for "Tehran")
         // that normalizeTitle can't catch because it strips non-ASCII characters.
-        const rawInputTitles = [...new Set(
-          [fileContent, keywords].filter(Boolean).join('\n')
-            .split(/[\n,;]+/).map(l => l.trim()).filter(Boolean).slice(0, 80)
-        )]
+        const rawInputTitles = extractRawInputTitles(fileContent, keywords)
         const inputTvdbIds = new Set<number>()
         const inputTvdbLookupDone = Promise.all(
           rawInputTitles.map(t =>
@@ -193,19 +187,7 @@ export async function POST(req: NextRequest) {
           throw parseErr
         }
 
-        parsed.recommendations.forEach((rec) => {
-          rec.title = sanitizeSeriesTitle(rec.title)
-          rec.reason = sanitizeReason(rec.reason)
-        })
-        parsed.recommendations = parsed.recommendations.filter(rec => (rec.imdb_rating ?? 0) > 0)
-
-        const seenTitles = new Set<string>()
-        const candidates = parsed.recommendations.filter((rec) => {
-          if (seenTitles.has(rec.title)) return false
-          if (isInputShow(rec.title, inputTitles)) return false
-          seenTitles.add(rec.title)
-          return true
-        })
+        const candidates = filterAndDedupeRecommendations(parsed.recommendations, inputTitles)
 
         // Kick off any TVDB fetches not already started during streaming, so they all
         // run in parallel rather than serializing one-per-iteration.
