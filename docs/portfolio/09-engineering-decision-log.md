@@ -11,7 +11,7 @@
 
 ## 
 
-This document records twelve deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, security, and the development workflow itself. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
+This document records thirteen deliberate engineering decisions made during the development of NextUpTV. Each decision had alternatives that were considered and a rationale that can be defended. The decisions span infrastructure, AI architecture, UX, security, and the development workflow itself. They are documented here because the reasoning behind a decision is often more revealing than the decision itself.
 
 ---
 
@@ -218,6 +218,37 @@ Documenting the workflow openly is more credible than pretending otherwise. A re
 
 ---
 
+## Decision 13: Unit Tests Targeted at the Deterministic Glue, Not the Model
+
+**Decision:** Added a Vitest suite covering the deterministic logic that surrounds the AI calls — JSON-stream recovery, title sanitisation and dedup, TVDB caching, per-token cost calculation, observability dispatch, SSE framing, and platform alias normalisation. 146 cases, ~1 second to run, 99% statement coverage on `lib/**`. Wired into CI between type-check and lint.
+
+**Alternatives considered:**
+- **No tests, rely solely on the eval framework.** Recommendation quality is already gated by `[EVAL]`; the argument was that everything else is "just glue."
+- **End-to-end tests via Playwright.** Drive the browser through a real recommendation run with the network mocked.
+- **Integration tests against live Anthropic and TVDB.** Highest fidelity, but non-deterministic, expensive, and flaky.
+- **Snapshot tests over recorded HTTP responses.** Cheap to write but brittle — every Claude wording change rewrites the snapshot.
+
+**Rationale:** The eval framework grades the model. It cannot catch a typo in `MODEL_COSTS['claude-sonnet-4-6'].output` that silently 10×-understates spend in the dashboards. It cannot catch a regression in `extractJson` where a refactor breaks the brace-depth scanner and every truncated SSE response starts throwing. It cannot catch the `<user_input>` tag reference quietly disappearing from the system prompt during an unrelated edit. These are the failures that unit tests exist for: deterministic bugs in code that the model never sees.
+
+The suite focuses on the functions where bugs hide:
+
+- `extractJson` — brace-depth tracking, escape-aware string scanning, fence stripping, mid-stream truncation recovery, and the documented limitation that an unclosed outer array prevents recovery
+- `calcCost` — exact per-token pricing for all three production models, with a band-check on a typical run cost that catches order-of-magnitude regressions
+- `sanitizeSeriesTitle` and `isInputShow` — the bidirectional substring matching that catches "Office" matching "The Office", and the cross-script dedup that catches Hebrew → English transliterations via TVDB ID
+- `fetchTvdbData` — cache-key case insensitivity, null caching on search failure, Claude streaming-platform fallback, and the firstSentence "Mr. Smith" edge case pinned so any future fix is deliberate
+- `usage-storage` — Neon vs JSONL dispatch on `DATABASE_URL`, newest-first ordering, malformed-line tolerance
+- `prompts.ts` — structural sanity checks that couple the system prompt to the `Recommendation` type and pin the prompt-injection defence; a regression guard for the kind of silent prompt drift that the eval framework only catches after the fact
+
+End-to-end tests through Playwright would have been the next layer up but were out of scope for this addition. Snapshot tests were rejected because they encode current behaviour without explaining intent — a future reader cannot tell which lines of a recorded response are load-bearing.
+
+Two route files were lightly refactored to extract pure helpers into `lib/recommendations-pipeline.ts` and `lib/eval-grading.ts`, so the input-size validation, dedup pipeline, score-to-grade mapping, and HTML escaping could be tested without booting Next.js. No behaviour changed; the route handlers now import what they used to declare inline.
+
+**Outcome:** The previous code review flagged "zero unit tests" as the single largest credibility gap between this portfolio and a senior-engineering signal. The suite closes that gap. It runs in ~1 second locally, in CI before lint, and is gated at 80% statement / 70% branch coverage on `lib/**` (actual coverage: 99.23% / 91.66%). The tests deliberately pin documented limitations — escaped quotes in stream titles, the "Mr." sentence-cut edge case, the unclosed-outer-array truncation case — so any future change to those behaviours is intentional, not accidental.
+
+The fastest dividend was during the refactor itself: extracting `validateInputSize` and `filterAndDedupeRecommendations` from the recommendations route into a pure module surfaced a small drift between the route's dedup key and what the tests considered "the same show." The drift was caught and pinned before it shipped.
+
+---
+
 ## Supporting File References
 
 All decisions reference source evidence. Key files:
@@ -234,3 +265,6 @@ All decisions reference source evidence. Key files:
 - Git commit `0c955dc` — decision 10 (prompt injection hardening)
 - Git commit `f7215a1` — decision 6 (genre scores)
 - Git commit `6b73ed1` — decision 2 (two-pass streaming)
+- [`lib/title-utils.test.ts`](../../lib/title-utils.test.ts), [`lib/tvdb.test.ts`](../../lib/tvdb.test.ts), [`lib/usage-logger.test.ts`](../../lib/usage-logger.test.ts), [`lib/usage-storage.test.ts`](../../lib/usage-storage.test.ts) — decision 13 (unit test suite)
+- [`lib/recommendations-pipeline.ts`](../../lib/recommendations-pipeline.ts), [`lib/eval-grading.ts`](../../lib/eval-grading.ts) — decision 13 (extracted pure helpers)
+- [`vitest.config.ts`](../../vitest.config.ts), [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — decision 13 (test runner + CI gate)

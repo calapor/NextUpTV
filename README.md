@@ -54,7 +54,12 @@ pnpm install
 pnpm dev          # http://localhost:3000
 pnpm build
 pnpm start
+pnpm test         # Vitest in watch mode
+pnpm test:run     # Single run (used by CI)
+pnpm test:cov     # Single run with coverage report
 ```
+
+The Vitest suite covers the deterministic logic that surrounds the AI calls — JSON-stream recovery, title dedup, TVDB caching, per-token cost calculation, SSE framing, and prompt structural sanity. CI runs type-check → test → lint on every push and PR to `main`. See [EDL Decision 13](docs/portfolio/09-engineering-decision-log.md#decision-13-unit-tests-targeted-at-the-deterministic-glue-not-the-model) for the rationale.
 
 ## Architecture
 

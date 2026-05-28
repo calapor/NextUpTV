@@ -4,6 +4,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import type { EvalCriteria, EvalGrade, EvalRunResult, RecommendationsResponse } from '@/lib/types'
 import { buildInputTitleSet, extractJson, isInputShow } from '@/lib/title-utils'
+import { computeOverallScore, escapeHtml, scoreToGrade, validateEvalInputs } from '@/lib/eval-grading'
 
 export const maxDuration = 60
 
@@ -62,28 +63,6 @@ Respond ONLY with valid JSON — no markdown, no prose — in this exact shape:
   },
   "critique": "Two to four sentence overall narrative assessment of the recommendation set."
 }`
-
-function scoreToGrade(score: number): EvalGrade {
-  if (score >= 9) return 'A'
-  if (score >= 8) return 'B'
-  if (score >= 7) return 'C'
-  if (score >= 6) return 'D'
-  return 'F'
-}
-
-function computeOverallScore(scores: number[]): number {
-  const sum = scores.reduce((a, b) => a + b, 0)
-  return Math.round((sum / scores.length) * 10) / 10
-}
-
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 function gradeColor(grade: EvalGrade): string {
   return { A: '#10b981', B: '#3b82f6', C: '#f59e0b', D: '#f97316', F: '#ef4444' }[grade]
@@ -323,20 +302,9 @@ export async function POST(req: NextRequest) {
       count: number
     }
 
-    if (!systemPrompt?.trim()) {
-      return NextResponse.json({ error: 'System prompt is required' }, { status: 400 })
-    }
-    if (!showsList?.trim()) {
-      return NextResponse.json({ error: 'Shows list is required' }, { status: 400 })
-    }
-    if (count < 1 || count > 20) {
-      return NextResponse.json({ error: 'Count must be between 1 and 20' }, { status: 400 })
-    }
-    if (systemPrompt.length > 10_000) {
-      return NextResponse.json({ error: 'System prompt exceeds maximum length' }, { status: 400 })
-    }
-    if (showsList.length > 20_000) {
-      return NextResponse.json({ error: 'Shows list exceeds maximum length' }, { status: 400 })
+    const validation = validateEvalInputs(systemPrompt, showsList, count)
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 })
     }
 
     const userContent = `My favourite shows:\n<user_input>\n${showsList}\n</user_input>\n\nPlease return ${count} recommendations.`

@@ -20,3 +20,6 @@ tsconfig.tsbuildinfo
 
 # Usage logs and runtime data
 data/
+
+# Test coverage
+coverage/
