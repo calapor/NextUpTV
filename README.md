@@ -4,6 +4,8 @@
 
 NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
 
+This project was solely intended to demonstrate applied AI engineering, design, scoping, prompting, evaluating, and shipping with AI in the loop, and to learn and understand how legacy development manager roles intersect with the problems that AI solves and new problems it introduces in a typical development cycle. 
+
 ---
 
 > **Portfolio documentation** — architecture, prompt engineering lifecycle, evaluation framework, AI safety, and engineering decision log:
@@ -134,4 +136,4 @@ specs/
 
 ## Credits
 
-Built with Claude Code. The application code, portfolio documentation, and architecture diagrams in this repo were produced in collaboration with Claude (Anthropic). The product scope, architecture decisions, prompt design, evaluation framework, and shipping calls are mine. The project is intended to demonstrate applied AI engineering — scoping, prompting, evaluating, and shipping with AI in the loop. See the [Engineering Decision Log](docs/portfolio/09-engineering-decision-log.md) for the full rationale.
+Built with Claude Code. The application code, portfolio documentation, and architecture diagrams in this repo were produced in collaboration with Claude (Anthropic). The product scope, design markup construction, wireframes, architecture decisions, prompt design, evaluation framework, and shipping calls are mine. The project is intended to demonstrate applied AI engineering, design, scoping, prompting, evaluating, and shipping with AI in the loop.  See the [Engineering Decision Log](docs/portfolio/09-engineering-decision-log.md) for the full rationale.
