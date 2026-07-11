@@ -10,6 +10,9 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: false,
+    reporters: ['verbose', 'junit'],
+    outputFile: { junit: 'test-results/junit.xml' },
+    env: { ANTHROPIC_API_KEY: 'test-key-not-real' },
     setupFiles: ['./test/setup.ts'],
     include: ['lib/**/*.test.ts', 'test/**/*.test.ts'],
     coverage: {
