@@ -1,5 +1,8 @@
 ![NextUpTV](docs/portfolio/assets/nextuptv-logo-1280x200.jpg)
 
+[![CI](https://github.com/calapor/NextUpTV/actions/workflows/ci.yml/badge.svg)](https://github.com/calapor/NextUpTV/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/github/checks-status/calapor/NextUpTV/main?check=Test%20Report&label=tests&logo=vitest)](https://github.com/calapor/NextUpTV/actions/workflows/ci.yml)
+
 # NextUpTV — AI-Powered TV Recommendation Platform
 
 NextUpTV generates personalised TV show recommendations by combining your watch history with Claude Sonnet — delivering enriched results (posters, streaming platforms, ratings) in real time via a cinematic dark-mode interface.
