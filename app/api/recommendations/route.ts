@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { isClaudeHalted, CLAUDE_HALTED_MESSAGE } from '@/lib/claude-halt'
 import type { PartialRecommendation, RecommendationsRequest, RecommendationsResponse } from '@/lib/types'
 import { fetchTvdbData } from '@/lib/tvdb'
 import { RECOMMENDATIONS_SYSTEM_PROMPT } from '@/lib/prompts'
@@ -85,6 +86,10 @@ export async function POST(req: NextRequest) {
   const keywordsChars = keywords?.length ?? 0
 
   const userContent = buildUserContent(fileContent, keywords, count)
+
+  if (await isClaudeHalted()) {
+    return NextResponse.json({ error: CLAUDE_HALTED_MESSAGE, claudeHalted: true }, { status: 503 })
+  }
 
   const stream = new ReadableStream({
     async start(controller) {

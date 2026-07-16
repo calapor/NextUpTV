@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest, NextResponse } from 'next/server'
+import { isClaudeHalted, CLAUDE_HALTED_MESSAGE } from '@/lib/claude-halt'
 import fs from 'fs/promises'
 import path from 'path'
 import type { EvalCriteria, EvalGrade, EvalRunResult, RecommendationsResponse } from '@/lib/types'
@@ -305,6 +306,10 @@ export async function POST(req: NextRequest) {
     const validation = validateEvalInputs(systemPrompt, showsList, count)
     if (!validation.ok) {
       return NextResponse.json({ error: validation.error }, { status: 400 })
+    }
+
+    if (await isClaudeHalted()) {
+      return NextResponse.json({ error: CLAUDE_HALTED_MESSAGE, claudeHalted: true }, { status: 503 })
     }
 
     const userContent = `My favourite shows:\n<user_input>\n${showsList}\n</user_input>\n\nPlease return ${count} recommendations.`

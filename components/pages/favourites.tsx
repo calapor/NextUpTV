@@ -65,8 +65,18 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
 
   const isDemoReady = (demoRecsData as unknown[]).length > 0
 
+  const [claudeHalted, setClaudeHalted] = useState(false)
+  const [claudeHaltedMessage, setClaudeHaltedMessage] = useState('')
+
   useEffect(() => {
     setSampleShowsDisplay(getTestShowsDisplay())
+    fetch('/api/claude-status')
+      .then(r => r.json())
+      .then((data: { halted: boolean; message: string }) => {
+        setClaudeHalted(data.halted)
+        setClaudeHaltedMessage(data.message)
+      })
+      .catch(() => {})
   }, [])
 
   // File validation
@@ -339,11 +349,19 @@ export function FavouritesPage({ onNavigate, onSubmit, cachedInput, onClearAll }
               </div>
             </div>
 
+            {/* Claude halted banner */}
+            {claudeHalted && (
+              <div className="bg-amber-100 text-amber-800 border border-amber-300 rounded p-3 text-sm">
+                <p className="font-medium">{claudeHaltedMessage}</p>
+                <p className="mt-1">Use the <strong>Test with Sample Data</strong> button below to try a demo.</p>
+              </div>
+            )}
+
             {/* Submit Button */}
             <Button
               type="submit"
               size="lg"
-              disabled={!isFormValid}
+              disabled={!isFormValid || claudeHalted}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="sm:hidden">Update &amp; Get Recommendations</span>
