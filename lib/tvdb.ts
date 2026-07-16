@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { isClaudeHalted } from '@/lib/claude-halt'
 
 const TVDB_BASE = 'https://api4.thetvdb.com/v4'
 const anthropic = new Anthropic()
@@ -43,6 +44,7 @@ function firstSentence(text: string): string {
 
 async function inferStreamingServices(title: string, overview: string): Promise<string[]> {
   try {
+    if (await isClaudeHalted()) return []
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 200,
